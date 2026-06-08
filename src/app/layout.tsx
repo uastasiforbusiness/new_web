@@ -6,12 +6,14 @@ const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -45,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} ${inter.variable} antialiased bg-[#0a0a0a] text-white`}
+        className={`${outfit.variable} ${inter.variable} antialiased bg-[#0a0a0a] text-white overflow-x-hidden`}
       >
         {children}
       </body>
