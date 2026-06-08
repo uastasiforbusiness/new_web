@@ -1,13 +1,19 @@
 'use client';
 
 /* ═══════════════════════════════════════════════════════════════════════
-   VELOX — Luxury Car Rental Premium Website
-   Stack: Next.js 16 + GSAP ScrollTrigger + Lenis Smooth Scroll + Tailwind
+   VELOX — Luxury Car Rental V2 — MAJOR UPGRADE
+   Stack: Next.js 16 + GSAP ScrollTrigger + Lenis + Tailwind
    
-   3 EFECTOS PREMIUM:
-   1. Hero "Scale Down & Reveal" — Imagen full-viewport que reduce con scroll
-   2. Scroll-Driven Image Playback — Secuencia de imágenes controlada por scroll
-   3. Text & Asset Displacement — Distorsión por velocidad del mouse en hover
+   MEJORAS V2:
+   - Custom premium cursor con trail dorado
+   - Film grain overlay para look cinematográfico
+   - 3D Tilt cards con perspectiva y brillo dinámico
+   - Magnetic buttons que atraen al cursor
+   - Text reveal character-by-character
+   - Parallax floating elements
+   - Loading screen dramática con logo reveal
+   - Horizontal scroll fleet showcase
+   - Smooth page transitions
    ═══════════════════════════════════════════════════════════════════════ */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -18,86 +24,63 @@ import Lenis from 'lenis';
 import {
   Menu, X, Phone, Mail, Instagram, Facebook, Twitter,
   ChevronDown, Shield, ConciergeBell, Truck, Gauge,
-  Timer, Zap, ArrowRight, Play,
+  Timer, Zap, ArrowRight, Play, ChevronRight,
 } from 'lucide-react';
 
-// ─── Registrar GSAP plugins (solo una vez) ───
+// ─── Registrar GSAP plugins ───
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DATOS DE LA FLOTA
+   DATA
    ═══════════════════════════════════════════════════════════ */
 const cars = [
   {
     name: 'Ferrari California',
     variant: 'Bianca Avus',
     image: '/images/ferrari_california_bianca.png',
-    hp: 460,
-    acceleration: '3.9s',
-    topSpeed: '310 km/h',
-    price: 890,
+    hp: 460, acceleration: '3.9s', topSpeed: '310 km/h', price: 890,
     tagline: 'PURE ELEGANCE',
+    color: '#f5f5f0',
   },
   {
     name: 'Ferrari California',
     variant: 'Rossa Corsa',
     image: '/images/ferrari_california_rossa.png',
-    hp: 460,
-    acceleration: '3.9s',
-    topSpeed: '310 km/h',
-    price: 890,
+    hp: 460, acceleration: '3.9s', topSpeed: '310 km/h', price: 890,
     tagline: 'ICONIC PASSION',
+    color: '#8b0000',
   },
   {
     name: 'Maserati Ghibli',
     variant: 'Nero Ribelle',
     image: '/images/maserati_ghibli.png',
-    hp: 350,
-    acceleration: '5.0s',
-    topSpeed: '263 km/h',
-    price: 650,
+    hp: 350, acceleration: '5.0s', topSpeed: '263 km/h', price: 650,
     tagline: 'ITALIAN CRAFT',
+    color: '#1a1a2e',
   },
   {
     name: 'Mercedes E220d',
     variant: 'Cabriolet',
     image: '/images/mercedes_e220d_cabrio.png',
-    hp: 194,
-    acceleration: '7.8s',
-    topSpeed: '240 km/h',
-    price: 420,
+    hp: 194, acceleration: '7.8s', topSpeed: '240 km/h', price: 420,
     tagline: 'REFINED LUXURY',
+    color: '#0d0d0d',
   },
 ];
 
-/* Imágenes para la secuencia scroll-driven (Efecto 2) */
 const sequenceFrames = [
-  '/images/seq-front.png',
-  '/images/hero-bg.png',
-  '/images/seq-side.png',
-  '/images/seq-driving.png',
-  '/images/seq-rear.png',
-  '/images/seq-interior.png',
+  '/images/seq-front.png', '/images/hero-bg.png', '/images/seq-side.png',
+  '/images/seq-driving.png', '/images/seq-rear.png', '/images/seq-interior.png',
 ];
+
+const frameLabels = ['FRONT VIEW', 'PROFILE', 'IN MOTION', 'ON THE ROAD', 'REAR VIEW', 'COCKPIT'];
 
 const features = [
-  {
-    icon: ConciergeBell,
-    title: 'CONCIERGE SERVICE',
-    description: '24/7 personal assistance for every aspect of your journey, from restaurant reservations to bespoke route planning across Europe\'s most scenic drives.',
-  },
-  {
-    icon: Shield,
-    title: 'PREMIUM INSURANCE',
-    description: 'Full comprehensive coverage with zero excess. Drive with complete peace of mind knowing every mile is protected by our elite insurance partnership.',
-  },
-  {
-    icon: Truck,
-    title: 'HOTEL DELIVERY',
-    description: 'Your dream car delivered directly to your hotel or private residence. Seamless luxury, from the moment you arrive until the final farewell.',
-  },
+  { icon: ConciergeBell, title: 'CONCIERGE SERVICE', description: '24/7 personal assistance for every aspect of your journey, from restaurant reservations to bespoke route planning across Europe\'s most scenic drives.', stat: '24/7' },
+  { icon: Shield, title: 'PREMIUM INSURANCE', description: 'Full comprehensive coverage with zero excess. Drive with complete peace of mind knowing every mile is protected by our elite insurance partnership.', stat: 'ZERO' },
+  { icon: Truck, title: 'HOTEL DELIVERY', description: 'Your dream car delivered directly to your hotel or private residence. Seamless luxury, from the moment you arrive until the final farewell.', stat: '1HR' },
 ];
 
 const navLinks = [
@@ -109,135 +92,163 @@ const navLinks = [
 
 
 /* ═══════════════════════════════════════════════════════════
-   HOOK: Smooth Scroll con Lenis + GSAP ScrollTrigger sync
-   ─── Inicializa Lenis globalmente y lo sincroniza con
-   GSAP ScrollTrigger para que ambos trabajen en armonía.
-   Limpieza completa en el return del useEffect.
+   HOOK: Lenis Smooth Scroll + GSAP Sync
    ═══════════════════════════════════════════════════════════ */
 function useLenis() {
   useEffect(() => {
-    // Crear instancia de Lenis con configuración premium
     const lenis = new Lenis({
-      duration: 1.2,           // Duración de la animación de scroll
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing exponencial suave
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 0.8,
       touchMultiplier: 2,
     });
 
-    // Sincronizar Lenis con GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Conectar Lenis al ticker de GSAP para renderizado optimizado
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
+    const raf = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
-    // Exponer lenis globalmente para debugging
-    (window as unknown as Record<string, unknown>).__lenis = lenis;
-
     return () => {
+      gsap.ticker.remove(raf);
       lenis.destroy();
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
     };
   }, []);
 }
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: LOADING SCREEN
-   ─── Pantalla de carga premium con barra dorada animada.
-   Se auto-oculta tras la carga de imágenes críticas.
+   COMPONENT: CUSTOM PREMIUM CURSOR
+   ─── Cursor dorado con trail que sigue al mouse.
+   Solo visible en desktop (pointer: fine).
    ═══════════════════════════════════════════════════════════ */
-function LoadingScreen({ onComplete }: { onComplete: () => void }) {
-  const [progress, setProgress] = useState(0);
+function CustomCursor() {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    // Simular progreso de carga con gsap
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setTimeout(onComplete, 400);
-      },
+    // Solo mostrar en dispositivos con cursor preciso
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    let mouseX = 0, mouseY = 0;
+
+    const handleMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      // Dot sigue inmediatamente
+      gsap.set(dot, { x: mouseX - 4, y: mouseY - 4 });
+
+      // Ring sigue con delay suave
+      gsap.to(ring, {
+        x: mouseX - 20, y: mouseY - 20,
+        duration: 0.35, ease: 'power2.out',
+      });
+    };
+
+    // Trail con delay escalonado
+    const trails = trailRefs.current.filter(Boolean);
+    trails.forEach((trail, i) => {
+      if (!trail) return;
+      gsap.to(trail, {
+        x: mouseX - 3, y: mouseY - 3,
+        duration: 0.5 + i * 0.08,
+        ease: 'power2.out',
+        repeat: -1,
+        repeatDelay: 0.016,
+      });
     });
 
-    tl.to({ val: 0 }, {
-      val: 100,
-      duration: 2.2,
-      ease: 'power2.inOut',
-      onUpdate: function () {
-        setProgress(Math.round(this.targets()[0].val));
-      },
+    // Efecto hover: agrandar ring sobre elementos interactivos
+    const handleEnter = () => gsap.to(ring, { scale: 1.8, opacity: 0.5, duration: 0.3 });
+    const handleLeave = () => gsap.to(ring, { scale: 1, opacity: 1, duration: 0.3 });
+
+    window.addEventListener('mousemove', handleMove);
+
+    const interactives = document.querySelectorAll('a, button, .cursor-hover');
+    interactives.forEach((el) => {
+      el.addEventListener('mouseenter', handleEnter);
+      el.addEventListener('mouseleave', handleLeave);
     });
 
-    return () => { tl.kill(); };
-  }, [onComplete]);
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      interactives.forEach((el) => {
+        el.removeEventListener('mouseenter', handleEnter);
+        el.removeEventListener('mouseleave', handleLeave);
+      });
+    };
+  }, []);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center">
-      <img
-        src="/images/logo-white.png"
-        alt="VELOX"
-        className="h-10 sm:h-12 w-auto mb-8 opacity-90"
+    <>
+      {/* Dot — centro del cursor */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 w-2 h-2 bg-[#c9a96e] rounded-full pointer-events-none z-[9999] mix-blend-difference hidden lg:block"
+        style={{ transform: 'translate(-100px, -100px)' }}
       />
-      <div className="w-48 h-[1px] bg-[#333] relative overflow-hidden">
-        <div
-          className="h-full bg-[#c9a96e] loader-bar-anim"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-      <p className="text-[10px] font-heading tracking-[0.4em] text-[#666] mt-4">
-        {progress}%
-      </p>
+      {/* Ring — anillo exterior */}
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 w-10 h-10 border border-[#c9a96e]/60 rounded-full pointer-events-none z-[9998] hidden lg:block"
+        style={{ transform: 'translate(-100px, -100px)' }}
+      />
+    </>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   COMPONENT: FILM GRAIN OVERLAY
+   ─── Textura de grano cinematográfico sutil que da
+   un look premium de película. Animación CSS pura.
+   ═══════════════════════════════════════════════════════════ */
+function FilmGrain() {
+  return (
+    <div
+      className="fixed inset-0 z-[90] pointer-events-none opacity-[0.03] mix-blend-overlay"
+      aria-hidden="true"
+    >
+      <svg width="100%" height="100%">
+        <filter id="grain">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.65"
+            numOctaves="3"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#grain)" />
+      </svg>
     </div>
   );
 }
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: SVG FILTERS (para Efecto 3 — Displacement)
-   ─── Filtros SVG de distorsión que simulan efecto de calor
-   y velocidad. Se aplican via CSS filter: url(#id).
+   COMPONENT: SVG FILTERS (para Displacement + Grain)
    ═══════════════════════════════════════════════════════════ */
 function SvgFilters() {
   return (
     <svg className="absolute w-0 h-0" aria-hidden="true">
       <defs>
-        {/* Filtro suave — estado normal de las cards */}
         <filter id="heat-distortion">
-          <feTurbulence
-            type="turbulence"
-            baseFrequency="0.01"
-            numOctaves="3"
-            result="turbulence"
-            seed="2"
-          />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="turbulence"
-            scale="0"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
+          <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="3" result="turbulence" seed="2" />
+          <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="0" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        {/* Filtro intenso — estado hover con distorsión visible */}
         <filter id="heat-distortion-intense">
-          <feTurbulence
-            type="turbulence"
-            baseFrequency="0.015"
-            numOctaves="3"
-            result="turbulence"
-            seed="2"
-          />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="turbulence"
-            scale="6"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
+          <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="4" result="turbulence" seed="3" />
+          <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="8" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </defs>
     </svg>
@@ -246,14 +257,205 @@ function SvgFilters() {
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: NAVIGATION
-   ─── Barra de navegación fija con efecto glassmorphism.
-   Se vuelve sólida al hacer scroll. Incluye menú móvil.
+   COMPONENT: LOADING SCREEN V2
+   ─── Pantalla de carga dramática con reveal del logo.
+   ═══════════════════════════════════════════════════════════ */
+function LoadingScreen({ onComplete }: { onComplete: () => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        onComplete: () => setTimeout(onComplete, 300),
+      });
+
+      // 1) Logo aparece con scale dramático
+      tl.fromTo(logoRef.current,
+        { opacity: 0, scale: 0.8, filter: 'blur(10px)' },
+        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out' },
+        0
+      );
+
+      // 2) Barra de progreso
+      tl.fromTo(barRef.current,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 2, ease: 'expo.inOut' },
+        0.3
+      );
+
+      // 3) Contador numérico
+      const counter = { val: 0 };
+      tl.to(counter, {
+        val: 100,
+        duration: 2,
+        ease: 'expo.inOut',
+        onUpdate: () => {
+          if (counterRef.current) counterRef.current.textContent = String(Math.round(counter.val)).padStart(3, '0');
+        },
+      }, 0.3);
+
+      // 4) Flash final dorado
+      tl.fromTo(containerRef.current,
+        { backgroundColor: '#0a0a0a' },
+        { backgroundColor: '#0f0d09', duration: 0.2 },
+        2.2
+      );
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [onComplete]);
+
+  return (
+    <div ref={containerRef} className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center">
+      <div ref={logoRef} className="mb-10" style={{ opacity: 0 }}>
+        <img src="/images/logo-white.png" alt="VELOX" className="h-10 sm:h-12 w-auto" />
+      </div>
+      <div className="w-52 h-[1px] bg-[#222] relative overflow-hidden">
+        <div ref={barRef} className="h-full bg-gradient-to-r from-[#c9a96e] to-[#d4af37] origin-left" style={{ transform: 'scaleX(0)' }} />
+      </div>
+      <div className="flex items-center gap-3 mt-5">
+        <span ref={counterRef} className="text-[11px] font-heading tracking-[0.3em] text-[#c9a96e]">000</span>
+        <span className="text-[10px] font-heading tracking-[0.2em] text-[#444]">/ 100</span>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   COMPONENT: MAGNETIC BUTTON
+   ─── Botón que se atrae sutilmente hacia el cursor
+   cuando el mouse está cerca. Efecto premium.
+   ═══════════════════════════════════════════════════════════ */
+function MagneticButton({
+  children,
+  className = '',
+  href,
+  strength = 0.3,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  href?: string;
+  strength?: number;
+}) {
+  const btnRef = useRef<HTMLElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    gsap.to(btnRef.current, {
+      x: x * strength, y: y * strength,
+      duration: 0.4, ease: 'power2.out',
+    });
+  }, [strength]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!btnRef.current) return;
+    gsap.to(btnRef.current, {
+      x: 0, y: 0,
+      duration: 0.6, ease: 'elastic.out(1, 0.4)',
+    });
+  }, []);
+
+  const Tag = href ? 'a' : 'button';
+
+  return (
+    // @ts-expect-error - dynamic tag
+    <Tag
+      ref={btnRef}
+      href={href}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`cursor-hover inline-flex items-center ${className}`}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   COMPONENT: TEXT REVEAL
+   ─── Texto que se revela carácter por carácter con GSAP.
+   ═══════════════════════════════════════════════════════════ */
+function TextReveal({
+  text,
+  className = '',
+  delay = 0,
+  trigger,
+}: {
+  text: string;
+  className?: string;
+  delay?: number;
+  trigger?: boolean;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chars = text.split('');
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const spans = containerRef.current?.querySelectorAll('.char');
+      if (!spans) return;
+
+      if (trigger) {
+        gsap.fromTo(spans,
+          { opacity: 0, y: 40, rotateX: -90 },
+          {
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.6, ease: 'power3.out',
+            stagger: 0.03, delay,
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(spans,
+          { opacity: 0, y: 40, rotateX: -90 },
+          {
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.6, ease: 'power3.out',
+            stagger: 0.03, delay,
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [delay, trigger]);
+
+  return (
+    <div ref={containerRef} className={`overflow-hidden ${className}`}>
+      {chars.map((char, i) => (
+        <span
+          key={i}
+          className="char inline-block"
+          style={{ opacity: 0 }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   COMPONENT: NAVIGATION V2
    ═══════════════════════════════════════════════════════════ */
 function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80);
@@ -262,49 +464,38 @@ function Navigation() {
   }, []);
 
   return (
-    <nav
-      ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'nav-glass bg-[#0a0a0a]/90 border-b border-[#333]/30'
-          : 'bg-transparent'
-      }`}
-    >
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+      scrolled ? 'nav-glass bg-[#0a0a0a]/85 border-b border-[#c9a96e]/10' : 'bg-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logo */}
-          <a href="#" className="flex-shrink-0">
-            <img
-              src="/images/logo-white.png"
-              alt="VELOX"
-              className="h-8 sm:h-10 w-auto"
-            />
+          <a href="#" className="flex-shrink-0 cursor-hover">
+            <img src="/images/logo-white.png" alt="VELOX" className="h-8 sm:h-10 w-auto transition-opacity duration-300 hover:opacity-70" />
           </a>
 
-          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-[11px] font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300"
+                className="cursor-hover relative text-[11px] font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300 after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-[#c9a96e] hover:after:w-full after:transition-all after:duration-300"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          {/* CTA + Hamburger */}
           <div className="flex items-center gap-4">
-            <a
+            <MagneticButton
               href="#reserve"
-              className="hidden sm:inline-flex items-center px-6 py-2.5 bg-[#c9a96e] hover:bg-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.2em] transition-all duration-300"
+              className="hidden sm:inline-flex px-7 py-2.5 bg-[#c9a96e] hover:bg-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.2em] transition-all duration-300 hover:shadow-[0_0_25px_rgba(201,169,110,0.3)]"
+              strength={0.2}
             >
               BOOK NOW
-            </a>
+            </MagneticButton>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-white p-2"
+              className="md:hidden text-white p-2 cursor-hover"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -313,23 +504,23 @@ function Navigation() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <framerMotion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-[#0a0a0a]/98 nav-glass border-t border-[#333]/50 overflow-hidden"
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="md:hidden bg-[#0a0a0a]/98 nav-glass border-t border-[#c9a96e]/10 overflow-hidden"
           >
-            <div className="px-4 py-6 space-y-4">
-              {navLinks.map((link) => (
+            <div className="px-6 py-8 space-y-5">
+              {navLinks.map((link, i) => (
                 <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block text-sm font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300 py-2"
+                  className="block text-base font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300 py-2"
+                  style={{ animationDelay: `${i * 0.05}s` }}
                 >
                   {link.label}
                 </a>
@@ -337,7 +528,7 @@ function Navigation() {
               <a
                 href="#reserve"
                 onClick={() => setMobileOpen(false)}
-                className="block text-center px-6 py-3 bg-[#c9a96e] hover:bg-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.2em] transition-all duration-300 mt-4"
+                className="block text-center px-6 py-3 bg-[#c9a96e] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.2em] mt-4"
               >
                 BOOK NOW
               </a>
@@ -352,13 +543,9 @@ function Navigation() {
 
 /* ═══════════════════════════════════════════════════════════
    ╔═══════════════════════════════════════════════════════╗
-   ║  EFECTO 1: HERO "SCALE DOWN & REVEAL"               ║
-   ║  ─────────────────────────────────────────────────    ║
-   ║  La imagen del carro ocupa 100% del viewport.        ║
-   ║  Al hacer scroll, GSAP ScrollTrigger reduce la       ║
-   ║  imagen (scale down) con clip-path inset, revelando  ║
-   ║  la interfaz de reserva debajo con tipografía        ║
-   ║  minimalista y elegante.                             ║
+   ║  EFECTO 1: HERO "SCALE DOWN & REVEAL" V2             ║
+   ║  ─── Añadido: parallax layers, glow border,          ║
+   ║  texto con split reveal, ambient particles            ║
    ╚═══════════════════════════════════════════════════════╝
    ═══════════════════════════════════════════════════════════ */
 function HeroScaleDown() {
@@ -366,6 +553,14 @@ function HeroScaleDown() {
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const revealRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const particlesRef = useRef<HTMLDivElement>(null);
+  // Partículas fijas con posiciones deterministas para evitar hydration mismatch
+  const particles = Array.from({ length: 20 }, (_, i) => ({
+    left: ((i * 37 + 13) % 100),
+    top: ((i * 53 + 7) % 100),
+    opacity: (i % 5 + 1) * 0.06 + 0.05,
+  }));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -374,134 +569,159 @@ function HeroScaleDown() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=100%',        // La animación dura exactamente 1 viewport de scroll
-          scrub: 1,             // Scrub suave (1 segundo de delay para suavidad)
-          pin: true,            // Fija la sección mientras se anima
-          anticipatePin: 1,     // Pre-calcular el pin para evitar saltos
+          end: '+=120%',
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
         },
       });
 
-      // 1) Scale down de la imagen hero — de full a ~60% con bordes redondeados
-      tl.fromTo(
-        imageRef.current,
+      // 1) Scale down con clip-path más dramático
+      tl.fromTo(imageRef.current,
         { clipPath: 'inset(0% 0% 0% 0% round 0px)', scale: 1 },
         {
-          clipPath: 'inset(4% 4% 4% 4% round 16px)',
-          scale: 0.88,
-          ease: 'none',
-          duration: 1,
+          clipPath: 'inset(3% 3% 3% 3% round 24px)',
+          scale: 0.82,
+          ease: 'none', duration: 1,
         },
         0
       );
 
-      // 2) Fade out del texto hero principal
-      tl.fromTo(
-        textRef.current,
+      // 2) Glow border aparece al reducir
+      tl.fromTo(glowRef.current,
+        { opacity: 0 },
+        { opacity: 1, ease: 'none', duration: 0.6 },
+        0.3
+      );
+
+      // 3) Fade out del texto hero
+      tl.fromTo(textRef.current,
         { opacity: 1, y: 0 },
-        { opacity: 0, y: -60, ease: 'none', duration: 0.6 },
+        { opacity: 0, y: -80, ease: 'none', duration: 0.5 },
         0
       );
 
-      // 3) Reveal del contenido debajo — información de reserva
-      tl.fromTo(
-        revealRef.current,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, ease: 'none', duration: 0.5 },
-        0.5
+      // 4) Reveal de specs con escala dramática
+      tl.fromTo(revealRef.current,
+        { opacity: 0, y: 60, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, ease: 'none', duration: 0.5 },
+        0.55
       );
+
+      // ─── Partículas ambientales flotantes ───
+      if (particlesRef.current) {
+        const dots = particlesRef.current.querySelectorAll('.ambient-dot');
+        dots.forEach((dot) => {
+          gsap.to(dot, {
+            y: `random(-30, 30)`,
+            x: `random(-20, 20)`,
+            opacity: `random(0.1, 0.4)`,
+            duration: `random(3, 6)`,
+            ease: 'sine.inOut',
+            repeat: -1,
+            yoyo: true,
+            delay: `random(0, 3)`,
+          });
+        });
+      }
     }, containerRef);
 
-    // Limpieza: matar todas las animaciones y ScrollTriggers del contexto
     return () => ctx.revert();
   }, []);
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden">
-      {/* ─── Imagen Hero Full Viewport ─── */}
+      {/* Partículas ambientales — client-only */}
+      <div ref={particlesRef} className="absolute inset-0 z-[5] pointer-events-none">
+        {particles.map((p, i) => (
+          <div
+            key={i}
+            className="ambient-dot absolute w-[2px] h-[2px] bg-[#c9a96e] rounded-full"
+            style={{ left: `${p.left}%`, top: `${p.top}%`, opacity: p.opacity }}
+          />
+        ))}
+      </div>
+
+      {/* Hero Image */}
       <div ref={imageRef} className="hero-scale-container absolute inset-0">
         <img
           src="/images/hero-bg.png"
           alt="Ferrari California in luxury showroom"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover scale-105"
           loading="eager"
         />
         <div className="hero-overlay absolute inset-0" />
       </div>
 
-      {/* ─── Texto Hero Principal (desaparece al scroll) ─── */}
+      {/* Glow Border (aparece al scale down) */}
+      <div
+        ref={glowRef}
+        className="absolute inset-[3%] rounded-3xl border border-[#c9a96e]/20 z-[3] pointer-events-none"
+        style={{ opacity: 0, boxShadow: '0 0 60px rgba(201,169,110,0.08), inset 0 0 60px rgba(201,169,110,0.03)' }}
+      />
+
+      {/* Hero Text */}
       <div ref={textRef} className="absolute inset-0 flex items-center justify-center z-10">
         <div className="text-center px-4 max-w-5xl mx-auto">
-          <p className="text-[11px] sm:text-xs font-heading font-semibold tracking-[0.5em] text-[#c9a96e] mb-4 sm:mb-6">
-            EXPERIENCE LUXURY
+          <p className="text-[10px] sm:text-xs font-heading font-semibold tracking-[0.6em] text-[#c9a96e] mb-5 sm:mb-8 uppercase">
+            Experience Luxury
           </p>
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl xl:text-[9rem] font-heading font-black tracking-wide text-white leading-[0.9] mb-4 sm:mb-6">
-            DRIVE
-            <br />
-            <span className="text-[#c9a96e]">YOUR DREAM</span>
+          <h1 className="text-5xl sm:text-7xl lg:text-[7rem] xl:text-[9rem] font-heading font-black tracking-tight text-white leading-[0.85] mb-5 sm:mb-8">
+            <span className="block">DRIVE</span>
+            <span className="block bg-gradient-to-r from-[#c9a96e] via-[#e6c875] to-[#c9a96e] bg-clip-text text-transparent">YOUR DREAM</span>
           </h1>
-          <p className="text-sm sm:text-base font-body font-light text-[#999] max-w-md mx-auto mb-8 sm:mb-10">
+          <p className="text-sm sm:text-base font-body font-light text-[#888] max-w-md mx-auto mb-8 sm:mb-12">
             Premium fleet. Unforgettable moments.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
+            <MagneticButton
               href="#fleet"
-              className="px-8 py-3.5 bg-[#c9a96e] hover:bg-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] transition-all duration-300 flex items-center gap-2"
+              className="px-9 py-4 bg-gradient-to-r from-[#c9a96e] to-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] hover:shadow-[0_0_35px_rgba(201,169,110,0.35)] transition-shadow duration-500"
+              strength={0.15}
             >
-              EXPLORE FLEET
-              <ArrowRight size={14} />
-            </a>
-            <a
+              EXPLORE FLEET <ArrowRight size={14} className="ml-2" />
+            </MagneticButton>
+            <MagneticButton
               href="#experience"
-              className="px-8 py-3.5 border border-white/30 hover:border-white text-white text-[11px] font-heading font-bold tracking-[0.25em] transition-all duration-300 flex items-center gap-2"
+              className="px-9 py-4 border border-white/25 hover:border-[#c9a96e]/50 text-white text-[11px] font-heading font-bold tracking-[0.25em] transition-all duration-500 hover:bg-white/5"
+              strength={0.15}
             >
-              <Play size={12} />
-              WATCH REEL
-            </a>
+              <Play size={12} className="mr-2" /> WATCH REEL
+            </MagneticButton>
           </div>
         </div>
       </div>
 
-      {/* ─── Contenido Reveal (aparece al hacer scroll) ─── */}
-      <div ref={revealRef} className="absolute bottom-12 sm:bottom-16 left-0 right-0 z-10 px-4">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
-          {/* Info del vehículo destacado */}
+      {/* Reveal Content */}
+      <div ref={revealRef} className="absolute bottom-10 sm:bottom-14 left-0 right-0 z-10 px-4" style={{ opacity: 0 }}>
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8">
           <div>
-            <p className="text-[10px] font-heading tracking-[0.3em] text-[#c9a96e] mb-1">
-              FEATURED VEHICLE
-            </p>
-            <h3 className="text-2xl sm:text-3xl font-heading font-black tracking-wider text-white">
-              FERRARI CALIFORNIA
-            </h3>
-            <p className="text-sm font-body text-[#999] mt-1">
-              Rosso Corsa — From €890/day
-            </p>
+            <p className="text-[9px] font-heading tracking-[0.4em] text-[#c9a96e] mb-2">FEATURED VEHICLE</p>
+            <h3 className="text-2xl sm:text-4xl font-heading font-black tracking-wider text-white">FERRARI CALIFORNIA</h3>
+            <p className="text-sm font-body text-[#777] mt-1">Rossa Corsa — From €890/day</p>
           </div>
-          {/* Specs mini */}
-          <div className="flex items-center gap-6 sm:gap-8">
-            <div className="text-right">
-              <p className="text-2xl sm:text-3xl font-heading font-bold text-[#c9a96e]">460</p>
-              <p className="text-[10px] font-heading tracking-[0.2em] text-[#666]">HP</p>
-            </div>
-            <div className="w-[1px] h-10 bg-[#333]" />
-            <div className="text-right">
-              <p className="text-2xl sm:text-3xl font-heading font-bold text-[#c9a96e]">3.9s</p>
-              <p className="text-[10px] font-heading tracking-[0.2em] text-[#666]">0-100</p>
-            </div>
-            <div className="w-[1px] h-10 bg-[#333]" />
-            <div className="text-right">
-              <p className="text-2xl sm:text-3xl font-heading font-bold text-[#c9a96e]">310</p>
-              <p className="text-[10px] font-heading tracking-[0.2em] text-[#666]">KM/H</p>
-            </div>
+          <div className="flex items-center gap-8 sm:gap-10">
+            {[
+              { val: '460', label: 'HP' },
+              { val: '3.9s', label: '0-100' },
+              { val: '310', label: 'KM/H' },
+            ].map((spec, i) => (
+              <div key={spec.label} className="flex items-center gap-3">
+                {i > 0 && <div className="w-[1px] h-10 bg-[#333]" />}
+                <div className="text-right">
+                  <p className="text-2xl sm:text-3xl font-heading font-bold bg-gradient-to-b from-[#c9a96e] to-[#b8943e] bg-clip-text text-transparent">{spec.val}</p>
+                  <p className="text-[9px] font-heading tracking-[0.2em] text-[#555]">{spec.label}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
-        <span className="text-[9px] font-heading tracking-[0.3em] text-[#555]">
-          SCROLL TO EXPLORE
-        </span>
-        <ChevronDown size={14} className="text-[#555] animate-bounce-slow" />
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+        <span className="text-[8px] font-heading tracking-[0.4em] text-[#444]">SCROLL</span>
+        <ChevronDown size={12} className="text-[#c9a96e]/50 animate-bounce-slow" />
       </div>
     </section>
   );
@@ -509,14 +729,45 @@ function HeroScaleDown() {
 
 
 /* ═══════════════════════════════════════════════════════════
+   COMPONENT: MARQUEE V2 — con speed change on hover
+   ═══════════════════════════════════════════════════════════ */
+function MarqueeText() {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const items = ['FERRARI', 'MASERATI', 'MERCEDES-BENZ', 'LUXURY RENTAL', 'VELOX', 'PREMIUM DRIVE'];
+
+  useEffect(() => {
+    if (!marqueeRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.to(marqueeRef.current, {
+        xPercent: -50,
+        duration: 25,
+        ease: 'none',
+        repeat: -1,
+      });
+    }, marqueeRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="py-6 sm:py-8 border-y border-[#c9a96e]/10 overflow-hidden bg-[#0a0a0a]">
+      <div ref={marqueeRef} className="flex whitespace-nowrap">
+        {[...items, ...items].map((item, i) => (
+          <span key={i} className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-[0.08em] text-[#181818] mx-4 sm:mx-6 select-none cursor-hover hover:text-[#222] transition-colors duration-300">
+            {item}
+            <span className="text-[#c9a96e]/20 mx-3 sm:mx-5 text-xl">◆</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════
    ╔═══════════════════════════════════════════════════════╗
-   ║  EFECTO 2: SCROLL-DRIVEN IMAGE PLAYBACK              ║
-   ║  ─────────────────────────────────────────────────    ║
-   ║  Una secuencia de imágenes del vehículo que responden ║
-   ║  directamente al scroll del usuario. Al bajar, el     ║
-   ║  carro avanza/rotación; al subir, retrocede. Se usa   ║
-   ║  GSAP ScrollTrigger con scrub para controlar la       ║
-   ║  opacidad cruzada (crossfade) entre frames.           ║
+   ║  EFECTO 2: SCROLL-DRIVEN IMAGE PLAYBACK V2            ║
+   ║  ─── Añadido: zoom sutil por frame, better UI,       ║
+   ║  animated counter, mejor gradiente overlay             ║
    ╚═══════════════════════════════════════════════════════╝
    ═══════════════════════════════════════════════════════════ */
 function ScrollDrivenPlayback() {
@@ -524,91 +775,53 @@ function ScrollDrivenPlayback() {
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const progressRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
-
-  // Labels para cada frame de la secuencia
-  const frameLabels = [
-    'FRONT VIEW',
-    'PROFILE',
-    'IN MOTION',
-    'ON THE ROAD',
-    'REAR VIEW',
-    'COCKPIT',
-  ];
+  const counterRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const frames = frameRefs.current.filter(Boolean);
 
-      // ─── Animación scroll-driven para cada frame ───
-      // Cada frame aparece y desaparece según la posición del scroll
       frames.forEach((frame, i) => {
         if (!frame) return;
+        const segStart = i / frames.length;
+        const segEnd = (i + 1) / frames.length;
 
-        // Cada frame ocupa una fracción del scroll total
-        const segmentStart = i / frames.length;
-        const segmentEnd = (i + 1) / frames.length;
-
-        gsap.fromTo(
-          frame,
-          { opacity: 0 },
+        // Crossfade con zoom sutil
+        gsap.fromTo(frame,
+          { opacity: 0, scale: 1.05 },
           {
-            opacity: 1,
+            opacity: 1, scale: 1,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: `${segmentStart * 100}% top`,
-              end: `${segmentEnd * 100}% top`,
-              scrub: 0.8,
-              // Pin la sección durante toda la animación
+              start: `${segStart * 100}% top`,
+              end: `${segEnd * 100}% top`,
+              scrub: 0.6,
             },
           }
         );
       });
 
-      // ─── Barra de progreso ───
-      gsap.fromTo(
-        progressRef.current,
+      // Progreso
+      gsap.fromTo(progressRef.current,
         { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 0.5,
-          },
-        }
+        { scaleX: 1, ease: 'none', scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: 'bottom bottom', scrub: 0.3 } }
       );
 
-      // ─── Labels que cambian con scroll ───
+      // Labels
       frames.forEach((_, i) => {
-        if (!labelRef.current) return;
-        gsap.fromTo(
-          labelRef.current,
-          { opacity: 0, y: 10 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.3,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: `${(i / frames.length) * 100 + 5}% top`,
-              end: `${((i + 1) / frames.length) * 100}% top`,
-              toggleActions: 'play reverse play reverse',
-              onEnter: () => {
-                if (labelRef.current) {
-                  labelRef.current.textContent = frameLabels[i];
-                }
-              },
-              onEnterBack: () => {
-                if (labelRef.current) {
-                  labelRef.current.textContent = frameLabels[i];
-                }
-              },
-            },
-          }
-        );
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: `${(i / frames.length) * 100 + 3}% top`,
+          onEnter: () => {
+            if (labelRef.current) labelRef.current.textContent = frameLabels[i];
+            if (counterRef.current) counterRef.current.textContent = String(i + 1).padStart(2, '0');
+          },
+          onEnterBack: () => {
+            if (labelRef.current) labelRef.current.textContent = frameLabels[i];
+            if (counterRef.current) counterRef.current.textContent = String(i + 1).padStart(2, '0');
+          },
+        });
       });
     }, sectionRef);
 
@@ -622,9 +835,7 @@ function ScrollDrivenPlayback() {
       className="relative bg-[#0a0a0a]"
       style={{ height: `${sequenceFrames.length * 100}vh` }}
     >
-      {/* ─── Contenedor sticky para las imágenes ─── */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Capa de imágenes — cada frame se superpone */}
         {sequenceFrames.map((src, i) => (
           <div
             key={src}
@@ -632,48 +843,37 @@ function ScrollDrivenPlayback() {
             className="scroll-seq-frame"
             style={{ opacity: i === 0 ? 1 : 0 }}
           >
-            <img
-              src={src}
-              alt={`Ferrari California frame ${i + 1}`}
-              className="w-full h-full object-cover"
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/30 via-transparent to-[#0a0a0a]/70" />
+            <img src={src} alt={`Ferrari frame ${i + 1}`} className="w-full h-full object-cover" loading={i === 0 ? 'eager' : 'lazy'} />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/40 via-transparent to-[#0a0a0a]/80" />
           </div>
         ))}
 
-        {/* ─── UI Overlay ─── */}
+        {/* UI Overlay */}
         <div className="absolute inset-0 flex items-end z-10 pointer-events-none">
-          <div className="w-full px-4 sm:px-8 lg:px-16 pb-20 sm:pb-24">
-            {/* Frame label */}
-            <div className="mb-4">
-              <p className="text-[10px] font-heading tracking-[0.4em] text-[#c9a96e] mb-1">
-                360° EXPERIENCE
-              </p>
+          <div className="w-full px-4 sm:px-8 lg:px-16 pb-16 sm:pb-20">
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-[1px] bg-[#c9a96e]" />
+                <p className="text-[9px] font-heading tracking-[0.5em] text-[#c9a96e]">360° EXPERIENCE</p>
+              </div>
               <div
                 ref={labelRef}
-                className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-wider text-white"
+                className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-wider text-white"
               >
                 FRONT VIEW
               </div>
             </div>
 
-            {/* Barra de progreso */}
-            <div className="w-full h-[1px] bg-[#333] relative overflow-hidden">
-              <div
-                ref={progressRef}
-                className="h-full bg-[#c9a96e] origin-left"
-                style={{ transform: 'scaleX(0)' }}
-              />
+            <div className="w-full h-[1px] bg-[#222] relative overflow-hidden">
+              <div ref={progressRef} className="h-full bg-gradient-to-r from-[#c9a96e] to-[#d4af37] origin-left" style={{ transform: 'scaleX(0)' }} />
             </div>
 
-            {/* Frame counter */}
             <div className="flex items-center justify-between mt-3">
-              <span className="text-[10px] font-heading tracking-[0.2em] text-[#666]">
-                SCROLL TO ROTATE
-              </span>
-              <span className="text-[10px] font-heading tracking-[0.2em] text-[#666]">
-                <span className="text-[#c9a96e]">01</span> / 0{sequenceFrames.length}
+              <span className="text-[9px] font-heading tracking-[0.3em] text-[#555]">SCROLL TO ROTATE</span>
+              <span className="text-[10px] font-heading tracking-[0.2em] text-[#555]">
+                <span ref={counterRef} className="text-[#c9a96e]">01</span>
+                <span className="mx-1">/</span>
+                0{sequenceFrames.length}
               </span>
             </div>
           </div>
@@ -686,98 +886,101 @@ function ScrollDrivenPlayback() {
 
 /* ═══════════════════════════════════════════════════════════
    ╔═══════════════════════════════════════════════════════╗
-   ║  EFECTO 3: TEXT & ASSET DISPLACEMENT                  ║
-   ║  ─────────────────────────────────────────────────    ║
-   ║  Tarjetas de carros con distorsión visual fluida al   ║
-   ║  hacer hover. Se aplica skew dinámico, traslación     ║
-   ║  sutil y distorsión líquida (SVG feTurbulence)        ║
-   ║  simulando reflejo de calor, viento o velocidad.      ║
-   ║  La distorsión se basa en la velocidad del mouse.     ║
+   ║  EFECTO 3: 3D TILT + DISPLACEMENT CARDS V2            ║
+   ║  ─── Añadido: perspectiva 3D, brillo dinámico,       ║
+   ║  color peek, mejor layout, glow en hover              ║
    ╚═══════════════════════════════════════════════════════╝
    ═══════════════════════════════════════════════════════════ */
-function DisplacementCard({
-  car,
-  index,
-}: {
-  car: typeof cars[number];
-  index: number;
-}) {
+function DisplacementCard({ car, index }: { car: typeof cars[number]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const shineRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const lastMouseX = useRef(0);
-  const lastMouseY = useRef(0);
-  const velocityX = useRef(0);
-  const velocityY = useRef(0);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const lastMouse = useRef({ x: 0, y: 0 });
 
-  // ─── Calcular velocidad del mouse y aplicar skew/distorsión ───
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || !imageRef.current) return;
+    if (!cardRef.current || !imageRef.current || !shineRef.current) return;
 
     const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;         // Posición X relativa a la card
-    const y = e.clientY - rect.top;           // Posición Y relativa a la card
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Calcular velocidad del mouse (qué tan rápido se mueve)
-    velocityX.current = e.clientX - lastMouseX.current;
-    velocityY.current = e.clientY - lastMouseY.current;
-    lastMouseX.current = e.clientX;
-    lastMouseY.current = e.clientY;
+    // Velocidad
+    const vx = e.clientX - lastMouse.current.x;
+    const vy = e.clientY - lastMouse.current.y;
+    lastMouse.current = { x: e.clientX, y: e.clientY };
 
-    // ─── Skew dinámico basado en velocidad ───
-    // Limitar el skew máximo a ±8 grados para elegancia
-    const skewX = gsap.utils.clamp(-8, 8, velocityX.current * 0.3);
-    const skewY = gsap.utils.clamp(-4, 4, velocityY.current * 0.2);
+    // ─── 3D Tilt con perspectiva ───
+    const rotateX = ((y - centerY) / centerY) * -8;  // ±8° tilt
+    const rotateY = ((x - centerX) / centerX) * 8;
 
-    // ─── Traslación parallax sutil ───
-    const moveX = (x - centerX) / centerX * 8;   // ±8px de traslación
-    const moveY = (y - centerY) / centerY * 5;    // ±5px de traslación
+    // Skew basado en velocidad
+    const skewX = gsap.utils.clamp(-6, 6, vx * 0.25);
 
-    // Aplicar transform a la imagen con GSAP (rendimiento GPU)
-    gsap.to(imageRef.current, {
-      skewX: skewX,
-      skewY: skewY,
-      x: moveX,
-      y: moveY,
-      scale: 1.05,
-      duration: 0.4,
-      ease: 'power2.out',
+    gsap.to(cardRef.current, {
+      rotateX, rotateY,
+      transformPerspective: 1000,
+      duration: 0.4, ease: 'power2.out',
     });
 
-    // ─── Efecto de título con desplazamiento opuesto ───
+    // ─── Shine que sigue el cursor ───
+    gsap.to(shineRef.current, {
+      background: `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(201,169,110,0.15) 0%, transparent 60%)`,
+      duration: 0.3,
+    });
+
+    // Imagen con parallax + skew
+    gsap.to(imageRef.current, {
+      x: (x - centerX) / centerX * 6,
+      y: (y - centerY) / centerY * 4,
+      skewX,
+      scale: 1.06,
+      duration: 0.4, ease: 'power2.out',
+    });
+
+    // Título con parallax invertido
     if (titleRef.current) {
       gsap.to(titleRef.current, {
-        x: -moveX * 0.5,
-        y: -moveY * 0.3,
+        x: (x - centerX) / centerX * -4,
         skewX: -skewX * 0.3,
-        duration: 0.4,
-        ease: 'power2.out',
+        duration: 0.4, ease: 'power2.out',
+      });
+    }
+
+    // Glow
+    if (glowRef.current) {
+      gsap.to(glowRef.current, {
+        opacity: 0.6,
+        duration: 0.3,
       });
     }
   }, []);
 
-  // ─── Reset al salir del hover ───
   const handleMouseLeave = useCallback(() => {
-    if (!imageRef.current || !titleRef.current) return;
+    if (!cardRef.current || !imageRef.current || !shineRef.current || !titleRef.current || !glowRef.current) return;
 
-    gsap.to(imageRef.current, {
-      skewX: 0,
-      skewY: 0,
-      x: 0,
-      y: 0,
-      scale: 1,
-      duration: 0.6,
-      ease: 'elastic.out(1, 0.5)',
+    gsap.to(cardRef.current, {
+      rotateX: 0, rotateY: 0,
+      duration: 0.8, ease: 'elastic.out(1, 0.5)',
     });
-
+    gsap.to(imageRef.current, {
+      x: 0, y: 0, skewX: 0, scale: 1,
+      duration: 0.7, ease: 'elastic.out(1, 0.5)',
+    });
     gsap.to(titleRef.current, {
-      x: 0,
-      y: 0,
-      skewX: 0,
-      duration: 0.6,
-      ease: 'elastic.out(1, 0.5)',
+      x: 0, skewX: 0,
+      duration: 0.7, ease: 'elastic.out(1, 0.5)',
+    });
+    gsap.to(shineRef.current, {
+      background: 'transparent',
+      duration: 0.4,
+    });
+    gsap.to(glowRef.current, {
+      opacity: 0,
+      duration: 0.4,
     });
   }, []);
 
@@ -786,73 +989,72 @@ function DisplacementCard({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="displacement-card group relative bg-[#111]/60 border border-[#333]/40 overflow-hidden cursor-pointer hover:border-[#c9a96e]/30 transition-colors duration-500"
+      className="cursor-hover group relative bg-[#0d0d0d] border border-[#222] overflow-hidden transition-colors duration-500 hover:border-[#c9a96e]/25"
+      style={{ transformStyle: 'preserve-3d' }}
     >
-      {/* Car Image Container */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#0d0d0d]">
-        <div ref={imageRef} className="w-full h-full">
-          <img
-            src={car.image}
-            alt={`${car.name} ${car.variant}`}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent" />
+      {/* Glow effect */}
+      <div
+        ref={glowRef}
+        className="absolute -inset-[1px] bg-gradient-to-r from-[#c9a96e]/20 via-transparent to-[#c9a96e]/20 rounded-none z-0"
+        style={{ opacity: 0 }}
+      />
 
-        {/* Tagline overlay */}
-        <div className="absolute top-4 left-4">
-          <span className="text-[9px] font-heading tracking-[0.3em] text-[#c9a96e] bg-[#0a0a0a]/80 px-3 py-1.5">
+      {/* Color accent bar */}
+      <div className="h-[2px] w-full" style={{ background: `linear-gradient(to right, ${car.color}, #c9a96e, ${car.color})` }} />
+
+      {/* Image */}
+      <div className="relative aspect-[16/9] overflow-hidden bg-[#0a0a0a]">
+        <div ref={imageRef} className="w-full h-full">
+          <img src={car.image} alt={`${car.name} ${car.variant}`} className="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
+
+        {/* Shine overlay */}
+        <div ref={shineRef} className="absolute inset-0 z-[2] pointer-events-none" />
+
+        {/* Tagline */}
+        <div className="absolute top-4 left-4 z-[3]">
+          <span className="text-[8px] font-heading tracking-[0.4em] text-[#c9a96e] bg-[#0a0a0a]/70 px-3 py-1.5 backdrop-blur-sm">
             {car.tagline}
+          </span>
+        </div>
+
+        {/* Price overlay */}
+        <div className="absolute top-4 right-4 z-[3]">
+          <span className="text-sm font-heading font-bold text-white bg-[#c9a96e] px-3 py-1.5">
+            €{car.price}<span className="text-[9px] font-normal opacity-70">/DAY</span>
           </span>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-5 sm:p-6">
+      <div className="p-5 sm:p-6 relative z-10">
         <div className="mb-4">
-          <h3
-            ref={titleRef}
-            className="text-lg sm:text-xl font-heading font-bold tracking-wider text-white"
-          >
+          <h3 ref={titleRef} className="text-lg sm:text-xl font-heading font-bold tracking-wider text-white">
             {car.name}
           </h3>
-          <p className="text-sm font-heading font-light tracking-widest text-[#666] mt-0.5">
-            {car.variant}
-          </p>
+          <p className="text-xs font-heading font-light tracking-[0.25em] text-[#555] mt-1">{car.variant}</p>
         </div>
 
-        {/* Specs */}
-        <div className="flex items-center gap-4 sm:gap-6 mb-5">
-          <div className="flex items-center gap-1.5">
-            <Zap size={13} className="text-[#c9a96e]" />
-            <span className="text-xs font-body text-[#999]">{car.hp} HP</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Timer size={13} className="text-[#c9a96e]" />
-            <span className="text-xs font-body text-[#999]">{car.acceleration} 0-100</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Gauge size={13} className="text-[#c9a96e]" />
-            <span className="text-xs font-body text-[#999]">{car.topSpeed}</span>
-          </div>
-        </div>
-
-        {/* Price & CTA */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-heading tracking-[0.2em] text-[#666]">FROM</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl sm:text-2xl font-heading font-bold text-[#c9a96e]">
-                €{car.price}
-              </span>
-              <span className="text-xs font-body text-[#666]">/DAY</span>
+        <div className="flex items-center gap-5 mb-5">
+          {[
+            { icon: Zap, val: `${car.hp} HP` },
+            { icon: Timer, val: `${car.acceleration} 0-100` },
+            { icon: Gauge, val: car.topSpeed },
+          ].map((spec) => (
+            <div key={spec.val} className="flex items-center gap-1.5">
+              <spec.icon size={12} className="text-[#c9a96e]/70" />
+              <span className="text-[11px] font-body text-[#888]">{spec.val}</span>
             </div>
-          </div>
-          <button className="reserve-btn px-5 py-2.5 border border-[#c9a96e]/50 text-[#c9a96e] text-[10px] font-heading font-bold tracking-[0.25em] hover:bg-[#c9a96e] hover:text-[#0a0a0a] transition-all duration-300">
-            RESERVE
-          </button>
+          ))}
         </div>
+
+        <MagneticButton
+          className="w-full justify-center py-3 border border-[#c9a96e]/40 text-[#c9a96e] text-[10px] font-heading font-bold tracking-[0.25em] hover:bg-[#c9a96e] hover:text-[#0a0a0a] transition-all duration-300 hover:shadow-[0_0_20px_rgba(201,169,110,0.2)]"
+          strength={0.1}
+        >
+          RESERVE <ChevronRight size={12} className="ml-1" />
+        </MagneticButton>
       </div>
     </div>
   );
@@ -860,56 +1062,53 @@ function DisplacementCard({
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: FLEET SECTION
-   ─── Sección de la flota con las 4 cards que usan el
-   Efecto 3 (Displacement). Título con animación GSAP.
+   COMPONENT: FLEET SECTION V2
    ═══════════════════════════════════════════════════════════ */
 function FleetSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ─── Animación del título de la sección ───
-      gsap.fromTo(
-        headingRef.current,
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            end: 'top 40%',
-            scrub: 1,
-          },
-        }
+      gsap.fromTo(headingRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', end: 'top 50%', scrub: 1 } }
       );
-    }, sectionRef);
 
+      // Staggered card reveal
+      cardsRef.current.filter(Boolean).forEach((card, i) => {
+        if (!card) return;
+        gsap.fromTo(card,
+          { opacity: 0, y: 80, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none reverse' },
+            delay: i * 0.1,
+          }
+        );
+      });
+    }, sectionRef);
     return () => ctx.revert();
   }, []);
 
   return (
     <section ref={sectionRef} id="fleet" className="relative py-20 sm:py-28 lg:py-36 bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div ref={headingRef} className="text-center mb-12 sm:mb-16 lg:mb-20" style={{ opacity: 0 }}>
-          <p className="text-[11px] font-heading font-semibold tracking-[0.4em] text-[#c9a96e] mb-3">
-            OUR COLLECTION
-          </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-wide text-white">
-            THE FLEET
-          </h2>
-          <div className="w-16 h-[1px] bg-[#c9a96e] mx-auto mt-6" />
+        <div ref={headingRef} className="text-center mb-14 sm:mb-20" style={{ opacity: 0 }}>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+            <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">OUR COLLECTION</p>
+            <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+          </div>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white">THE FLEET</h2>
         </div>
 
-        {/* Car Grid — Efecto 3: Displacement Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6">
           {cars.map((car, index) => (
-            <DisplacementCard key={car.variant} car={car} index={index} />
+            <div key={car.variant} ref={(el) => { cardsRef.current[index] = el; }} style={{ opacity: 0 }}>
+              <DisplacementCard car={car} index={index} />
+            </div>
           ))}
         </div>
       </div>
@@ -919,34 +1118,7 @@ function FleetSection() {
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: MARQUEE TEXT
-   ─── Texto infinito que se desplaza horizontalmente,
-   dando sensación de movimiento y velocidad.
-   ═══════════════════════════════════════════════════════════ */
-function MarqueeText() {
-  const items = ['FERRARI', 'MASERATI', 'MERCEDES-BENZ', 'LUXURY RENTAL', 'VELOX', 'PREMIUM EXPERIENCE'];
-
-  return (
-    <div className="py-8 sm:py-12 border-y border-[#333]/30 overflow-hidden bg-[#0a0a0a]">
-      <div className="animate-marquee flex whitespace-nowrap">
-        {[...items, ...items].map((item, i) => (
-          <span
-            key={i}
-            className="text-4xl sm:text-6xl lg:text-7xl font-heading font-black tracking-[0.1em] text-[#1a1a1a] mx-6 sm:mx-8 select-none"
-          >
-            {item}
-            <span className="text-[#c9a96e]/30 mx-4 sm:mx-6">◆</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-/* ═══════════════════════════════════════════════════════════
-   COMPONENTE: FEATURES SECTION
-   ─── 3 tarjetas de características con animación GSAP.
+   COMPONENT: FEATURES V2 — con stat badges
    ═══════════════════════════════════════════════════════════ */
 function FeaturesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -954,66 +1126,63 @@ function FeaturesSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ─── Staggered reveal de las feature cards ───
       cardsRef.current.filter(Boolean).forEach((card, i) => {
         if (!card) return;
-        gsap.fromTo(
-          card,
-          { opacity: 0, y: 60, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            delay: i * 0.15,
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
+        gsap.fromTo(card,
+          { opacity: 0, y: 60, rotateX: 5 },
+          { opacity: 1, y: 0, rotateX: 0, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none reverse' },
+            delay: i * 0.12,
           }
         );
       });
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
     <section ref={sectionRef} className="relative py-20 sm:py-28 lg:py-36 section-gradient">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
-          <p className="text-[11px] font-heading font-semibold tracking-[0.4em] text-[#c9a96e] mb-3">
-            WHY VELOX
-          </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-wide text-white">
-            THE EXPERIENCE
-          </h2>
-          <div className="w-16 h-[1px] bg-[#c9a96e] mx-auto mt-6" />
+        <div className="text-center mb-14 sm:mb-20">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+            <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">WHY VELOX</p>
+            <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+          </div>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white">THE EXPERIENCE</h2>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.title}
                 ref={(el) => { cardsRef.current[index] = el; }}
-                className="group bg-[#111]/60 border border-[#333]/40 p-8 sm:p-10 text-center hover:border-[#c9a96e]/30 transition-all duration-500"
+                className="group bg-[#0d0d0d] border border-[#1a1a1a] p-8 sm:p-10 text-center hover:border-[#c9a96e]/20 transition-all duration-500 relative overflow-hidden"
                 style={{ opacity: 0 }}
               >
-                <div className="inline-flex items-center justify-center w-14 h-14 border border-[#c9a96e]/30 rounded-full mb-6 group-hover:bg-[#c9a96e]/10 transition-all duration-300">
-                  <Icon size={22} className="text-[#c9a96e]" />
+                {/* Stat badge */}
+                <div className="absolute top-4 right-4">
+                  <span className="text-[9px] font-heading tracking-[0.2em] text-[#c9a96e]/40 bg-[#c9a96e]/5 px-2 py-1">
+                    {feature.stat}
+                  </span>
                 </div>
-                <h3 className="text-sm sm:text-base font-heading font-bold tracking-[0.2em] text-white mb-3">
+
+                {/* Icon */}
+                <div className="inline-flex items-center justify-center w-16 h-16 border border-[#c9a96e]/20 rounded-full mb-7 group-hover:bg-[#c9a96e]/5 group-hover:border-[#c9a96e]/40 transition-all duration-500">
+                  <Icon size={24} className="text-[#c9a96e]/80 group-hover:text-[#c9a96e] transition-colors duration-500" />
+                </div>
+
+                <h3 className="text-sm sm:text-base font-heading font-bold tracking-[0.2em] text-white mb-4">
                   {feature.title}
                 </h3>
-                <p className="text-sm font-body font-light text-[#999] leading-relaxed">
+                <p className="text-sm font-body font-light text-[#888] leading-relaxed">
                   {feature.description}
                 </p>
+
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#c9a96e] to-[#d4af37] group-hover:w-full transition-all duration-700" />
               </div>
             );
           })}
@@ -1025,8 +1194,7 @@ function FeaturesSection() {
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: RESERVE / CTA SECTION
-   ─── Call to action con spotlight dorado y contacto.
+   COMPONENT: RESERVE V2
    ═══════════════════════════════════════════════════════════ */
 function ReserveSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -1034,77 +1202,51 @@ function ReserveSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ctaRef.current,
-        { opacity: 0, scale: 0.9 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse',
-          },
-        }
+      gsap.fromTo(ctaRef.current,
+        { opacity: 0, scale: 0.92 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 70%', toggleActions: 'play none none reverse' } }
       );
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="reserve"
-      className="relative py-20 sm:py-28 lg:py-36 bg-[#0a0a0a] overflow-hidden"
-    >
-      {/* Decorative background */}
+    <section ref={sectionRef} id="reserve" className="relative py-20 sm:py-28 lg:py-36 bg-[#0a0a0a] overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#c9a96e]/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-[#c9a96e]/3 rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#c9a96e]/3 rounded-full blur-[200px]" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#c9a96e]/2 rounded-full blur-[120px]" />
       </div>
 
       <div ref={ctaRef} className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center" style={{ opacity: 0 }}>
-        <p className="text-[11px] font-heading font-semibold tracking-[0.4em] text-[#c9a96e] mb-3">
-          YOUR JOURNEY AWAITS
-        </p>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-wide text-white mb-4 sm:mb-6">
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+          <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">YOUR JOURNEY AWAITS</p>
+          <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+        </div>
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white mb-5 sm:mb-6">
           READY TO EXPERIENCE
           <br />
-          <span className="text-[#c9a96e]">LUXURY?</span>
+          <span className="bg-gradient-to-r from-[#c9a96e] via-[#e6c875] to-[#c9a96e] bg-clip-text text-transparent">LUXURY?</span>
         </h2>
-        <p className="text-base sm:text-lg font-body font-light text-[#999] max-w-lg mx-auto mb-8 sm:mb-10">
+        <p className="text-base sm:text-lg font-body font-light text-[#888] max-w-lg mx-auto mb-8 sm:mb-10">
           Book your dream car today and elevate your journey
         </p>
 
-        <a
+        <MagneticButton
           href="#contact"
-          className="inline-flex items-center gap-2 px-10 py-4 bg-[#c9a96e] hover:bg-[#d4af37] text-[#0a0a0a] text-[12px] font-heading font-bold tracking-[0.25em] transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,169,110,0.3)]"
+          className="px-12 py-5 bg-gradient-to-r from-[#c9a96e] to-[#d4af37] text-[#0a0a0a] text-[12px] font-heading font-bold tracking-[0.25em] hover:shadow-[0_0_40px_rgba(201,169,110,0.35)] transition-shadow duration-500"
+          strength={0.15}
         >
-          RESERVE NOW
-          <ArrowRight size={16} />
-        </a>
+          RESERVE NOW <ArrowRight size={16} className="ml-2" />
+        </MagneticButton>
 
-        {/* Contact Info */}
-        <div
-          id="contact"
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mt-12 sm:mt-16 pt-10 border-t border-[#333]/40"
-        >
-          <a
-            href="tel:+393331234567"
-            className="flex items-center gap-2 text-[#999] hover:text-[#c9a96e] transition-colors duration-300"
-          >
-            <Phone size={15} />
-            <span className="text-sm font-body">+39 333 123 4567</span>
+        <div id="contact" className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 mt-14 sm:mt-16 pt-10 border-t border-[#222]">
+          <a href="tel:+393331234567" className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-hover">
+            <Phone size={14} /> <span className="text-sm font-body">+39 333 123 4567</span>
           </a>
-          <a
-            href="mailto:reserve@velox.com"
-            className="flex items-center gap-2 text-[#999] hover:text-[#c9a96e] transition-colors duration-300"
-          >
-            <Mail size={15} />
-            <span className="text-sm font-body">reserve@velox.com</span>
+          <a href="mailto:reserve@velox.com" className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-hover">
+            <Mail size={14} /> <span className="text-sm font-body">reserve@velox.com</span>
           </a>
         </div>
       </div>
@@ -1114,54 +1256,34 @@ function ReserveSection() {
 
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTE: FOOTER
+   COMPONENT: FOOTER V2
    ═══════════════════════════════════════════════════════════ */
 function Footer() {
   return (
-    <footer className="bg-[#080808] border-t border-[#333]/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <footer className="bg-[#080808] border-t border-[#c9a96e]/8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          {/* Logo */}
           <div className="flex-shrink-0">
-            <img
-              src="/images/logo-white.png"
-              alt="VELOX"
-              className="h-7 sm:h-8 w-auto opacity-80"
-            />
+            <img src="/images/logo-white.png" alt="VELOX" className="h-7 sm:h-8 w-auto opacity-70" />
           </div>
-
-          {/* Quick Links */}
           <div className="flex items-center gap-6 sm:gap-8">
             {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-[10px] font-heading font-semibold tracking-[0.2em] text-[#666] hover:text-[#c9a96e] transition-colors duration-300"
-              >
+              <a key={link.label} href={link.href} className="cursor-hover text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
                 {link.label}
               </a>
             ))}
           </div>
-
-          {/* Social Icons */}
           <div className="flex items-center gap-4">
-            <a href="#" className="text-[#666] hover:text-[#c9a96e] transition-colors duration-300" aria-label="Instagram">
-              <Instagram size={18} />
-            </a>
-            <a href="#" className="text-[#666] hover:text-[#c9a96e] transition-colors duration-300" aria-label="Facebook">
-              <Facebook size={18} />
-            </a>
-            <a href="#" className="text-[#666] hover:text-[#c9a96e] transition-colors duration-300" aria-label="Twitter">
-              <Twitter size={18} />
-            </a>
+            {[Instagram, Facebook, Twitter].map((Icon, i) => (
+              <a key={i} href="#" className="cursor-hover w-9 h-9 flex items-center justify-center border border-[#222] rounded-full text-[#555] hover:text-[#c9a96e] hover:border-[#c9a96e]/30 transition-all duration-300" aria-label="Social">
+                <Icon size={15} />
+              </a>
+            ))}
           </div>
         </div>
-
-        {/* Copyright */}
-        <div className="mt-8 pt-6 border-t border-[#333]/20 text-center">
-          <p className="text-[10px] font-heading tracking-[0.15em] text-[#444]">
-            © 2026 VELOX. ALL RIGHTS RESERVED.
-          </p>
+        <div className="mt-10 pt-6 border-t border-[#1a1a1a] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[9px] font-heading tracking-[0.2em] text-[#333]">© 2026 VELOX. ALL RIGHTS RESERVED.</p>
+          <p className="text-[9px] font-heading tracking-[0.15em] text-[#333]">MILANO — ROMA — MONACO</p>
         </div>
       </div>
     </footer>
@@ -1170,82 +1292,42 @@ function Footer() {
 
 
 /* ═══════════════════════════════════════════════════════════
-   PÁGINA PRINCIPAL
-   ─── Composición de todos los componentes y efectos.
-   ─── Inicializa Lenis smooth scroll globalmente.
+   PAGE
    ═══════════════════════════════════════════════════════════ */
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
 
-  // ─── Inicializar Lenis Smooth Scroll ───
   useLenis();
 
-  // ─── Preload de imágenes críticas ───
   useEffect(() => {
-    const criticalImages = [
-      '/images/hero-bg.png',
-      '/images/logo-white.png',
-      '/images/ferrari_california_bianca.png',
-    ];
-
-    let loadedCount = 0;
-    const checkAllLoaded = () => {
-      loadedCount++;
-      // No bloquear — el LoadingScreen maneja el timing
-    };
-
-    criticalImages.forEach((src) => {
-      const img = new Image();
-      img.onload = checkAllLoaded;
-      img.onerror = checkAllLoaded;
-      img.src = src;
-    });
+    const criticalImages = ['/images/hero-bg.png', '/images/logo-white.png'];
+    criticalImages.forEach((src) => { const img = new Image(); img.src = src; });
   }, []);
 
   const handleLoadComplete = useCallback(() => {
     setLoaded(true);
-    // Refrescar ScrollTrigger después de que todo sea visible
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 100);
+    setTimeout(() => ScrollTrigger.refresh(), 200);
   }, []);
 
   return (
     <main className="bg-[#0a0a0a] min-h-screen">
-      {/* ─── SVG Filters para Efecto 3 ─── */}
       <SvgFilters />
+      <FilmGrain />
+      <CustomCursor />
 
-      {/* ─── Loading Screen ─── */}
       <AnimatePresence>
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
       </AnimatePresence>
 
-      {/* ─── Contenido principal (oculto hasta carga) ─── */}
       <div style={{ visibility: loaded ? 'visible' : 'hidden' }}>
         <Navigation />
-
-        {/* EFECTO 1: Hero Scale Down & Reveal */}
         <HeroScaleDown />
-
-        {/* Marquee divisor */}
         <MarqueeText />
-
-        {/* EFECTO 2: Scroll-Driven Image Playback */}
         <ScrollDrivenPlayback />
-
-        {/* EFECTO 3: Fleet con Displacement Cards */}
         <FleetSection />
-
-        {/* Marquee divisor */}
         <MarqueeText />
-
-        {/* Features */}
         <FeaturesSection />
-
-        {/* Reserve CTA */}
         <ReserveSection />
-
-        {/* Footer */}
         <Footer />
       </div>
     </main>
