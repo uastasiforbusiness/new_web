@@ -17,24 +17,25 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "VELOX — Luxury Car Rental",
+  title: "B LEADER — Premium Car Rental",
   description:
-    "Experience luxury driving. Premium fleet of Ferrari, Maserati, and Mercedes vehicles available for rent. Concierge service, premium insurance, hotel delivery.",
+    "Experience premium driving. Exclusive fleet of high-performance vehicles available for rent. Concierge service, premium insurance, hotel delivery.",
   keywords: [
-    "luxury car rental",
-    "Ferrari rental",
-    "Maserati rental",
-    "Mercedes rental",
-    "premium cars",
-    "VELOX",
+    "premium car rental",
+    "B LEADER",
+    "luxury cars",
+    "exclusive fleet",
+    "car rental",
   ],
   icons: {
-    icon: "/images/logo.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
   },
   openGraph: {
-    title: "VELOX — Luxury Car Rental",
+    title: "B LEADER — Premium Car Rental",
     description:
-      "Experience luxury driving. Premium fleet available for rent.",
+      "Experience premium driving. Exclusive fleet available for rent.",
     type: "website",
   },
 };
