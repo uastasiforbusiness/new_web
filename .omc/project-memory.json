@@ -1,0 +1,205 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1780981711182,
+  "projectRoot": "C:\\Users\\gabri\\Desktop\\new_web",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "16.1.1",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.0.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.0.0",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev -p 3000 2>&1 | tee dev.log",
+      "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+      "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
+      "lint": "eslint .",
+      "db:push": "prisma db push",
+      "db:generate": "prisma generate",
+      "db:migrate": "prisma migrate dev",
+      "db:reset": "prisma migrate reset"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "examples",
+      "public",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "db": {
+      "path": "db",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780981711105,
+      "keyFiles": [
+        "custom.db"
+      ]
+    },
+    "download": {
+      "path": "download",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780981711106,
+      "keyFiles": [
+        "README.md"
+      ]
+    },
+    "examples": {
+      "path": "examples",
+      "purpose": "Example code",
+      "fileCount": 0,
+      "lastAccessed": 1780981711117,
+      "keyFiles": []
+    },
+    "mini-services": {
+      "path": "mini-services",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780981711117,
+      "keyFiles": []
+    },
+    "prisma": {
+      "path": "prisma",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780981711118,
+      "keyFiles": [
+        "schema.prisma"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 2,
+      "lastAccessed": 1780981711118,
+      "keyFiles": [
+        "logo.svg",
+        "robots.txt"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1780981711119,
+      "keyFiles": []
+    },
+    "upload": {
+      "path": "upload",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1780981711120,
+      "keyFiles": [
+        "ferrari_california_bianca.png",
+        "ferrari_california_rossa.png",
+        "logo-white.png",
+        "logo.png",
+        "maserati_ghibli.png"
+      ]
+    },
+    "src\\app": {
+      "path": "src\\app",
+      "purpose": "Application code",
+      "fileCount": 3,
+      "lastAccessed": 1780981711123,
+      "keyFiles": [
+        "globals.css",
+        "layout.tsx",
+        "page.tsx"
+      ]
+    },
+    "src\\components": {
+      "path": "src\\components",
+      "purpose": "UI components",
+      "fileCount": 0,
+      "lastAccessed": 1780981711123,
+      "keyFiles": []
+    },
+    "src\\lib": {
+      "path": "src\\lib",
+      "purpose": "Library code",
+      "fileCount": 2,
+      "lastAccessed": 1780981711124,
+      "keyFiles": [
+        "db.ts",
+        "utils.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src\\components\\360Gallery.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1780990423233,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\360Gallery.module.css",
+      "accessCount": 2,
+      "lastAccessed": 1780989959262,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780988429045,
+      "type": "file"
+    },
+    {
+      "path": "plans\\elegant-waddling-volcano.md",
+      "accessCount": 1,
+      "lastAccessed": 1780990085287,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
