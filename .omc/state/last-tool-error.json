@@ -1,0 +1,7 @@
+{
+  "tool_name": "Agent",
+  "tool_input_preview": "{\"description\":\"Kill port 3000 process\",\"prompt\":\"Find the process listening on port 3000 and terminate it using PowerShell: Get-Process | Where-Object {$_.Port -eq 3000} | Stop-Process -Force\",\"subag...",
+  "error": "Agent type 'code-executor' not found. Available agents: general-purpose, statusline-setup, Explore, Plan, claude-code-guide, verification, oh-my-claudecode:analyst, oh-my-claudecode:architect, oh-my-claudecode:code-simplifier, oh-my-claudecode:debugger, oh-my-claudecode:code-reviewer, oh-my-claudecode:critic, oh-my-claudecode:designer, oh-my-claudecode:document-specialist, oh-my-claudecode:executor, oh-my-claudecode:explore, oh-my-claudecode:git-master, oh-my-claudecode:planner, oh-my-claudecode...",
+  "timestamp": "2026-06-09T07:42:07.491Z",
+  "retry_count": 1
+}

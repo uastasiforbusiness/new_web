@@ -39,7 +39,7 @@ const cars = [
   {
     name: 'Ferrari California',
     variant: 'Bianca Avus',
-    image: '/images/ferrari_california_bianca.png',
+    image: '/images/ferrari_california_bianca.webp',
     hp: 460, acceleration: '3.9s', topSpeed: '310 km/h', price: 890,
     tagline: 'PURE ELEGANCE',
     color: '#f5f5f0',
@@ -47,7 +47,7 @@ const cars = [
   {
     name: 'Ferrari California',
     variant: 'Rossa Corsa',
-    image: '/images/ferrari_california_rossa.png',
+    image: '/images/ferrari_california_rossa.webp',
     hp: 460, acceleration: '3.9s', topSpeed: '310 km/h', price: 890,
     tagline: 'ICONIC PASSION',
     color: '#8b0000',
@@ -55,7 +55,7 @@ const cars = [
   {
     name: 'Maserati Ghibli',
     variant: 'Nero Ribelle',
-    image: '/images/maserati_ghibli.png',
+    image: '/images/maserati_ghibli.webp',
     hp: 350, acceleration: '5.0s', topSpeed: '263 km/h', price: 650,
     tagline: 'ITALIAN CRAFT',
     color: '#1a1a2e',
@@ -63,7 +63,7 @@ const cars = [
   {
     name: 'Mercedes E220d',
     variant: 'Cabriolet',
-    image: '/images/mercedes_e220d_cabrio.png',
+    image: '/images/mercedes_e220d_cabrio.webp',
     hp: 194, acceleration: '7.8s', topSpeed: '240 km/h', price: 420,
     tagline: 'REFINED LUXURY',
     color: '#0d0d0d',
@@ -71,11 +71,12 @@ const cars = [
 ];
 
 const sequenceFrames = [
-  '/images/seq-front.png', '/images/hero-bg.png', '/images/seq-side.png',
-  '/images/seq-driving.png', '/images/seq-rear.png', '/images/seq-interior.png',
+  '/images/360/frame_001.webp', '/images/360/frame_002.webp', '/images/360/frame_003.webp',
+  '/images/360/frame_004.webp', '/images/360/frame_005.webp', '/images/360/frame_006.webp',
+  '/images/360/frame_007.webp', '/images/360/frame_008.webp',
 ];
 
-const frameLabels = ['FRONT VIEW', 'PROFILE', 'IN MOTION', 'ON THE ROAD', 'REAR VIEW', 'COCKPIT'];
+const frameLabels = ['FRONT VIEW', 'PROFILE', 'IN MOTION', 'ON THE ROAD', 'REAR VIEW', 'COCKPIT', 'DETAIL', 'INTERIOR'];
 
 const features = [
   { icon: ConciergeBell, title: 'CONCIERGE SERVICE', description: '24/7 personal assistance for every aspect of your journey, from restaurant reservations to bespoke route planning across Europe\'s most scenic drives.', stat: '24/7' },
@@ -312,7 +313,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   return (
     <div ref={containerRef} className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center">
       <div ref={logoRef} className="mb-10" style={{ opacity: 0 }}>
-        <img src="/images/logo-white.png" alt="VELOX" className="h-10 sm:h-12 w-auto" />
+        <img src="/images/logo.webp" alt="VELOX" className="h-10 sm:h-12 w-auto" />
       </div>
       <div className="w-52 h-[1px] bg-[#222] relative overflow-hidden">
         <div ref={barRef} className="h-full bg-gradient-to-r from-[#c9a96e] to-[#d4af37] origin-left" style={{ transform: 'scaleX(0)' }} />
@@ -470,7 +471,7 @@ function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <a href="#" className="flex-shrink-0 cursor-hover">
-            <img src="/images/logo-white.png" alt="VELOX" className="h-8 sm:h-10 w-auto transition-opacity duration-300 hover:opacity-70" />
+            <img src="/images/logo-white.webp" alt="VELOX" className="h-8 sm:h-10 w-auto transition-opacity duration-300 hover:opacity-70" />
           </a>
 
           <div className="hidden md:flex items-center gap-8">
@@ -645,9 +646,9 @@ function HeroScaleDown() {
       {/* Hero Image */}
       <div ref={imageRef} className="hero-scale-container absolute inset-0">
         <img
-          src="/images/hero-bg.png"
+          src="/images/hero-bg.webp"
           alt="Ferrari California in luxury showroom"
-          className="w-full h-full object-cover scale-105"
+          className="w-full h-full object-cover scale-100"
           loading="eager"
         />
         <div className="hero-overlay absolute inset-0" />
@@ -788,7 +789,7 @@ function ScrollDrivenPlayback() {
 
         // Crossfade con zoom sutil
         gsap.fromTo(frame,
-          { opacity: 0, scale: 1.05 },
+          { opacity: 0, scale: 1.01 },
           {
             opacity: 1, scale: 1,
             ease: 'none',
@@ -937,7 +938,7 @@ function DisplacementCard({ car, index }: { car: typeof cars[number]; index: num
       x: (x - centerX) / centerX * 6,
       y: (y - centerY) / centerY * 4,
       skewX,
-      scale: 1.06,
+      scale: 1.02,
       duration: 0.4, ease: 'power2.out',
     });
 
@@ -1264,7 +1265,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex-shrink-0">
-            <img src="/images/logo-white.png" alt="VELOX" className="h-7 sm:h-8 w-auto opacity-70" />
+            <img src="/images/logo-white.webp" alt="VELOX" className="h-7 sm:h-8 w-auto opacity-70" />
           </div>
           <div className="flex items-center gap-6 sm:gap-8">
             {navLinks.map((link) => (
@@ -1300,7 +1301,7 @@ export default function Home() {
   useLenis();
 
   useEffect(() => {
-    const criticalImages = ['/images/hero-bg.png', '/images/logo-white.png'];
+    const criticalImages = ['/images/hero-bg.webp', '/images/logo-white.webp'];
     criticalImages.forEach((src) => { const img = new Image(); img.src = src; });
   }, []);
 
