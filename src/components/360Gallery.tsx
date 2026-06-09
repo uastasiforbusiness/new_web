@@ -8,36 +8,47 @@ type Props = {
   durationMs?: number;
 };
 
-export default function 360Gallery({ frames, durationMs = 3000 }: Props) {
+const TRANSITION_DURATION = 800; // must match CSS transition duration
+
+export default function Gallery360({ frames, durationMs = 3000 }: Props) {
   const [current, setCurrent] = useState(0);
-  const [next, setNext] = useState(0);
+  const [next, setNext] = useState<number | null>(null);
+  const transitioning = next !== null;
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent((prev) => {
-        const nxt = (prev + 1) % frames.length;
-        setNext(nxt);
-        return nxt;
-      });
+      if (!transitioning) {
+        setNext((current + 1) % frames.length);
+      }
     }, durationMs);
     return () => clearInterval(timer);
-  }, [frames, durationMs]);
+  }, [frames.length, durationMs, current, transitioning]);
+
+  // When next is set, wait for the CSS transition to finish, then update current
+  useEffect(() => {
+    if (next === null) return;
+    const timeout = setTimeout(() => {
+      setCurrent(next);
+      setNext(null);
+    }, TRANSITION_DURATION);
+    return () => clearTimeout(timeout);
+  }, [next]);
 
   return (
     <div className={styles.gallery}>
       <div className={styles.wrapper}>
-        {/* Current frame */}
+        {/* Current frame — fades out when next appears */}
         <img
           src={frames[current]}
           alt={`frame ${current + 1}`}
-          className={`${styles.image} ${current === next ? styles.active : styles.inactive}`}
+          className={`${styles.image} ${next !== null ? styles.inactive : styles.active}`}
         />
-        {/* Next frame (hidden until transition) */}
-        {current !== next && (
+        {/* Next frame — fades in */}
+        {next !== null && (
           <img
             src={frames[next]}
             alt={`frame ${next + 1}`}
-            className={`${styles.image} ${current === next ? styles.active : styles.inactive}`}
+            className={`${styles.image} ${styles.active}`}
           />
         )}
       </div>
