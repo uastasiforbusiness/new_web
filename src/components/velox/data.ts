@@ -7,7 +7,7 @@ export const cars = [
   {
     name: 'Ferrari California T',
     variant: 'Bianca Avus',
-    image: '/images/ferrari_california_bianca.webp',
+    image: '/images/ferrari_blanca_card.webp',
     images: [
       { src: '/images/ferrari_bianca_360/frame_001.webp', label: 'FRONT VIEW' },
       { src: '/images/ferrari_bianca_360/frame_002.webp', label: 'PROFILE' },
@@ -25,7 +25,7 @@ export const cars = [
   {
     name: 'Ferrari California',
     variant: 'Rossa Corsa',
-    image: '/images/ferrari_california_rossa.webp',
+    image: '/images/ferrari_rossa_card.webp',
     images: [
       { src: '/images/ferrari_rossa_360/frame_001.webp', label: 'FRONT VIEW' },
       { src: '/images/ferrari_rossa_360/frame_002.webp', label: 'PROFILE' },
@@ -47,7 +47,7 @@ export const cars = [
   {
     name: 'Maserati Ghibli',
     variant: 'Nero Ribelle',
-    image: '/images/maserati_ghibli.webp',
+    image: '/images/maserati_card.webp',
     images: [
       { src: '/images/maserati_ghibli_360/frame_001.webp', label: 'FRONT VIEW' },
       { src: '/images/maserati_ghibli_360/frame_002.webp', label: 'PROFILE' },
@@ -78,7 +78,7 @@ export const cars = [
       { src: '/images/mercedes_e220d_360/frame_020.webp', label: 'INTERIOR' },
       { src: '/images/mercedes_e220d_360/frame_024.webp', label: 'DETAIL' },
     ],
-    hp: 194, acceleration: '7.7s', topSpeed: '237 km/h', price: 420,
+    hp: 194, acceleration: '7.7s', topSpeed: '237 km/h',
     tagline: 'REFINED LUXURY',
     color: '#0d0d0d',
     seats: 4, engine: '2.0L Turbodiesel', torque: '400 Nm',
@@ -105,18 +105,14 @@ export type Car = typeof cars[number];
 export type CarImage = Car['images'][number];
 
 export const sequenceFrames = [
-  '/images/ferrari_rossa_360/frame_001.webp',
-  '/images/ferrari_rossa_360/frame_002.webp',
-  '/images/ferrari_rossa_360/frame_03.webp',
-  '/images/ferrari_rossa_360/frame_004.webp',
-  '/images/ferrari_rossa_360/frame_005.webp',
-  '/images/ferrari_rossa_360/frame_006.webp',
-  '/images/ferrari_rossa_360/frame_007.webp',
-  '/images/ferrari_rossa_360/frame_008.webp',
-  '/images/ferrari_rossa_360/frame_009.webp',
+  '/images/yacht_360/frame_001.webp',
+  '/images/yacht_360/frame_002.webp',
+  '/images/yacht_360/frame_003.webp',
+  '/images/yacht_360/frame_004.webp',
+  '/images/yacht_360/frame_005.png',
 ];
 
-export const frameLabels = ['FRONT VIEW', 'PROFILE', 'IN MOTION', 'REAR VIEW', 'COCKPIT', 'INTERIOR', 'DETAIL', 'REAR QUARTER', 'DYNAMIC'];
+export const frameLabels = ['NAUTICAL ADVENTURE', 'FULL SPEED', 'CRYSTAL WATERS', 'ELITE EXPERIENCE', 'PURE FREEDOM'];
 
 export const fleetSpecs = [
   {
@@ -209,31 +205,6 @@ export const yachtData = {
   ],
   options: ['Half day', 'Full day', 'Sunset cruise', 'Romantic dinner', 'Overnight', 'Mini cruise'],
 };
-
-export const fullDayTariffs = [
-  { season: 'May / September', price: '1,800' },
-  { season: 'June / July', price: '1,900' },
-  { season: 'August', price: '2,000' },
-  { season: 'August 10-17 (peak)', price: '2,300' },
-];
-
-export const halfDayTariffs = [
-  { season: 'May / September', price: '1,300' },
-  { season: 'June', price: '1,400' },
-  { season: 'July / August', price: '1,500' },
-  { season: 'August 10-17 (peak)', price: '1,800' },
-];
-
-export const yachtExtras = [
-  { service: 'Beach towel', price: '5' },
-  { service: 'Heineken/Becks beer', price: '4' },
-  { service: 'Extra prosecco bottle', price: '20' },
-  { service: 'Extra wine bottle', price: '15' },
-  { service: 'Spritz & Co (2 cocktails/person)', price: '15' },
-  { service: 'Seafood/sushi menu', price: '40/pax' },
-  { service: 'Champagne', price: 'from 150' },
-  { service: 'Custom itineraries', price: '12/mile' },
-];
 
 export const serviceLines = [
   {

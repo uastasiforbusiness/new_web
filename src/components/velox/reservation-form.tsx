@@ -106,7 +106,6 @@ export function ReservationForm() {
                 >
                   <span className="font-elegant font-semibold">{car.name}</span>
                   <span className="text-[#555] font-elegant ml-2">— {car.variant}</span>
-                  <span className="float-right text-[#c9a96e] text-[11px]">€{car.price}/day</span>
                 </button>
               ))}
             </div>
