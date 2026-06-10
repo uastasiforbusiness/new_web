@@ -109,7 +109,7 @@ export const sequenceFrames = [
   '/images/yacht_360/frame_002.webp',
   '/images/yacht_360/frame_003.webp',
   '/images/yacht_360/frame_004.webp',
-  '/images/yacht_360/frame_005.png',
+  '/images/yacht_360/frame_005.webp',
 ];
 
 export const frameLabels = ['NAUTICAL ADVENTURE', 'FULL SPEED', 'CRYSTAL WATERS', 'ELITE EXPERIENCE', 'PURE FREEDOM'];
@@ -186,7 +186,7 @@ export const yachtData = {
   name: 'Cranchi Atlantique 50 Flybridge',
   length: '15.60 m',
   capacity: '10 guests + crew (skipper + assistant)',
-  season: 'May - September 2025',
+  season: 'May - September 2026',
   departure: 'Porto Gaio, Gallipoli',
   features: [
     'Full flybridge',

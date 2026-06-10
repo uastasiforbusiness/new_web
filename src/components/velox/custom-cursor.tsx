@@ -39,23 +39,23 @@ export function CustomCursor() {
       });
     };
 
-    const handleEnter = () => gsap.to(ring, { scale: 1.8, opacity: 0.5, duration: 0.3 });
-    const handleLeave = () => gsap.to(ring, { scale: 1, opacity: 1, duration: 0.3 });
-
     window.addEventListener('mousemove', handleMove);
 
-    const interactives = document.querySelectorAll('a, button, .cursor-hover');
-    interactives.forEach((el) => {
-      el.addEventListener('mouseenter', handleEnter);
-      el.addEventListener('mouseleave', handleLeave);
-    });
+    const handleInteract = (e: Event) => {
+      if (e.type === 'mouseenter') {
+        gsap.to(ring, { scale: 1.8, opacity: 0.5, duration: 0.3 });
+      } else if (e.type === 'mouseleave') {
+        gsap.to(ring, { scale: 1, opacity: 1, duration: 0.3 });
+      }
+    };
+
+    document.addEventListener('mouseenter', handleInteract, true);
+    document.addEventListener('mouseleave', handleInteract, true);
 
     return () => {
       window.removeEventListener('mousemove', handleMove);
-      interactives.forEach((el) => {
-        el.removeEventListener('mouseenter', handleEnter);
-        el.removeEventListener('mouseleave', handleLeave);
-      });
+      document.removeEventListener('mouseenter', handleInteract, true);
+      document.removeEventListener('mouseleave', handleInteract, true);
     };
   }, []);
 

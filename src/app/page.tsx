@@ -49,8 +49,13 @@ export default function Home() {
 
   const handleLoadComplete = useCallback(() => {
     setLoaded(true);
-    setTimeout(() => ScrollTrigger.refresh(), 200);
   }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    const timeout = setTimeout(() => ScrollTrigger.refresh(), 200);
+    return () => clearTimeout(timeout);
+  }, [loaded]);
 
   return (
     <main className="bg-[#0a0a0a] min-h-screen">

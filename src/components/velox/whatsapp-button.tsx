@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-const WHATSAPP_NUMBER = '393395425284';
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '393395425284';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hello! I would like to inquire about your services.')}`;
 
 export function WhatsAppButton() {
@@ -11,25 +11,27 @@ export function WhatsAppButton() {
   const pulseRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    // Entrance animation
-    if (btnRef.current) {
-      gsap.fromTo(btnRef.current,
-        { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 3 }
-      );
-    }
+    const ctx = gsap.context(() => {
+      if (btnRef.current) {
+        gsap.fromTo(btnRef.current,
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 3 }
+        );
+      }
 
-    // Continuous pulse on the ring
-    if (pulseRef.current) {
-      gsap.to(pulseRef.current, {
-        scale: 1.6,
-        opacity: 0,
-        duration: 1.5,
-        ease: 'power1.out',
-        repeat: -1,
-        repeatDelay: 2,
-      });
-    }
+      if (pulseRef.current) {
+        gsap.to(pulseRef.current, {
+          scale: 1.6,
+          opacity: 0,
+          duration: 1.5,
+          ease: 'power1.out',
+          repeat: -1,
+          repeatDelay: 2,
+        });
+      }
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (
