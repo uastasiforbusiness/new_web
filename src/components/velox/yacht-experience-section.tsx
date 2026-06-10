@@ -164,52 +164,11 @@ export function YachtExperienceSection() {
             </div>
           </div>
 
-          {/* Tariffs */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-            {/* Full Day */}
-            <div className="bg-[#0d0d0d] border border-[#1a1a1a] p-6 sm:p-8">
-              <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-6">FULL DAY RATES</h3>
-              <div className="space-y-3">
-                {fullDayTariffs.map((t) => (
-                  <div key={t.season} className="flex items-center justify-between py-3 border-b border-[#1a1a1a] last:border-0">
-                    <span className="text-xs font-body text-[#999]">{t.season}</span>
-                    <span className="text-sm font-elegant font-semibold text-white">&euro; {t.price}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Payment conditions removed as per no-price strategy */}
 
-            {/* Half Day */}
-            <div className="bg-[#0d0d0d] border border-[#1a1a1a] p-6 sm:p-8">
-              <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-6">HALF DAY RATES</h3>
-              <div className="space-y-3">
-                {halfDayTariffs.map((t) => (
-                  <div key={t.season} className="flex items-center justify-between py-3 border-b border-[#1a1a1a] last:border-0">
-                    <span className="text-xs font-body text-[#999]">{t.season}</span>
-                    <span className="text-sm font-elegant font-semibold text-white">&euro; {t.price}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Extras */}
-          <div className="bg-[#0d0d0d] border border-[#1a1a1a] p-6 sm:p-8 mb-12">
-            <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-6 text-center">EXTRA SERVICES</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {yachtExtras.map((extra) => (
-                <div key={extra.service} className="flex items-center justify-between py-3 px-4 bg-[#111] border border-[#1a1a1a] hover:border-[#c9a96e]/15 transition-colors duration-300">
-                  <span className="text-xs font-body text-[#999]">{extra.service}</span>
-                  <span className="text-xs font-elegant font-semibold text-[#c9a96e]">&euro;{extra.price}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Payment conditions */}
-          <div className="text-center">
-            <p className="text-xs font-body text-[#666]">
-              <span className="text-[#c9a96e]/60">Terms:</span> 40% deposit upon booking (bank transfer) &middot; Balance in cash on board
+          <div className="text-center mt-12">
+            <p className="text-xs font-body text-[#c9a96e]/60 uppercase tracking-[0.2em]">
+              Bespoke luxury experiences. Contact us for a personalized quote.
             </p>
           </div>
         </div>

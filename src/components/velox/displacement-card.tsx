@@ -208,7 +208,12 @@ export function DisplacementCard({ car }: { car: Car }) {
           onClick={() => setGalleryOpen(true)}
         >
           <div ref={imageRef} className="w-full h-full">
-            <img src={car.image} alt={`${car.name} ${car.variant}`} className="w-full h-full object-cover" loading="lazy" />
+            <img 
+              src={car.image} 
+              alt={`${car.name} ${car.variant}`} 
+              className={`w-full h-full ${car.name.includes('Ferrari') ? 'object-contain p-4' : 'object-cover'}`} 
+              loading="lazy" 
+            />
           </div>
           {/* Hover angle layer */}
           <div ref={hoverImageRef} className="absolute inset-0 z-[1]" style={{ opacity: 0 }}>
@@ -234,9 +239,7 @@ export function DisplacementCard({ car }: { car: Car }) {
           </div>
 
           <div className="absolute top-4 right-4 z-[3]">
-            <span className="text-sm font-elegant font-semibold text-white bg-[#c9a96e] px-3 py-1.5">
-              €{car.price}<span className="text-[9px] font-elegant font-light opacity-70">/DAY</span>
-            </span>
+            {/* Price removed as per luxury brand strategy */}
           </div>
         </div>
 

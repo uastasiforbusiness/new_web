@@ -7,91 +7,77 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoWrapRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  const shimmerRef = useRef<HTMLDivElement>(null);
-  const borderTopRef = useRef<HTMLDivElement>(null);
-  const borderBottomRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
-  const diamondRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        onComplete: () => setTimeout(onComplete, 400),
+        onComplete: () => {
+          // Final immersive transition: Zoom into the logo to "enter" the site
+          gsap.to(containerRef.current, {
+            scale: 4,
+            opacity: 0,
+            duration: 1.2,
+            ease: 'power4.inOut',
+            onComplete: onComplete
+          });
+        },
       });
 
-      // 1. Golden glow fades in behind logo
-      tl.fromTo(glowRef.current,
-        { opacity: 0, scale: 0.5 },
-        { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
+      // 1. GAUSSIAN AWAKENING: Start with heavy blur and clarify
+      tl.fromTo(containerRef.current,
+        { opacity: 0, filter: 'blur(30px) brightness(0)' },
+        { opacity: 1, filter: 'blur(0px) brightness(1)', duration: 3, ease: 'power2.inOut' },
         0
       );
 
-      // 2. Logo scales up from small with a subtle bounce
+      // 2. AMBIENT BLOOM: Moving gold gas clouds
+      tl.to(glowRef.current, { opacity: 0.2, duration: 2 }, 0);
+      gsap.to(glowRef.current, {
+        scale: 1.8,
+        duration: 8,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      });
+
+      // 3. LOGO CRYSTALLIZATION: Fades in from a blurred shadow
       tl.fromTo(logoWrapRef.current,
-        { opacity: 0, scale: 0.3, y: 30 },
-        { opacity: 1, scale: 1, y: 0, duration: 1.4, ease: 'power4.out' },
-        0.1
+        { 
+          opacity: 0, 
+          scale: 0.85,
+          filter: 'blur(20px) brightness(0)'
+        },
+        { 
+          opacity: 1, 
+          scale: 1,
+          filter: 'blur(0px) brightness(1)',
+          duration: 2.5, 
+          ease: 'expo.out' 
+        },
+        0.5
       );
 
-      // 3. Golden border corners draw in
-      tl.fromTo(borderTopRef.current,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.8, ease: 'power3.out' },
-        0.4
-      );
-      tl.fromTo(borderBottomRef.current,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.8, ease: 'power3.out' },
-        0.4
-      );
-
-      // 4. Shimmer sweep across the logo
-      tl.fromTo(shimmerRef.current,
-        { x: '-120%' },
-        { x: '220%', duration: 1.2, ease: 'power2.inOut' },
-        0.6
-      );
-
-      // 5. Tagline fades in below with elegant serif entrance
+      // 4. ELEGANT TAGLINE REVEAL: Stretching from wide spacing
       tl.fromTo(taglineRef.current,
-        { opacity: 0, y: 15, letterSpacing: '0.6em' },
-        { opacity: 1, y: 0, letterSpacing: '0.45em', duration: 1, ease: 'power3.out' },
-        1.8
+        { opacity: 0, letterSpacing: '1.5em', filter: 'blur(10px)' },
+        { opacity: 0.7, letterSpacing: '0.45em', filter: 'blur(0px)', duration: 2, ease: 'power3.out' },
+        1.5
       );
 
-      // 5b. Decorative diamond fades in after tagline
-      tl.fromTo(diamondRef.current,
-        { opacity: 0, scale: 0 },
-        { opacity: 0.4, scale: 1, duration: 0.5, ease: 'back.out(2)' },
-        2.3
-      );
-
-      // 6. Progress bar fills
-      tl.fromTo(barRef.current,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 1.5, ease: 'expo.inOut' },
-        0.8
-      );
-
-      // 7. Counter goes from 0 to 100
+      // 5. PROGRESS & COUNTER: Smooth synchronization
       const counter = { val: 0 };
       tl.to(counter, {
         val: 100,
-        duration: 1.5,
-        ease: 'expo.inOut',
+        duration: 2.5,
+        ease: 'power2.inOut',
         onUpdate: () => {
           if (counterRef.current) counterRef.current.textContent = String(Math.round(counter.val)).padStart(3, '0');
+          if (barRef.current) barRef.current.style.transform = `scaleX(${counter.val / 100})`;
         },
-      }, 0.8);
-
-      // 8. Background warms up slightly
-      tl.fromTo(containerRef.current,
-        { backgroundColor: '#0a0a0a' },
-        { backgroundColor: '#0f0d09', duration: 0.3 },
-        2.0
-      );
+      }, 0.5);
 
     }, containerRef);
 
@@ -101,101 +87,53 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden select-none"
+      className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden select-none origin-center"
     >
-      {/* Background grain texture */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
-        backgroundSize: '256px 256px',
-      }} />
+      {/* Background ethereal light clouds */}
+      <div
+        ref={glowRef}
+        className="absolute w-[150%] h-[150%] pointer-events-none opacity-20"
+        style={{
+          background: 'radial-gradient(circle at center, rgba(201,169,110,0.3) 0%, rgba(10,10,10,0) 70%)',
+          filter: 'blur(80px)',
+        }}
+      />
 
-      {/* Vertical dividers */}
-      <div className="absolute left-[15%] top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[#c9a96e]/5 to-transparent" />
-      <div className="absolute right-[15%] top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[#c9a96e]/5 to-transparent" />
-
-      {/* Logo section */}
-      <div className="relative flex flex-col items-center mb-20">
-        {/* Golden glow behind logo */}
-        <div
-          ref={glowRef}
-          className="absolute -inset-20 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(201,169,110,0.15) 0%, rgba(201,169,110,0.05) 40%, transparent 70%)',
-          }}
-        />
-
-        {/* Top border line */}
-        <div className="relative mb-6 overflow-hidden" style={{ width: '220px', height: '1px' }}>
-          <div
-            ref={borderTopRef}
-            className="h-full bg-gradient-to-r from-transparent via-[#c9a96e] to-transparent origin-left"
-            style={{ transform: 'scaleX(0)' }}
-          />
-        </div>
-
-        {/* Logo with shimmer */}
+      {/* Main Content Group */}
+      <div className="relative flex flex-col items-center">
+        {/* Logo Container with Crystallization Effect */}
         <div
           ref={logoWrapRef}
-          className="relative"
-          style={{ opacity: 0 }}
+          className="relative mb-12"
         >
           <img
             src="/images/logo-white.webp"
             alt="B LEADER"
-            className="h-24 sm:h-28 md:h-36 w-auto"
+            className="h-28 sm:h-36 md:h-44 w-auto"
             draggable={false}
-          />
-          {/* Shimmer overlay */}
-          <div
-            ref={shimmerRef}
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'linear-gradient(120deg, transparent 30%, rgba(201,169,110,0.3) 45%, rgba(212,175,55,0.4) 50%, rgba(201,169,110,0.3) 55%, transparent 70%)',
-              mixBlendMode: 'overlay',
-            }}
-          />
-        </div>
-
-        {/* Bottom border line */}
-        <div className="relative mt-6 overflow-hidden" style={{ width: '220px', height: '1px' }}>
-          <div
-            ref={borderBottomRef}
-            className="h-full bg-gradient-to-r from-transparent via-[#c9a96e] to-transparent origin-left"
-            style={{ transform: 'scaleX(0)' }}
           />
         </div>
 
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="mt-6 text-[9px] font-elegant tracking-[0.45em] text-[#c9a96e]/60 italic"
-          style={{ opacity: 0 }}
+          className="text-[10px] font-elegant tracking-[0.45em] text-[#c9a96e] italic uppercase mb-16"
         >
           Luxury Automotive
         </p>
-
-        {/* Decorative diamond */}
-        <div
-          ref={diamondRef}
-          className="mt-3 text-[#c9a96e] text-[6px]"
-          style={{ opacity: 0 }}
-        >
-          ◆
-        </div>
       </div>
 
-      {/* Progress section */}
-      <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 flex flex-col items-center">
-        <div className="w-40 sm:w-52 h-[1px] bg-[#222] relative overflow-hidden">
+      {/* Minimalist Progress Indicator */}
+      <div className="absolute bottom-20 flex flex-col items-center">
+        <div className="w-32 h-[1px] bg-white/5 relative overflow-hidden mb-4">
           <div
             ref={barRef}
-            className="h-full bg-gradient-to-r from-[#c9a96e] to-[#d4af37] origin-left"
-            style={{ transform: 'scaleX(0)' }}
+            className="h-full bg-gradient-to-r from-[#c9a96e] to-[#d4af37] origin-left scale-x-0"
           />
         </div>
-        <div className="flex items-center gap-3 mt-4">
-          <span ref={counterRef} className="text-[10px] font-heading tracking-[0.3em] text-[#c9a96e]">000</span>
-          <span className="text-[9px] font-heading tracking-[0.2em] text-[#444]">/ 100</span>
+        <div className="flex items-baseline gap-1">
+          <span ref={counterRef} className="text-[12px] font-heading font-light tracking-[0.2em] text-[#c9a96e]">000</span>
+          <span className="text-[8px] font-heading tracking-[0.1em] text-white/20">%</span>
         </div>
       </div>
     </div>
