@@ -41,6 +41,7 @@
   --color-gold: #c9a96e;
   --color-gold-light: #d4af37;
   --color-gold-dark: #b8943e;
+  --font-elegant: var(--font-cormorant);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -279,4 +280,39 @@ html.lenis, html.lenis body {
   width: 40px;
   height: 1px;
   background: #c9a96e;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ELEGANT SHIMMER TEXT ANIMATION
+   ═══════════════════════════════════════════════════════════ */
+@keyframes elegant-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer-text {
+  background: linear-gradient(
+    110deg,
+    #c9a96e 0%,
+    #e6c875 20%,
+    #f5e6c8 40%,
+    #e6c875 60%,
+    #c9a96e 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: elegant-shimmer 6s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REFINED TEXT SELECTION
+   ═══════════════════════════════════════════════════════════ */
+::selection {
+  background: rgba(201, 169, 110, 0.25);
+  color: #fff;
+}
+::-moz-selection {
+  background: rgba(201, 169, 110, 0.25);
+  color: #fff;
 }

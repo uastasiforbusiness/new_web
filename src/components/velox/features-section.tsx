@@ -34,7 +34,7 @@ export function FeaturesSection() {
             <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">WHY B LEADER</p>
             <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white">THE EXPERIENCE</h2>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-elegant font-light tracking-wide text-white italic">The Experience</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
@@ -57,10 +57,10 @@ export function FeaturesSection() {
                   <Icon size={24} className="text-[#c9a96e]/80 group-hover:text-[#c9a96e] transition-colors duration-500" />
                 </div>
 
-                <h3 className="text-sm sm:text-base font-heading font-bold tracking-[0.2em] text-white mb-4">
+                <h3 className="text-sm sm:text-base font-elegant font-semibold tracking-wide text-white mb-4">
                   {feature.title}
                 </h3>
-                <p className="text-sm font-body font-light text-[#888] leading-relaxed">
+                <p className="text-sm font-body font-light text-[#999] leading-relaxed">
                   {feature.description}
                 </p>
 

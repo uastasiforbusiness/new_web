@@ -19,9 +19,14 @@ import { HeroScaleDown } from '@/components/velox/hero-scale-down';
 import { MarqueeText } from '@/components/velox/marquee-text';
 import { ScrollDrivenPlayback } from '@/components/velox/scroll-driven-playback';
 import { FleetSection } from '@/components/velox/fleet-section';
+import { FleetDetailSection } from '@/components/velox/fleet-detail-section';
+import { YachtExperienceSection } from '@/components/velox/yacht-experience-section';
+import { ServiceLinesSection } from '@/components/velox/service-lines-section';
+import { CoverageSection } from '@/components/velox/coverage-section';
 import { FeaturesSection } from '@/components/velox/features-section';
 import { ReserveSection } from '@/components/velox/reserve-section';
 import { Footer } from '@/components/velox/footer';
+import { WhatsAppButton } from '@/components/velox/whatsapp-button';
 
 // ─── Registrar GSAP plugins ───
 if (typeof window !== 'undefined') {
@@ -62,11 +67,26 @@ export default function Home() {
         <HeroScaleDown />
         <MarqueeText />
         <ScrollDrivenPlayback />
+
+        {/* Elegant gold separator */}
+        <div className="relative py-10 sm:py-14">
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+          <div className="relative flex justify-center">
+            <span className="text-[#c9a96e]/40 text-[8px] bg-[#0a0a0a] px-4">◆</span>
+          </div>
+        </div>
+
         <FleetSection />
+        <FleetDetailSection />
+        <MarqueeText />
+        <YachtExperienceSection />
+        <ServiceLinesSection />
+        <CoverageSection />
         <MarqueeText />
         <FeaturesSection />
         <ReserveSection />
         <Footer />
+        <WhatsAppButton />
       </div>
     </main>
   );

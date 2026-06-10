@@ -112,13 +112,13 @@ export function HeroScaleDown() {
       <div ref={textRef} className="absolute inset-0 flex items-center justify-center z-10">
         <div className="text-center px-4 max-w-5xl mx-auto">
           <p className="text-[10px] sm:text-xs font-heading font-semibold tracking-[0.6em] text-[#c9a96e] mb-5 sm:mb-8 uppercase">
-            Experience Luxury
+            ✦&nbsp;&nbsp;Experience Luxury&nbsp;&nbsp;✦
           </p>
-          <h1 className="text-5xl sm:text-7xl lg:text-[7rem] xl:text-[9rem] font-heading font-black tracking-tight text-white leading-[0.85] mb-5 sm:mb-8">
-            <span className="block">DRIVE</span>
-            <span className="block bg-gradient-to-r from-[#c9a96e] via-[#e6c875] to-[#c9a96e] bg-clip-text text-transparent">YOUR DREAM</span>
+          <h1 className="text-5xl sm:text-7xl lg:text-[7rem] xl:text-[9rem] font-elegant font-light tracking-wide text-white leading-[0.85] mb-5 sm:mb-8 italic">
+            <span className="block">Drive</span>
+            <span className="block shimmer-text">Your Dream</span>
           </h1>
-          <p className="text-sm sm:text-base font-body font-light text-[#888] max-w-md mx-auto mb-8 sm:mb-12">
+          <p className="text-sm sm:text-base font-body font-light text-[#999] max-w-md mx-auto mb-8 sm:mb-12 tracking-wide">
             Premium fleet. Unforgettable moments.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -144,7 +144,7 @@ export function HeroScaleDown() {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8">
           <div>
             <p className="text-[9px] font-heading tracking-[0.4em] text-[#c9a96e] mb-2">FEATURED VEHICLE</p>
-            <h3 className="text-2xl sm:text-4xl font-heading font-black tracking-wider text-white">FERRARI CALIFORNIA</h3>
+            <h3 className="text-2xl sm:text-4xl font-elegant font-light tracking-wide text-white italic">Ferrari California</h3>
             <p className="text-sm font-body text-[#777] mt-1">Rossa Corsa — From €890/day</p>
           </div>
           <div className="flex items-center gap-8 sm:gap-10">

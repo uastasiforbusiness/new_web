@@ -13,6 +13,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const barRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
+  const diamondRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -53,11 +54,18 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         0.6
       );
 
-      // 5. Tagline fades in below (after shimmer completes)
+      // 5. Tagline fades in below with elegant serif entrance
       tl.fromTo(taglineRef.current,
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
-        1.9
+        { opacity: 0, y: 15, letterSpacing: '0.6em' },
+        { opacity: 1, y: 0, letterSpacing: '0.45em', duration: 1, ease: 'power3.out' },
+        1.8
+      );
+
+      // 5b. Decorative diamond fades in after tagline
+      tl.fromTo(diamondRef.current,
+        { opacity: 0, scale: 0 },
+        { opacity: 0.4, scale: 1, duration: 0.5, ease: 'back.out(2)' },
+        2.3
       );
 
       // 6. Progress bar fills
@@ -160,11 +168,20 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="mt-6 text-[9px] font-heading tracking-[0.45em] text-[#c9a96e]/50 uppercase"
+          className="mt-6 text-[9px] font-elegant tracking-[0.45em] text-[#c9a96e]/60 italic"
           style={{ opacity: 0 }}
         >
           Luxury Automotive
         </p>
+
+        {/* Decorative diamond */}
+        <div
+          ref={diamondRef}
+          className="mt-3 text-[#c9a96e] text-[6px]"
+          style={{ opacity: 0 }}
+        >
+          ◆
+        </div>
       </div>
 
       {/* Progress section */}
