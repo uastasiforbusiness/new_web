@@ -40,10 +40,10 @@ export function FleetSection() {
         <div ref={headingRef} className="text-center mb-14 sm:mb-20" style={{ opacity: 0 }}>
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
-            <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">OUR COLLECTION</p>
+            <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">OUR COLLECTION ✦</p>
             <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white">THE FLEET</h2>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-elegant font-light tracking-wide text-white italic">Our Fleet</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6">

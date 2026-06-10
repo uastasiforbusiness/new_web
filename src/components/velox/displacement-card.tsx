@@ -24,6 +24,8 @@ export function DisplacementCard({ car }: { car: Car }) {
   const speedRef = useRef<HTMLSpanElement>(null);
   const specsAnimated = useRef(false);
 
+  const isYacht = car.name.includes('Cranchi');
+
   // Spec counter animation on scroll
   useEffect(() => {
     const accelNum = parseFloat(car.acceleration);
@@ -232,18 +234,18 @@ export function DisplacementCard({ car }: { car: Car }) {
           </div>
 
           <div className="absolute top-4 right-4 z-[3]">
-            <span className="text-sm font-heading font-bold text-white bg-[#c9a96e] px-3 py-1.5">
-              €{car.price}<span className="text-[9px] font-normal opacity-70">/DAY</span>
+            <span className="text-sm font-elegant font-semibold text-white bg-[#c9a96e] px-3 py-1.5">
+              €{car.price}<span className="text-[9px] font-elegant font-light opacity-70">/DAY</span>
             </span>
           </div>
         </div>
 
         <div className="p-5 sm:p-6 relative z-10">
           <div className="mb-4">
-            <h3 ref={titleRef} className="text-lg sm:text-xl font-heading font-bold tracking-wider text-white">
+            <h3 ref={titleRef} className="text-lg sm:text-xl font-elegant font-semibold tracking-wide text-white italic">
               {car.name}
             </h3>
-            <p className="text-xs font-heading font-light tracking-[0.25em] text-[#555] mt-1">{car.variant}</p>
+            <p className="text-xs font-elegant tracking-[0.15em] text-[#666] mt-1">{car.variant}</p>
           </div>
 
           {/* Specs with animated counters */}
@@ -251,19 +253,23 @@ export function DisplacementCard({ car }: { car: Car }) {
             <div className="flex items-center gap-1.5">
               <Zap size={12} style={{ color: `${car.color}bb` }} />
               <span className="text-[11px] font-body text-[#888]">
-                <span ref={hpRef}>0</span> HP
+                <span ref={hpRef}>0</span> {isYacht ? 'HP total' : 'HP'}
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <Timer size={12} style={{ color: `${car.color}bb` }} />
               <span className="text-[11px] font-body text-[#888]">
-                <span ref={accelRef}>0</span>s 0-100
+                {isYacht ? (
+                  <><span ref={accelRef}>0</span> kn</>
+                ) : (
+                  <><span ref={accelRef}>0</span>s 0-100</>
+                )}
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <Gauge size={12} style={{ color: `${car.color}bb` }} />
               <span className="text-[11px] font-body text-[#888]">
-                <span ref={speedRef}>0</span> km/h
+                <span ref={speedRef}>0</span> {isYacht ? 'knots' : 'km/h'}
               </span>
             </div>
           </div>

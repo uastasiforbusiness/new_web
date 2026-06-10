@@ -87,13 +87,13 @@ export function ScrollDrivenPlayback() {
             <div className="mb-5">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-8 h-[1px] bg-[#c9a96e]" />
-                <p className="text-[9px] font-heading tracking-[0.5em] text-[#c9a96e]">360° EXPERIENCE</p>
+                <p className="text-[9px] font-elegant tracking-[0.5em] text-[#c9a96e] italic">360° Experience</p>
               </div>
               <div
                 ref={labelRef}
-                className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-wider text-white"
+                className="text-3xl sm:text-5xl lg:text-6xl font-elegant font-light tracking-wide text-white italic"
               >
-                FRONT VIEW
+                Front View
               </div>
             </div>
 

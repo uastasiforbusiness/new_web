@@ -60,31 +60,52 @@ export function Navigation() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className="md:hidden bg-[#0a0a0a]/98 nav-glass border-t border-[#c9a96e]/10 overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="md:hidden bg-[#0a0a0a]/98 nav-glass border-t border-[#c9a96e]/10"
           >
-            <div className="px-6 py-8 space-y-5">
+            <div className="px-6 pt-8 pb-10">
               {navLinks.map((link, i) => (
-                <a
+                <motion.div
                   key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="block text-base font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300 py-2"
-                  style={{ animationDelay: `${i * 0.05}s` }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.08 + i * 0.07, ease: [0.23, 1, 0.32, 1] }}
                 >
-                  {link.label}
-                </a>
+                  <a
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="group flex items-center gap-4 py-3.5 border-b border-[#1a1a1a] hover:border-[#c9a96e]/15 transition-colors duration-500"
+                  >
+                    <span className="text-[9px] font-heading tracking-[0.2em] text-[#c9a96e]/40 group-hover:text-[#c9a96e]/70 transition-colors duration-500 w-5">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-base font-elegant tracking-wide text-[#999] group-hover:text-[#c9a96e] transition-colors duration-500 italic">
+                      {link.label}
+                    </span>
+                    <span className="ml-auto text-[10px] text-[#c9a96e]/0 group-hover:text-[#c9a96e]/40 transition-all duration-500 translate-x-[-4px] group-hover:translate-x-0">
+                      →
+                    </span>
+                  </a>
+                </motion.div>
               ))}
-              <a
-                href="#reserve"
-                onClick={() => setMobileOpen(false)}
-                className="block text-center px-6 py-3 bg-[#c9a96e] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.2em] mt-4"
+
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.08 + navLinks.length * 0.07, ease: [0.23, 1, 0.32, 1] }}
+                className="mt-8"
               >
-                BOOK NOW
-              </a>
+                <a
+                  href="#reserve"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-[#c9a96e] to-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] hover:shadow-[0_0_30px_rgba(201,169,110,0.25)] transition-shadow duration-500"
+                >
+                  BOOK NOW
+                </a>
+              </motion.div>
             </div>
           </motion.div>
         )}

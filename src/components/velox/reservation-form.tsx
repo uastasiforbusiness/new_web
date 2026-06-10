@@ -74,7 +74,7 @@ export function ReservationForm() {
   };
 
   const inputClass = "w-full bg-[#0a0a0a] border border-[#333] text-white text-sm font-body py-3 px-4 focus:border-[#c9a96e] focus:outline-none transition-colors duration-300 placeholder:text-[#555]";
-  const labelClass = "block text-[10px] font-heading font-semibold tracking-[0.2em] text-[#888] mb-2";
+  const labelClass = "block text-[10px] font-elegant font-semibold tracking-[0.15em] text-[#888] mb-2";
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -104,8 +104,8 @@ export function ReservationForm() {
                     i === form.carIndex ? 'bg-[#c9a96e]/10 text-[#c9a96e]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
                   }`}
                 >
-                  <span className="font-heading font-semibold">{car.name}</span>
-                  <span className="text-[#555] ml-2">— {car.variant}</span>
+                  <span className="font-elegant font-semibold">{car.name}</span>
+                  <span className="text-[#555] font-elegant ml-2">— {car.variant}</span>
                   <span className="float-right text-[#c9a96e] text-[11px]">€{car.price}/day</span>
                 </button>
               ))}
