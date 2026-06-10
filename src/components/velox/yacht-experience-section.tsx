@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Anchor, MapPin, Clock, Compass, ChevronDown, ChevronUp } from 'lucide-react';
-import { yachtData, fullDayTariffs, halfDayTariffs, yachtExtras } from './data';
+import { yachtData } from './data';
 
 export function YachtExperienceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

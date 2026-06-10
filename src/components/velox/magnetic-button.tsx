@@ -8,11 +8,13 @@ export function MagneticButton({
   className = '',
   href,
   strength = 0.3,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
   href?: string;
   strength?: number;
+  style?: React.CSSProperties;
 }) {
   const btnRef = useRef<HTMLElement>(null);
 
@@ -38,13 +40,13 @@ export function MagneticButton({
   const Tag = href ? 'a' : 'button';
 
   return (
-    // @ts-expect-error - dynamic tag
     <Tag
-      ref={btnRef}
+      ref={btnRef as React.Ref<HTMLAnchorElement & HTMLButtonElement>}
       href={href}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`cursor-hover inline-flex items-center ${className}`}
+      style={style}
     >
       {children}
     </Tag>

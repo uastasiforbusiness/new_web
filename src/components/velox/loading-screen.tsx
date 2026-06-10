@@ -15,7 +15,6 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
-          // Final immersive transition: Zoom into the logo to "enter" the site
           gsap.to(containerRef.current, {
             scale: 4,
             opacity: 0,
@@ -26,14 +25,14 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         },
       });
 
-      // 1. GAUSSIAN AWAKENING: Start with heavy blur and clarify
+      // 1. GAUSSIAN AWAKENING
       tl.fromTo(containerRef.current,
         { opacity: 0, filter: 'blur(30px) brightness(0)' },
         { opacity: 1, filter: 'blur(0px) brightness(1)', duration: 3, ease: 'power2.inOut' },
         0
       );
 
-      // 2. AMBIENT BLOOM: Moving gold gas clouds
+      // 2. AMBIENT BLOB
       tl.to(glowRef.current, { opacity: 0.2, duration: 2 }, 0);
       gsap.to(glowRef.current, {
         scale: 1.8,
@@ -43,7 +42,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         ease: 'sine.inOut'
       });
 
-      // 3. LOGO CRYSTALLIZATION: Fades in from a blurred shadow
+      // 3. LOGO CRYSTALLIZATION
       tl.fromTo(logoWrapRef.current,
         { 
           opacity: 0, 
@@ -60,14 +59,14 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         0.5
       );
 
-      // 4. ELEGANT TAGLINE REVEAL: Stretching from wide spacing
+      // 4. TAGLINE REVEAL
       tl.fromTo(taglineRef.current,
         { opacity: 0, letterSpacing: '1.5em', filter: 'blur(10px)' },
         { opacity: 0.7, letterSpacing: '0.45em', filter: 'blur(0px)', duration: 2, ease: 'power3.out' },
         1.5
       );
 
-      // 5. PROGRESS & COUNTER: Smooth synchronization
+      // 5. PROGRESS & COUNTER
       const counter = { val: 0 };
       tl.to(counter, {
         val: 100,

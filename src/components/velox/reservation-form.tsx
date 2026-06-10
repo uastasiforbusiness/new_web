@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { cars } from './data';
 
@@ -32,6 +32,12 @@ export function ReservationForm() {
   const [carDropdownOpen, setCarDropdownOpen] = useState(false);
 
   const selectedCar = cars[form.carIndex];
+
+  useEffect(() => {
+    if (!success) return;
+    const timeout = setTimeout(() => setSuccess(false), 5000);
+    return () => clearTimeout(timeout);
+  }, [success]);
 
   const update = (field: keyof FormData, value: string | number) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -65,7 +71,6 @@ export function ReservationForm() {
 
       setSuccess(true);
       setForm(initialForm);
-      setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit reservation');
     } finally {
