@@ -23,7 +23,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <a href="#" className="flex-shrink-0 cursor-hover">
-            <img src="/images/logo-white.webp" alt="B LEADER" className="h-8 sm:h-10 w-auto transition-opacity duration-300 hover:opacity-70" />
+            <img src="/images/logo-white.webp" alt="B LEADER" className="h-12 sm:h-14 w-auto transition-opacity duration-300 hover:opacity-70" />
           </a>
 
           <div className="hidden md:flex items-center gap-8">

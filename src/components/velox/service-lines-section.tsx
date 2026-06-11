@@ -48,14 +48,14 @@ export function ServiceLinesSection() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
           {serviceLines.map((service, index) => {
             const Icon = service.icon;
             return (
               <div
                 key={service.title}
                 ref={(el) => { cardsRef.current[index] = el; }}
-                className="group bg-[#0d0d0d] border border-[#1a1a1a] p-7 sm:p-8 text-center hover:border-[#c9a96e]/20 transition-all duration-500 relative overflow-hidden flex flex-col"
+                className="group bg-[#0d0d0d] border border-[#1a1a1a] p-7 sm:p-8 text-center hover:border-[#c9a96e]/30 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(201,169,110,0.1)] transition-all duration-500 ease-out relative overflow-hidden flex flex-col"
                 style={{ opacity: 0 }}
               >
                 {/* Top accent */}
@@ -84,8 +84,8 @@ export function ServiceLinesSection() {
                   {service.description}
                 </p>
 
-                {/* Bottom glow */}
-                <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#c9a96e] to-[#d4af37] group-hover:w-full transition-all duration-700" />
+                {/* Bottom glow — crece desde el centro hacia los bordes */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-[#c9a96e] to-[#d4af37] group-hover:w-full transition-all duration-700" />
               </div>
             );
           })}

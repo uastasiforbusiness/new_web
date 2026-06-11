@@ -1,6 +1,6 @@
 import {
   ConciergeBell, Shield, Truck, Briefcase, Plane,
-  Car, Sparkles,
+  Car, Sparkles, Ship,
 } from 'lucide-react';
 
 export const cars = [
@@ -115,30 +115,6 @@ export const YACHT_SPRITE_FRAMES = 5;
 export const YACHT_SPRITE_SLOT_W = 835;
 export const YACHT_SPRITE_SLOT_H = 306;
 
-// ─── Ferrari 360° Virtual Tour: sprites responsive para canvas ───
-//     Se elige srcMobile en viewports < 768px para reducir payload ~75%
-//     Generados con scripts/generate-car-sprites.mjs
-export const FERRARI_SPRITES = [
-  {
-    src: '/images/ferrari_bianca_sprite.webp',
-    srcMobile: '/images/ferrari_bianca_sprite_mobile.webp',
-    frameCount: 5,
-    slotW: 720,
-    slotH: 1280,
-    label: 'Ferrari California T · Bianca Avus',
-    color: '#f5f5f0',
-  },
-  {
-    src: '/images/ferrari_rossa_sprite.webp',
-    srcMobile: '/images/ferrari_rossa_sprite_mobile.webp',
-    frameCount: 9,
-    slotW: 406,
-    slotH: 720,
-    label: 'Ferrari California · Rossa Corsa',
-    color: '#8b0000',
-  },
-];
-
 // Mantenemos compatibilidad con código legacy que importe sequenceFrames
 export const sequenceFrames = [
   YACHT_SPRITE,
@@ -244,6 +220,13 @@ export const yachtData = {
 
 export const serviceLines = [
   {
+    icon: Ship,
+    title: 'YACHT CHARTER',
+    subtitle: 'Nautical Experiences',
+    description: 'Luxury yacht rentals along the Salento coast. Depart from Porto Gaio, Gallipoli, and explore Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and Greece. Half-day, full-day, sunset cruises, and overnight options with professional skipper.',
+    stat: 'PREMIUM',
+  },
+  {
     icon: Car,
     title: 'WEDDING CAR RENTAL',
     subtitle: 'Weddings',
@@ -287,9 +270,9 @@ export const airports = [
 ];
 
 export const features = [
-  { icon: ConciergeBell, title: 'CONCIERGE SERVICE', description: '24/7 personal assistance for every aspect of your journey, from restaurant reservations to bespoke route planning across Europe\'s most scenic drives.', stat: '24/7' },
-  { icon: Shield, title: 'PREMIUM INSURANCE', description: 'Full comprehensive coverage with zero excess. Drive with complete peace of mind knowing every mile is protected by our elite insurance partnership.', stat: 'ZERO' },
-  { icon: Truck, title: 'HOTEL DELIVERY', description: 'Your dream car delivered directly to your hotel or private residence. Seamless luxury, from the moment you arrive until the final farewell.', stat: '1HR' },
+  { icon: ConciergeBell, title: 'COMING SOON', description: 'We are curating exclusive experiences to elevate your journey. Stay tuned for something extraordinary.', stat: 'SOON' },
+  { icon: Shield, title: 'COMING SOON', description: 'We are curating exclusive experiences to elevate your journey. Stay tuned for something extraordinary.', stat: 'SOON' },
+  { icon: Truck, title: 'COMING SOON', description: 'We are curating exclusive experiences to elevate your journey. Stay tuned for something extraordinary.', stat: 'SOON' },
 ];
 
 export const navLinks = [

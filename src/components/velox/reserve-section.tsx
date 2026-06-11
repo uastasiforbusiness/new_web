@@ -166,7 +166,7 @@ export function ReserveSection() {
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-elegant font-light tracking-wide text-white mb-4 italic">
             Reserve Your
             <br />
-            <span className="shimmer-text">Dream Car</span>
+            <span className="shimmer-text">Experience</span>
           </h2>
           <p className="text-base font-body font-light text-[#999] max-w-lg mx-auto tracking-wide">
             Fill in the form below and our concierge team will confirm your booking within 1 hour

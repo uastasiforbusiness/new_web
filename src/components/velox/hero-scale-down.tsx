@@ -97,7 +97,7 @@ export function HeroScaleDown() {
         <img
           src="/images/hero-bg.webp"
           alt="Ferrari California in luxury showroom"
-          className="w-full h-full object-cover scale-100"
+          className="w-full h-full object-cover object-[center_35%] sm:object-center scale-100"
           loading="eager"
         />
         <div className="hero-overlay absolute inset-0" />
