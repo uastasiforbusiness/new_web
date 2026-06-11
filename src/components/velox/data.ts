@@ -108,23 +108,22 @@ export type CarImage = Car['images'][number];
 // SPRITE SHEETS OPTIMIZADOS
 // ═══════════════════════════════════════════════════════════════
 
-// ─── Yate: 5 frames → sprites responsive ───
-export const YACHT_SPRITE = '/images/yacht_360_sprite.webp';
-export const YACHT_SPRITE_MOBILE = '/images/yacht_360_sprite_mobile.webp';
-export const YACHT_SPRITE_FRAMES = 5;
-export const YACHT_SPRITE_SLOT_W = 835;
-export const YACHT_SPRITE_SLOT_H = 306;
+// ─── Yate: 6 frames individuales ───
+export const YACHT_SPRITE_FRAMES = 6;
 
-// Mantenemos compatibilidad con código legacy que importe sequenceFrames
-export const sequenceFrames = [
-  YACHT_SPRITE,
-  YACHT_SPRITE,
-  YACHT_SPRITE,
-  YACHT_SPRITE,
-  YACHT_SPRITE,
+export const yachtFrames = [
+  '/images/real_15s.webp',
+  '/images/real_25s.webp',
+  '/images/real_35s.webp',
+  '/images/real_55s.webp',
+  '/images/real_75s.webp',
+  '/images/real_95s.webp',
 ];
 
-export const frameLabels = ['NAUTICAL ADVENTURE', 'FULL SPEED', 'CRYSTAL WATERS', 'ELITE EXPERIENCE', 'PURE FREEDOM'];
+// Mantenemos compatibilidad con código legacy que importe sequenceFrames
+export const sequenceFrames = yachtFrames;
+
+export const frameLabels = ['NAUTICAL ADVENTURE', 'FULL SPEED', 'CRYSTAL WATERS', 'ELITE EXPERIENCE', 'PURE FREEDOM', 'OCEAN SUNSET'];
 
 export const fleetSpecs = [
   {

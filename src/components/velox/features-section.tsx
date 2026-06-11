@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { features } from './data';
 
 export function FeaturesSection() {
@@ -42,7 +41,7 @@ export function FeaturesSection() {
             const Icon = feature.icon;
             return (
               <div
-                key={feature.title}
+                key={index}
                 ref={(el) => { cardsRef.current[index] = el; }}
                 className="group bg-[#0d0d0d] border border-[#1a1a1a] p-8 sm:p-10 text-center hover:border-[#c9a96e]/20 transition-all duration-500 relative overflow-hidden"
                 style={{ opacity: 0 }}
