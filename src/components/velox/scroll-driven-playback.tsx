@@ -61,7 +61,10 @@ export function ScrollDrivenPlayback() {
 
         // Add a subtle "Engine Shake" when the boat is moving fast (frames 2 and 3)
         // Aplica al div del sprite (ya no hay <img> individual)
-        if (i === 1 || i === 2) {
+        // Desactivado en táctiles y con prefers-reduced-motion (ahorro de batería)
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+        if ((i === 1 || i === 2) && !reduceMotion && !isCoarse) {
           gsap.to(frame, {
             x: 'random(-1, 1)',
             y: 'random(-1, 1)',
