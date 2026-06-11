@@ -20,7 +20,6 @@ import { MarqueeText } from '@/components/velox/marquee-text';
 import { ScrollDrivenPlayback } from '@/components/velox/scroll-driven-playback';
 import { FleetSection } from '@/components/velox/fleet-section';
 import { FleetDetailSection } from '@/components/velox/fleet-detail-section';
-import { VirtualTourSection } from '@/components/velox/virtual-tour-section';
 import { YachtExperienceSection } from '@/components/velox/yacht-experience-section';
 import { ServiceLinesSection } from '@/components/velox/service-lines-section';
 import { CoverageSection } from '@/components/velox/coverage-section';
@@ -69,42 +68,6 @@ export default function Home() {
 
     const timeout = setTimeout(() => ScrollTrigger.refresh(), 200);
 
-    // Asynchronously prefetch the 360 tour frame images once the page has loaded and is interactive
-    const prefetch360Images = () => {
-      const tourFrames = [
-        '/images/ferrari_bianca_360/frame_001.webp',
-        '/images/ferrari_bianca_360/frame_002.webp',
-        '/images/ferrari_bianca_360/frame_003.webp',
-        '/images/ferrari_bianca_360/frame_004.webp',
-        '/images/ferrari_bianca_360/frame_005.webp',
-        '/images/ferrari_rossa_360/frame_001.webp',
-        '/images/ferrari_rossa_360/frame_002.webp',
-        '/images/ferrari_rossa_360/frame_03.webp',
-        '/images/ferrari_rossa_360/frame_004.webp',
-        '/images/ferrari_rossa_360/frame_005.webp',
-        '/images/ferrari_rossa_360/frame_006.webp',
-        '/images/ferrari_rossa_360/frame_007.webp',
-        '/images/ferrari_rossa_360/frame_008.webp',
-        '/images/ferrari_rossa_360/frame_009.webp',
-      ];
-      
-      // Load them using requestIdleCallback if available, or a slight delay to avoid blocking any initial page load interactive scripts
-      const load = () => {
-        tourFrames.forEach((src) => {
-          const img = new Image();
-          img.src = src;
-        });
-      };
-
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(() => load());
-      } else {
-        setTimeout(load, 1500);
-      }
-    };
-
-    prefetch360Images();
-
     return () => clearTimeout(timeout);
   }, [loaded]);
 
@@ -134,7 +97,6 @@ export default function Home() {
 
         <FleetSection />
         <FleetDetailSection />
-        <VirtualTourSection />
         <MarqueeText />
         <YachtExperienceSection />
         <ServiceLinesSection />
