@@ -10,17 +10,18 @@ export function useLenis() {
     // ─── Detectar si es touch device ───
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+    // ─── En táctiles usamos scroll NATIVO: Lenis interceptando el touch
+    //     entra en conflicto con ScrollTrigger.normalizeScroll(true)
+    //     y degrada el rendimiento en móvil ───
+    if (isTouchDevice) return;
+
     const lenis = new Lenis({
-      duration: isTouchDevice ? 0.8 : 1.4,          // menos duración en móvil = más responsive
+      duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 0.8,
-      touchMultiplier: isTouchDevice ? 1 : 2,       // 1 en móvil para evitar scroll nervioso
-      // ─── En touch devices, Lenis intercepta el scroll nativo ───
-      //     Esto puede causar conflicto con normalizeScroll de GSAP.
-      //     Por eso reducimos la duración y touchMultiplier.
     });
 
     lenis.on('scroll', ScrollTrigger.update);
