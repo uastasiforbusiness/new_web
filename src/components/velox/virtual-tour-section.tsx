@@ -1,34 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-const FERRARI_BIANCA_FRAMES = [
-  '/images/ferrari_bianca_360/frame_001.webp',
-  '/images/ferrari_bianca_360/frame_002.webp',
-  '/images/ferrari_bianca_360/frame_003.webp',
-  '/images/ferrari_bianca_360/frame_004.webp',
-  '/images/ferrari_bianca_360/frame_005.webp',
-];
-
-const FERRARI_ROSSA_FRAMES = [
-  '/images/ferrari_rossa_360/frame_001.webp',
-  '/images/ferrari_rossa_360/frame_002.webp',
-  '/images/ferrari_rossa_360/frame_03.webp',
-  '/images/ferrari_rossa_360/frame_004.webp',
-  '/images/ferrari_rossa_360/frame_005.webp',
-  '/images/ferrari_rossa_360/frame_006.webp',
-  '/images/ferrari_rossa_360/frame_007.webp',
-  '/images/ferrari_rossa_360/frame_008.webp',
-  '/images/ferrari_rossa_360/frame_009.webp',
-];
-
-type CarTour = { label: string; color: string; frames: string[] };
-const CARS: CarTour[] = [
-  { label: 'Ferrari California T · Bianca Avus', color: '#f5f5f0', frames: FERRARI_BIANCA_FRAMES },
-  { label: 'Ferrari California · Rossa Corsa', color: '#8b0000', frames: FERRARI_ROSSA_FRAMES },
-];
+import { FERRARI_SPRITES } from './data';
 
 export function VirtualTourSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -37,13 +12,19 @@ export function VirtualTourSection() {
   const [activeCar, setActiveCar] = useState(0);
   const [frameIndex, setFrameIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [spritesLoaded, setSpritesLoaded] = useState(false);
+  const [sectionInView, setSectionInView] = useState(false);
   const dragStartX = useRef<number>(0);
   const dragStartFrame = useRef<number>(0);
-  const frameRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
+  const spriteImagesRef = useRef<HTMLImageElement[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const frameIndexRef = useRef(0);
+  const activeCarRef = useRef(0);
 
-  const car = CARS[activeCar];
-  const totalFrames = car.frames.length;
+  const car = FERRARI_SPRITES[activeCar];
+  const totalFrames = car.frameCount;
 
   // Animate section header on scroll
   useEffect(() => {
@@ -62,17 +43,126 @@ export function VirtualTourSection() {
     return () => ctx.revert();
   }, []);
 
-  // Reset frame on car switch
+  // ─── IntersectionObserver: cargar sprites solo cuando la sección entra en viewport ───
+  //     rootMargin: 200px para empezar a cargar ANTES de que el usuario llegue
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setSectionInView(true); obs.disconnect(); } },
+      { rootMargin: '200px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // ─── Helper: elegir sprite responsive según viewport ───
+  function getSpriteSrc(i: number) {
+    const sprite = FERRARI_SPRITES[i];
+    if (window.innerWidth < 768 && sprite.srcMobile) return sprite.srcMobile;
+    return sprite.src;
+  }
+
+  // ─── Cargar sprites solo cuando la sección está visible ───
+  //     Usa srcMobile en viewports < 768px (reduce payload ~75%)
+  useEffect(() => {
+    if (!sectionInView) return;
+
+    const images: HTMLImageElement[] = [];
+    let loaded = 0;
+
+    FERRARI_SPRITES.forEach((sprite, i) => {
+      const img = new Image();
+      img.onload = () => {
+        loaded++;
+        if (loaded === FERRARI_SPRITES.length) {
+          spriteImagesRef.current = images;
+          setSpritesLoaded(true);
+        }
+      };
+      img.src = getSpriteSrc(i);
+      images[i] = img;
+    });
+
+    return () => {
+      images.forEach((img) => { img.onload = null; });
+    };
+  }, [sectionInView]);
+
+  // ─── drawFrame: extraer frame del sprite y dibujarlo en el canvas ───
+  // DEFINIDO ANTES de los effects que lo usan (evita TDZ con const)
+  const drawFrame = useCallback((index: number) => {
+    const canvas = canvasRef.current;
+    const images = spriteImagesRef.current;
+    const carIdx = activeCarRef.current;
+    if (!canvas || !images[carIdx]) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const sprite = FERRARI_SPRITES[carIdx];
+    const slotW = sprite.slotW;
+    const slotH = sprite.slotH;
+    const dpr = window.devicePixelRatio || 1;
+    const canvasW = canvas.width / dpr;
+    const canvasH = canvas.height / dpr;
+
+    // Clear
+    ctx.clearRect(0, 0, canvasW, canvasH);
+
+    // Calcular escala manteniendo aspect ratio (object-contain)
+    const scale = Math.min(canvasW / slotW, canvasH / slotH);
+    const destW = slotW * scale;
+    const destH = slotH * scale;
+    const dx = (canvasW - destW) / 2;
+    const dy = (canvasH - destH) / 2;
+
+    ctx.drawImage(
+      images[carIdx],
+      index * slotW, 0, slotW, slotH,
+      dx, dy, destW, destH
+    );
+  }, []);
+
+  // ─── Actualizar refs en cada render ───
+  useEffect(() => {
+    frameIndexRef.current = frameIndex;
+    activeCarRef.current = activeCar;
+  });
+
+  // ─── Resetear frame al cambiar de auto ───
   useEffect(() => {
     setFrameIndex(0);
   }, [activeCar]);
 
-  // Cross-fade on frame change
+  // ─── Dibujar cuando cambia frame o sprites cargados ───
   useEffect(() => {
-    if (frameRef.current) {
-      gsap.fromTo(frameRef.current, { opacity: 0.5 }, { opacity: 1, duration: 0.12, ease: 'power1.out' });
-    }
-  }, [frameIndex]);
+    if (!spritesLoaded) return;
+    drawFrame(frameIndex);
+  }, [frameIndex, activeCar, spritesLoaded, drawFrame]);
+
+  // ─── Resize observer para canvas responsivo (estable, sin dep de frameIndex) ───
+  useEffect(() => {
+    const container = containerRef.current;
+    const canvas = canvasRef.current;
+    if (!container || !canvas) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        const ctx = canvas.getContext('2d');
+        if (ctx) ctx.scale(dpr, dpr);
+        drawFrame(frameIndexRef.current);
+      }
+    });
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [drawFrame]);
 
   // Update label
   useEffect(() => {
@@ -106,7 +196,7 @@ export function VirtualTourSection() {
     let i = 0;
     const spin = setInterval(() => {
       i++;
-      setFrameIndex(f => (f + 1) % CARS[activeCar].frames.length);
+      setFrameIndex(f => (f + 1) % FERRARI_SPRITES[activeCar].frameCount);
       if (i >= 3) clearInterval(spin);
     }, 120);
     return () => clearInterval(spin);
@@ -156,11 +246,9 @@ export function VirtualTourSection() {
           <p className="text-sm font-body text-[#666] max-w-md mx-auto">
             Drag to rotate. Experience the car in full 360° before you decide.
           </p>
-        </div>
-
-        {/* Car selector tabs */}
+        </div>          {/* Car selector tabs */}
         <div className="flex justify-center gap-3 mb-10">
-          {CARS.map((c, i) => (
+          {FERRARI_SPRITES.map((c, i) => (
             <button
               key={i}
               onClick={() => setActiveCar(i)}
@@ -189,6 +277,7 @@ export function VirtualTourSection() {
 
           {/* Image stage */}
           <div
+            ref={containerRef}
             className={`relative bg-[#080808] border border-[#1a1a1a] overflow-hidden ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{ aspectRatio: '16/9' }}
             onPointerDown={handlePointerDown}
@@ -201,12 +290,14 @@ export function VirtualTourSection() {
               style={{ background: 'radial-gradient(ellipse at center, transparent 45%, rgba(8,8,8,0.7) 100%)' }}
             />
 
-            <img
-              ref={frameRef}
-              src={car.frames[frameIndex]}
-              alt={`${car.label} — view ${frameIndex + 1}`}
-              className="w-full h-full object-contain"
-              draggable={false}
+            {/* ─── Canvas: dibuja el frame desde el sprite ───
+                  Renderiza solo el slice correspondiente del sprite,
+                  manteniendo aspect ratio (object-contain).
+                  Sin <img> individuales → 1 HTTP request por auto. */}
+            <canvas
+              ref={canvasRef}
+              className="w-full h-full"
+              style={{ display: 'block' }}
             />
 
             {/* Drag hint — fades after first drag */}
@@ -230,7 +321,7 @@ export function VirtualTourSection() {
 
             {/* Frame dots bottom-right */}
             <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1 pointer-events-none">
-              {car.frames.map((_, i) => (
+              {Array.from({ length: totalFrames }).map((_, i) => (
                 <span
                   key={i}
                   className="rounded-full transition-all duration-300"

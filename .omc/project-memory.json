@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1780981711182,
+  "lastScanned": 1781160711593,
   "projectRoot": "C:\\Users\\gabri\\Desktop\\new_web",
   "techStack": {
     "languages": [
@@ -47,9 +47,9 @@
     "lintCommand": "npm run lint",
     "devCommand": "npm run dev",
     "scripts": {
-      "dev": "next dev -p 3000 2>&1 | tee dev.log",
-      "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
-      "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
+      "dev": "next dev -p 3001",
+      "build": "next build",
+      "start": "next start -p 3000",
       "lint": "eslint .",
       "db:push": "prisma db push",
       "db:generate": "prisma generate",
@@ -71,7 +71,10 @@
       "public",
       "src"
     ],
-    "gitBranches": null
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
   },
   "customNotes": [],
   "directoryMap": {
@@ -79,7 +82,7 @@
       "path": "db",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1780981711105,
+      "lastAccessed": 1781160711550,
       "keyFiles": [
         "custom.db"
       ]
@@ -88,7 +91,7 @@
       "path": "download",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1780981711106,
+      "lastAccessed": 1781160711551,
       "keyFiles": [
         "README.md"
       ]
@@ -97,21 +100,30 @@
       "path": "examples",
       "purpose": "Example code",
       "fileCount": 0,
-      "lastAccessed": 1780981711117,
+      "lastAccessed": 1781160711559,
       "keyFiles": []
     },
     "mini-services": {
       "path": "mini-services",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1780981711117,
+      "lastAccessed": 1781160711560,
       "keyFiles": []
+    },
+    "plans": {
+      "path": "plans",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1781160711560,
+      "keyFiles": [
+        "elegant-waddling-volcano.md"
+      ]
     },
     "prisma": {
       "path": "prisma",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1780981711118,
+      "lastAccessed": 1781160711561,
       "keyFiles": [
         "schema.prisma"
       ]
@@ -119,9 +131,10 @@
     "public": {
       "path": "public",
       "purpose": "Public files",
-      "fileCount": 2,
-      "lastAccessed": 1780981711118,
+      "fileCount": 3,
+      "lastAccessed": 1781160711561,
       "keyFiles": [
+        "favicon.svg",
         "logo.svg",
         "robots.txt"
       ]
@@ -130,14 +143,14 @@
       "path": "src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1780981711119,
+      "lastAccessed": 1781160711562,
       "keyFiles": []
     },
     "upload": {
       "path": "upload",
       "purpose": null,
       "fileCount": 6,
-      "lastAccessed": 1780981711120,
+      "lastAccessed": 1781160711564,
       "keyFiles": [
         "ferrari_california_bianca.png",
         "ferrari_california_rossa.png",
@@ -146,11 +159,18 @@
         "maserati_ghibli.png"
       ]
     },
+    "public\\assets": {
+      "path": "public\\assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1781160711573,
+      "keyFiles": []
+    },
     "src\\app": {
       "path": "src\\app",
       "purpose": "Application code",
       "fileCount": 3,
-      "lastAccessed": 1780981711123,
+      "lastAccessed": 1781160711574,
       "keyFiles": [
         "globals.css",
         "layout.tsx",
@@ -160,15 +180,18 @@
     "src\\components": {
       "path": "src\\components",
       "purpose": "UI components",
-      "fileCount": 0,
-      "lastAccessed": 1780981711123,
-      "keyFiles": []
+      "fileCount": 2,
+      "lastAccessed": 1781160711575,
+      "keyFiles": [
+        "360Gallery.module.css",
+        "360Gallery.tsx"
+      ]
     },
     "src\\lib": {
       "path": "src\\lib",
       "purpose": "Library code",
       "fileCount": 2,
-      "lastAccessed": 1780981711124,
+      "lastAccessed": 1781160711575,
       "keyFiles": [
         "db.ts",
         "utils.ts"

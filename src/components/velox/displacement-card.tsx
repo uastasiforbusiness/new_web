@@ -26,10 +26,21 @@ export function DisplacementCard({ car }: { car: Car }) {
 
   const isYacht = car.name.includes('Cranchi');
 
+  // ─── En touch devices, mostrar valores finales desde el inicio ───
+  const [isTouch] = useState(() => typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+
   // Spec counter animation on scroll
   useEffect(() => {
     const accelNum = parseFloat(car.acceleration);
     const speedNum = parseInt(car.topSpeed);
+
+    // En touch devices, establecemos los valores finales inmediatamente
+    if (isTouch) {
+      if (hpRef.current) hpRef.current.textContent = String(car.hp);
+      if (accelRef.current) accelRef.current.textContent = car.acceleration.replace('s', '');
+      if (speedRef.current) speedRef.current.textContent = String(speedNum);
+      return;
+    }
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -77,9 +88,14 @@ export function DisplacementCard({ car }: { car: Car }) {
     }, specTriggerRef);
 
     return () => ctx.revert();
-  }, [car.hp, car.acceleration, car.topSpeed]);
+  }, [car.hp, car.acceleration, car.topSpeed, isTouch]);
+
+  // ─── En touch devices no aplicamos efecto 3D tilt ───
+  const isTouchDevice = useRef(typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)).current;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    // No hacer nada en touch devices — el efecto 3D no funciona y consume GPU
+    if (isTouchDevice) return;
     if (!cardRef.current || !imageRef.current || !shineRef.current) return;
 
     const rect = cardRef.current.getBoundingClientRect();
@@ -148,6 +164,8 @@ export function DisplacementCard({ car }: { car: Car }) {
   }, [car.images, car.color]);
 
   const handleMouseLeave = useCallback(() => {
+    // En touch devices no aplicamos efecto 3D
+    if (isTouchDevice) return;
     if (!cardRef.current || !imageRef.current || !shineRef.current || !titleRef.current || !glowRef.current) return;
 
     gsap.to(cardRef.current, {

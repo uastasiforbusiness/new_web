@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
+import { ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
+import { DatePicker } from './date-picker';
 import { cars } from './data';
 
 type FormData = {
@@ -78,7 +79,9 @@ export function ReservationForm() {
     }
   };
 
-  const inputClass = "w-full bg-[#0a0a0a] border border-[#333] text-white text-sm font-body py-3 px-4 focus:border-[#c9a96e] focus:outline-none transition-colors duration-300 placeholder:text-[#555]";
+  // ─── iOS Safari fix: inputs con font-size < 16px hacen zoom al enfocar ───
+  //     El font-size 16px está forzado globalmente en globals.css
+  const inputClass = "w-full bg-[#0a0a0a] border border-[#333] text-white font-body py-3 px-4 focus:border-[#c9a96e] focus:outline-none transition-colors duration-300 placeholder:text-[#555]";
   const labelClass = "block text-[10px] font-elegant font-semibold tracking-[0.15em] text-[#888] mb-2";
 
   return (
@@ -156,26 +159,26 @@ export function ReservationForm() {
             />
           </div>
           <div>
-            <label className={labelClass}><Calendar size={11} className="inline mr-1 text-[#c9a96e]" /> PICKUP DATE</label>
-            <input
-              type="date"
+            <DatePicker
               value={form.pickupDate}
-              onChange={(e) => update('pickupDate', e.target.value)}
+              onChange={(v) => update('pickupDate', v)}
+              label="PICKUP DATE"
+              placeholder="Select pickup date"
               required
-              className={inputClass}
+              min={new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelClass}><Calendar size={11} className="inline mr-1 text-[#c9a96e]" /> RETURN DATE</label>
-            <input
-              type="date"
+            <DatePicker
               value={form.returnDate}
-              onChange={(e) => update('returnDate', e.target.value)}
+              onChange={(v) => update('returnDate', v)}
+              label="RETURN DATE"
+              placeholder="Select return date"
               required
-              className={inputClass}
+              min={form.pickupDate || new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>

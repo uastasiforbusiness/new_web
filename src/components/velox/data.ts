@@ -104,12 +104,48 @@ export const cars = [
 export type Car = typeof cars[number];
 export type CarImage = Car['images'][number];
 
+// ═══════════════════════════════════════════════════════════════
+// SPRITE SHEETS OPTIMIZADOS
+// ═══════════════════════════════════════════════════════════════
+
+// ─── Yate: 5 frames → sprites responsive ───
+export const YACHT_SPRITE = '/images/yacht_360_sprite.webp';
+export const YACHT_SPRITE_MOBILE = '/images/yacht_360_sprite_mobile.webp';
+export const YACHT_SPRITE_FRAMES = 5;
+export const YACHT_SPRITE_SLOT_W = 835;
+export const YACHT_SPRITE_SLOT_H = 306;
+
+// ─── Ferrari 360° Virtual Tour: sprites responsive para canvas ───
+//     Se elige srcMobile en viewports < 768px para reducir payload ~75%
+//     Generados con scripts/generate-car-sprites.mjs
+export const FERRARI_SPRITES = [
+  {
+    src: '/images/ferrari_bianca_sprite.webp',
+    srcMobile: '/images/ferrari_bianca_sprite_mobile.webp',
+    frameCount: 5,
+    slotW: 720,
+    slotH: 1280,
+    label: 'Ferrari California T · Bianca Avus',
+    color: '#f5f5f0',
+  },
+  {
+    src: '/images/ferrari_rossa_sprite.webp',
+    srcMobile: '/images/ferrari_rossa_sprite_mobile.webp',
+    frameCount: 9,
+    slotW: 406,
+    slotH: 720,
+    label: 'Ferrari California · Rossa Corsa',
+    color: '#8b0000',
+  },
+];
+
+// Mantenemos compatibilidad con código legacy que importe sequenceFrames
 export const sequenceFrames = [
-  '/images/yacht_360/frame_001.webp',
-  '/images/yacht_360/frame_002.webp',
-  '/images/yacht_360/frame_003.webp',
-  '/images/yacht_360/frame_004.webp',
-  '/images/yacht_360/frame_005.webp',
+  YACHT_SPRITE,
+  YACHT_SPRITE,
+  YACHT_SPRITE,
+  YACHT_SPRITE,
+  YACHT_SPRITE,
 ];
 
 export const frameLabels = ['NAUTICAL ADVENTURE', 'FULL SPEED', 'CRYSTAL WATERS', 'ELITE EXPERIENCE', 'PURE FREEDOM'];

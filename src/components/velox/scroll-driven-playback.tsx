@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { sequenceFrames, frameLabels } from './data';
+import { YACHT_SPRITE, YACHT_SPRITE_MOBILE, YACHT_SPRITE_FRAMES, frameLabels } from './data';
 
 export function ScrollDrivenPlayback() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -11,8 +11,30 @@ export function ScrollDrivenPlayback() {
   const progressRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
+  const [sectionInView, setSectionInView] = useState(false);
+
+  // ─── IntersectionObserver lazy loading + responsive ───
+  //     Carga el sprite del yate solo cuando la sección entra en viewport.
+  //     En móvil (< 768px) usa el sprite a 50% de resolución.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setSectionInView(true); obs.disconnect(); } },
+      { rootMargin: '200px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // ─── Elegir sprite según viewport ───
+  function getSprite() {
+    if (window.innerWidth < 768) return YACHT_SPRITE_MOBILE;
+    return YACHT_SPRITE;
+  }
 
   useEffect(() => {
+    if (!sectionInView) return;
     const ctx = gsap.context(() => {
       const frames = frameRefs.current.filter(Boolean);
 
@@ -38,8 +60,9 @@ export function ScrollDrivenPlayback() {
         );
 
         // Add a subtle "Engine Shake" when the boat is moving fast (frames 2 and 3)
+        // Aplica al div del sprite (ya no hay <img> individual)
         if (i === 1 || i === 2) {
-          gsap.to(frame.querySelector('img'), {
+          gsap.to(frame, {
             x: 'random(-1, 1)',
             y: 'random(-1, 1)',
             duration: 0.1,
@@ -91,14 +114,14 @@ export function ScrollDrivenPlayback() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [sectionInView]);
 
   return (
     <section
       ref={sectionRef}
       id="experience"
       className="relative bg-[#0a0a0a]"
-      style={{ height: `${sequenceFrames.length * 100}vh` }}
+      style={{ height: `${YACHT_SPRITE_FRAMES * 100}vh` }}
     >
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-10">
         {/* Cinematic Viewport Frame with Feathered Edges */}
@@ -118,20 +141,23 @@ export function ScrollDrivenPlayback() {
             }}
           />
 
-          {sequenceFrames.map((src, i) => (
+          {/* ─── Sprite sheet: 5 frames en UNA sola imagen ───
+                Cada div muestra un slice diferente del sprite usando
+                background-size: 500% (= 5 frames) y background-position.
+                GSAP crossfadea la opacidad para transición suave. */}
+          {Array.from({ length: YACHT_SPRITE_FRAMES }).map((_, i) => (
             <div
-              key={src}
+              key={i}
               ref={(el) => { frameRefs.current[i] = el; }}
               className="absolute inset-0 w-full h-full"
-              style={{ opacity: i === 0 ? 1 : 0 }}
-            >
-              <img 
-                src={src} 
-                alt={`Yacht frame ${i + 1}`} 
-                className="w-full h-full object-contain" 
-                loading={i === 0 ? 'eager' : 'lazy'} 
-              />
-            </div>
+              style={{
+                backgroundImage: sectionInView ? `url(${getSprite()})` : undefined,
+                backgroundSize: 'cover',
+                backgroundPosition: `${(i / (YACHT_SPRITE_FRAMES - 1)) * 100}% 0`,
+                backgroundRepeat: 'no-repeat',
+                opacity: i === 0 ? 1 : 0,
+              }}
+            />
           ))}
         </div>
 
@@ -159,7 +185,7 @@ export function ScrollDrivenPlayback() {
               <span className="text-[10px] font-heading tracking-[0.2em] text-[#555]">
                 <span ref={counterRef} className="text-[#c9a96e]">01</span>
                 <span className="mx-1">/</span>
-                0{sequenceFrames.length}
+                0{YACHT_SPRITE_FRAMES}
               </span>
             </div>
           </div>

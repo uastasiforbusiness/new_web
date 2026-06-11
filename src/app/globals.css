@@ -127,6 +127,28 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
+   SAFARI iOS FIXES
+   ═══════════════════════════════════════════════════════════ */
+html, body {
+  /* Evita el efecto rubber-band/bounce en iOS que interfiere con Lenis */
+  overscroll-behavior: none;
+}
+
+/* 100dvh como respaldo moderno para Safari iOS (barra de direcciones dinámica) */
+@supports (height: 100dvh) {
+  .h-dynamic {
+    height: 100dvh;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   iOS INPUT FIX: font-size 16px mínimo evita zoom automático
+   ═══════════════════════════════════════════════════════════ */
+input, select, textarea {
+  font-size: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════
    LENIS SMOOTH SCROLL — Desactivar scroll nativo
    ═══════════════════════════════════════════════════════════ */
 html.lenis, html.lenis body {
@@ -197,8 +219,17 @@ html.lenis, html.lenis body {
    NAV GLASS EFFECT
    ═══════════════════════════════════════════════════════════ */
 .nav-glass {
+  /* Fallback sólido para iOS que no soporta backdrop-filter bien */
+  background: rgba(10, 10, 10, 0.92);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* En dispositivos que soportan backdrop-filter, reducimos opacidad del fondo */
+@supports (backdrop-filter: blur(1px)) {
+  .nav-glass {
+    background: rgba(10, 10, 10, 0.75);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
