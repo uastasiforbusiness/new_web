@@ -32,6 +32,9 @@ import { WhatsAppButton } from '@/components/velox/whatsapp-button';
 // ─── Registrar GSAP plugins ───
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
+
+  // ─── iOS Safari fix: ignora resize causado por ocultación de barra de direcciones ───
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 
@@ -54,6 +57,16 @@ export default function Home() {
 
   useEffect(() => {
     if (!loaded) return;
+
+    // ─── Fix crítico para iOS/móvil: evita saltos por la barra de direcciones ───
+    // normalizeScroll(true) unifica el scroll en iOS previniendo conflictos
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      ScrollTrigger.normalizeScroll(true);
+    } else {
+      // En desktop también refresh al resize por si cambia el viewport
+      ScrollTrigger.config({ ignoreMobileResize: false });
+    }
+
     const timeout = setTimeout(() => ScrollTrigger.refresh(), 200);
 
     // Asynchronously prefetch the 360 tour frame images once the page has loaded and is interactive

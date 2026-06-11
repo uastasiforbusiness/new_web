@@ -82,7 +82,7 @@ export function HeroScaleDown() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen w-full overflow-hidden">
+    <section ref={containerRef} className="relative h-screen h-dynamic w-full overflow-hidden">
       <div ref={particlesRef} className="absolute inset-0 z-[5] pointer-events-none">
         {particles.map((p, i) => (
           <div
@@ -114,7 +114,7 @@ export function HeroScaleDown() {
           <p className="text-[10px] sm:text-xs font-heading font-semibold tracking-[0.6em] text-[#c9a96e] mb-5 sm:mb-8 uppercase">
             ✦&nbsp;&nbsp;Experience Luxury&nbsp;&nbsp;✦
           </p>
-          <h1 className="text-5xl sm:text-7xl lg:text-[7rem] xl:text-[9rem] font-elegant font-light tracking-wide text-white leading-[0.85] mb-5 sm:mb-8 italic">
+          <h1 className="text-4xl md:text-7xl lg:text-[7rem] xl:text-[9rem] font-elegant font-light tracking-wide text-white leading-[0.85] mb-5 sm:mb-8 italic">
             <span className="block">Drive</span>
             <span className="block shimmer-text">Your Dream</span>
           </h1>
@@ -145,7 +145,6 @@ export function HeroScaleDown() {
           <div>
             <p className="text-[9px] font-heading tracking-[0.4em] text-[#c9a96e] mb-2">FEATURED VEHICLE</p>
             <h3 className="text-2xl sm:text-4xl font-elegant font-light tracking-wide text-white italic">Ferrari California</h3>
-            <p className="text-sm font-body text-[#777] mt-1">Rossa Corsa — From €890/day</p>
           </div>
           <div className="flex items-center gap-8 sm:gap-10">
             {[
