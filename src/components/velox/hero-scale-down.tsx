@@ -94,12 +94,18 @@ export function HeroScaleDown() {
       </div>
 
       <div ref={imageRef} className="hero-scale-container absolute inset-0">
-        <img
-          src="/images/hero-bg.webp"
-          alt="Ferrari California in luxury showroom"
-          className="w-full h-full object-cover object-[center_35%] sm:object-center scale-100"
-          loading="eager"
-        />
+        <picture className="block w-full h-full">
+          <source
+            srcSet="/images/hero-bg-mobile.webp"
+            media="(max-width: 767px)"
+          />
+          <img
+            src="/images/hero-bg.webp"
+            alt="Ferrari California in luxury showroom"
+            className="w-full h-full object-cover max-md:object-[center_30%]"
+            loading="eager"
+          />
+        </picture>
         <div className="hero-overlay absolute inset-0" />
       </div>
 
