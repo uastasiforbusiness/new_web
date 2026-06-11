@@ -222,9 +222,9 @@ export function DisplacementCard({ car }: { car: Car }) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
           <div ref={shineRef} className="absolute inset-0 z-[2] pointer-events-none" />
 
-          {/* Hover overlay */}
-          <div className="absolute inset-0 z-[3] bg-black/0 hover:bg-black/30 transition-all duration-500 flex items-center justify-center">
-            <span className="text-[10px] font-heading tracking-[0.3em] text-white/0 hover:text-white/90 transition-all duration-500">
+          {/* Hover overlay — activates on whole image */}
+          <div className="absolute inset-0 z-[3] bg-black/0 group-hover/image:bg-black/35 transition-all duration-500 flex items-center justify-center">
+            <span className="text-[10px] font-heading tracking-[0.3em] text-white/0 group-hover/image:text-white/95 transition-all duration-500 border border-white/0 group-hover/image:border-white/30 px-4 py-2">
               VIEW GALLERY
             </span>
           </div>

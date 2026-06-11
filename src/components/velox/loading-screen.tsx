@@ -104,6 +104,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         <div
           ref={logoWrapRef}
           className="relative mb-12"
+          style={{ opacity: 0, filter: 'blur(20px) brightness(0)', transform: 'scale(0.85)' }}
         >
           <img
             src="/images/logo-white.webp"
@@ -117,6 +118,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         <p
           ref={taglineRef}
           className="text-[10px] font-elegant tracking-[0.45em] text-[#c9a96e] italic uppercase mb-16"
+          style={{ opacity: 0, filter: 'blur(10px)' }}
         >
           Luxury Automotive
         </p>

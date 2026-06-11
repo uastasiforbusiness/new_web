@@ -105,13 +105,13 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
     setTouchStart(null);
   };
 
-  // Lens zoom
+  // Lens zoom — track relative to the slide image element
   const handleMouseMove = (e: React.MouseEvent) => {
     const el = imageWrapRef.current;
-    if (!el || !lensVisible) return;
+    if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+    const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
     setLensPos({ x, y });
   };
 
@@ -164,7 +164,8 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
       >
         <div
           ref={imageWrapRef}
-          className="relative w-full h-full flex items-center justify-center"
+          className={`relative w-full h-full flex items-center justify-center ${lensVisible ? 'cursor-none' : ''}`}
+          onMouseMove={handleMouseMove}
         >
           <div
             ref={slideRef}
@@ -177,24 +178,21 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
               draggable={false}
             />
 
-            {/* Lens zoom overlay */}
+            {/* Lens zoom overlay — follows cursor */}
             {lensVisible && (
-              <div
-                className="absolute inset-0 cursor-none pointer-events-none overflow-hidden"
-                onMouseMove={handleMouseMove}
-              >
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div
-                  className="absolute border-2 border-[#c9a96e]/60 rounded-full pointer-events-none"
+                  className="absolute border-2 border-[#c9a96e]/70 rounded-full pointer-events-none transition-[left,top] duration-75"
                   style={{
-                    width: '120px',
-                    height: '120px',
-                    left: `calc(${lensPos.x}% - 60px)`,
-                    top: `calc(${lensPos.y}% - 60px)`,
+                    width: '130px',
+                    height: '130px',
+                    left: `calc(${lensPos.x}% - 65px)`,
+                    top: `calc(${lensPos.y}% - 65px)`,
                     backgroundImage: `url(${currentImage.src})`,
-                    backgroundSize: '250%',
-                    backgroundPosition: `${lensPos.x * 0.6}% ${lensPos.y * 0.6}%`,
-                    boxShadow: '0 0 20px rgba(0,0,0,0.5), inset 0 0 10px rgba(201,169,110,0.2)',
-                    backdropFilter: 'blur(2px)',
+                    backgroundSize: '300%',
+                    backgroundPosition: `${lensPos.x}% ${lensPos.y}%`,
+                    boxShadow: '0 0 0 1px rgba(201,169,110,0.15), 0 8px 32px rgba(0,0,0,0.6), inset 0 0 12px rgba(201,169,110,0.15)',
+                    backdropFilter: 'blur(1px)',
                   }}
                 />
               </div>
