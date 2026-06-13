@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
 import { ReservationForm } from './reservation-form';
 
 const PHONE = process.env.NEXT_PUBLIC_PHONE || '+39 333 123 4567';
@@ -171,6 +171,21 @@ export function ReserveSection() {
           <p className="text-base font-body font-light text-[#999] max-w-lg mx-auto tracking-wide">
             Fill in the form below and our concierge team will confirm your booking within 1 hour
           </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto mb-10">
+          <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3 text-center">
+            <ShieldCheck size={14} className="mx-auto mb-2 text-[#c9a96e]" />
+            <p className="text-xs font-heading tracking-[0.2em] text-[#c9a96e]">SECURE REQUEST</p>
+          </div>
+          <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3 text-center">
+            <Clock size={14} className="mx-auto mb-2 text-[#c9a96e]" />
+            <p className="text-xs font-heading tracking-[0.2em] text-[#c9a96e]">1H RESPONSE</p>
+          </div>
+          <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3 text-center">
+            <MessageCircle size={14} className="mx-auto mb-2 text-[#c9a96e]" />
+            <p className="text-xs font-heading tracking-[0.2em] text-[#c9a96e]">CONCIERGE</p>
+          </div>
         </div>
 
         <ReservationForm />

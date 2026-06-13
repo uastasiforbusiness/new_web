@@ -199,18 +199,20 @@ export function ReservationForm() {
         </div>
 
         {/* Consent */}
-        <label className="flex items-start gap-3 text-[11px] font-body leading-5 text-[#aaa]">
-          <input
-            type="checkbox"
-            checked={form.consentAccepted}
-            onChange={(e) => update('consentAccepted', e.target.checked)}
-            required
-            className="mt-0.5 size-4 accent-[#c9a96e] cursor-hover"
-          />
-          <span>
-            I agree to B LEADER processing my data to manage this reservation request.
-          </span>
-        </label>
+        <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3">
+          <label className="flex items-start gap-3 text-[11px] font-body leading-5 text-[#bbb]">
+            <input
+              type="checkbox"
+              checked={form.consentAccepted}
+              onChange={(e) => update('consentAccepted', e.target.checked)}
+              required
+              className="mt-0.5 size-4 accent-[#c9a96e] cursor-hover"
+            />
+            <span>
+              I agree to B LEADER processing my data to manage this reservation request.
+            </span>
+          </label>
+        </div>
 
         {/* Submit */}
         <button
