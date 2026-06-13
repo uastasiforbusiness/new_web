@@ -61,7 +61,11 @@ export function HeroScaleDown() {
         0.55
       );
 
-      if (particlesRef.current) {
+      // ─── Partículas solo en desktop y sin prefers-reduced-motion (ahorro de batería) ───
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+
+      if (particlesRef.current && !reduceMotion && !isCoarse) {
         const dots = particlesRef.current.querySelectorAll('.ambient-dot');
         dots.forEach((dot) => {
           gsap.to(dot, {

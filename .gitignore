@@ -52,3 +52,19 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# env example is safe to commit
+!.env.example
+
+# AI tooling artifacts
+.omc/
+
+# runtime/process files
+*.pid
+
+# local databases
+db/*.db
+
+# local reports
+lighthouse*.json
+report.json
