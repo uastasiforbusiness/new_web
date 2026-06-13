@@ -65,6 +65,16 @@ jobs:
       - name: Pull Vercel environment
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
+      - name: Run database migrations (optional)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -n "$DATABASE_URL" ]; then
+            npx prisma migrate deploy
+          else
+            echo "⚠️  DATABASE_URL not set — skipping migrations"
+          fi
+
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
@@ -110,6 +120,16 @@ jobs:
 
       - name: Pull Vercel environment
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Run database migrations (optional)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -n "$DATABASE_URL" ]; then
+            npx prisma migrate deploy
+          else
+            echo "⚠️  DATABASE_URL not set — skipping migrations"
+          fi
 
       - name: Build for Vercel
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
