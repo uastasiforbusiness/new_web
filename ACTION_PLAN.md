@@ -15,10 +15,10 @@ Este documento ya no debe leerse como plan pendiente de migración SQLite → Po
 
 ## Pendientes reales
 
-### CRÍTICO
+### CRÍTICO (Resuelto)
 
+- **Limpieza de CI/CD:** Se eliminó la duplicación entre `ci.yml` y `deploy.yml` en GitHub. Se mantiene `deploy.yml` como el pipeline principal (Lint, Build, Migraciones, Vercel) y `.gitlab-ci.yml` como validador secundario para mantener compatibilidad multiplataforma.
 - Mantener `DATABASE_URL` configurada en Vercel Production/Preview y como GitHub secret si se quieren migraciones automáticas.
-- Revisar duplicación de CI: `.github/workflows/deploy.yml`, `.github/workflows/ci.yml` y `.gitlab-ci.yml` validan lint/build por separado.
 
 ### IMPORTANTE
 
