@@ -11,19 +11,21 @@ datasource db {
 }
 
 model Reservation {
-  id           String   @id @default(cuid())
-  carName      String
-  carVariant   String
-  customerName String
-  email        String
-  phone        String
-  pickupDate   DateTime
-  returnDate   DateTime
-  message      String?
-  status       String   @default("pending")
-  userId       String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                String    @id @default(cuid())
+  carName           String
+  carVariant        String
+  customerName      String
+  email             String
+  phone             String
+  pickupDate        DateTime
+  returnDate        DateTime
+  message           String?
+  consentAccepted   Boolean   @default(false)
+  consentAcceptedAt DateTime?
+  status            String    @default("pending")
+  userId            String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@index([email])
   @@index([createdAt])

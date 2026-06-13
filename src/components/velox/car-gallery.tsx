@@ -125,7 +125,6 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
     if (slideRef.current) {
       gsap.set(slideRef.current, { x: 0, opacity: 1, scale: 1 });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

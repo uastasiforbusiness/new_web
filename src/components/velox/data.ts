@@ -73,7 +73,7 @@ export const cars = [
       { src: '/images/mercedes_e220d_360/frame_003.webp', label: 'FRONT VIEW' },
       { src: '/images/mercedes_e220d_360/frame_007.webp', label: 'PROFILE' },
       { src: '/images/mercedes_e220d_360/frame_009.webp', label: 'IN MOTION' },
-      { src: '/images/mercedes_e220d_360/frame_015.webp', label: 'REAR VIEW' },
+      { src: '/images/mercedes_e220d_360/frame_014.webp', label: 'REAR VIEW' },
       { src: '/images/mercedes_e220d_360/frame_018.webp', label: 'COCKPIT' },
       { src: '/images/mercedes_e220d_360/frame_020.webp', label: 'INTERIOR' },
       { src: '/images/mercedes_e220d_360/frame_024.webp', label: 'DETAIL' },

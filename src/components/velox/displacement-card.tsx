@@ -161,7 +161,7 @@ export function DisplacementCard({ car }: { car: Car }) {
         }
       }
     }
-  }, [car.images, car.color]);
+  }, [car.images, car.color, isTouchDevice]);
 
   const handleMouseLeave = useCallback(() => {
     // En touch devices no aplicamos efecto 3D
@@ -197,7 +197,7 @@ export function DisplacementCard({ car }: { car: Car }) {
         ease: 'power1.in',
       });
     }
-  }, []);
+  }, [isTouchDevice]);
 
   return (
     <>

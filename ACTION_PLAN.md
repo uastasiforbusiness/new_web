@@ -1,86 +1,33 @@
-# Plan de Acción: Migrar SQLite → Neon (PostgreSQL)
+# Plan de Acción — Estado Actual
 
-## 1. Crear base de datos Neon (2 min)
-```bash
-# Opción A: Web UI
-# 1. Ve a https://console.neon.tech
-# 2. New Project → nombre: new-web-db
-# 3. Copy connection string (empieza con postgresql://)
+Este documento ya no debe leerse como plan pendiente de migración SQLite → PostgreSQL. Esa migración está aplicada en el código actual.
 
-# Opción B: Vercel Marketplace (1-click)
-# En Vercel Dashboard → Storage → Create Database → Neon
-```
+## Estado confirmado
 
-## 2. Configurar variables en Vercel
-```
-Settings → Environment Variables → Add New:
-Name: DATABASE_URL
-Value: postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
-Environments: ☑ Production ☑ Preview ☑ Development
-```
+- Prisma usa PostgreSQL en `prisma/schema.prisma`.
+- `DATABASE_URL` viene de variables de entorno.
+- `package.json` incluye `postinstall: prisma generate`.
+- `npm run vercel-build` ejecuta `prisma generate && next build`.
+- Las migraciones de producción/preview se ejecutan como paso opcional separado en `.github/workflows/deploy.yml`, solo si `DATABASE_URL` existe como GitHub secret.
+- El formulario y `/api/reserve` requieren consentimiento explícito del usuario.
+- Se añadió migración para `consentAccepted` y `consentAcceptedAt`.
+- README actualizado con setup PostgreSQL/Neon y comandos actuales.
 
-## 3. Cambios en código (3 archivos)
+## Pendientes reales
 
-### prisma/schema.prisma
-```prisma
-datasource db {
-  provider = "postgresql"   // era "sqlite"
-  url      = env("DATABASE_URL")
-}
+### CRÍTICO
 
-generator client {
-  provider = "prisma-client-js"
-  // binaryTargets = ["native", "rhel-openssl-3.0.x"] // opcional para serverless
-}
-```
+- Mantener `DATABASE_URL` configurada en Vercel Production/Preview y como GitHub secret si se quieren migraciones automáticas.
+- Revisar duplicación de CI: `.github/workflows/deploy.yml`, `.github/workflows/ci.yml` y `.gitlab-ci.yml` validan lint/build por separado.
 
-### package.json (scripts + dependencies)
-```json
-{
-  "scripts": {
-    "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
-    "build": "next build",
-    "dev": "next dev -p 3001",
-    "db:push": "prisma db push",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev"
-  },
-  "dependencies": {
-    "prisma": "^6.11.1",   // MOVIDO desde devDependencies
-    "@prisma/client": "^6.11.1"
-  },
-  "devDependencies": {
-    // prisma YA NO aquí
-  }
-}
-```
+### IMPORTANTE
 
-### .env.example (actualizar)
-```env
-DATABASE_URL=postgresql://user:pass@host:5432/dbname?sslmode=require
-```
+- Añadir tests mínimos para `/api/reserve`.
+- Añadir política de privacidad real/enlazada para completar el requisito de consentimiento.
+- Reemplazar rate limit in-memory por Redis/KV si el tráfico o el riesgo justifican protección distribuida.
 
-## 4. Aplicar migraciones
-```bash
-# Local: genera y aplica a Neon
-npm run db:generate
-npm run db:migrate
+### NICE
 
-# O en Vercel: el vercel-build lo hace automático
-```
-
-## 5. Push y verificar
-```bash
-git add .
-git commit -m "chore: migrate to Neon PostgreSQL for Vercel deployment"
-git push origin review/api-validation-and-cleanup
-# GitHub Actions correrá lint + build → verde
-# Vercel deployará con nueva BD → verde
-```
-
-## 6. Rollback si algo falla
-```bash
-# En Vercel: Settings → Functions → Redeploy previous deployment
-# En Neon: Branching → crea branch de main antes de migrar
-```
+- Medir Lighthouse.
+- Revisar tamaños de imágenes.
+- Añadir panel/admin o email de notificación para nuevas reservas.

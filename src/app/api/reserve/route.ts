@@ -40,6 +40,9 @@ const reservationSchema = z
     phone: z.string().trim().min(6).max(20),
     pickupDate: z.coerce.date(),
     returnDate: z.coerce.date(),
+    consentAccepted: z.boolean().refine((value) => value === true, {
+      message: "You must accept data processing consent",
+    }),
     message: z.string().trim().max(MAX_LENGTH).nullish(),
   })
   .refine((data) => data.returnDate > data.pickupDate, {
@@ -86,6 +89,7 @@ export async function POST(request: Request) {
       phone,
       pickupDate,
       returnDate,
+      consentAccepted,
       message,
     } = parsed.data;
 
@@ -98,6 +102,8 @@ export async function POST(request: Request) {
         phone,
         pickupDate,
         returnDate,
+        consentAccepted,
+        consentAcceptedAt: new Date(),
         message: message ?? null,
       },
     });

@@ -13,6 +13,7 @@ type FormData = {
   pickupDate: string;
   returnDate: string;
   message: string;
+  consentAccepted: boolean;
 };
 
 const initialForm: FormData = {
@@ -23,6 +24,7 @@ const initialForm: FormData = {
   pickupDate: '',
   returnDate: '',
   message: '',
+  consentAccepted: false,
 };
 
 export function ReservationForm() {
@@ -40,7 +42,7 @@ export function ReservationForm() {
     return () => clearTimeout(timeout);
   }, [success]);
 
-  const update = (field: keyof FormData, value: string | number) => {
+  const update = (field: keyof FormData, value: string | number | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -62,6 +64,7 @@ export function ReservationForm() {
           pickupDate: form.pickupDate,
           returnDate: form.returnDate,
           message: form.message || undefined,
+          consentAccepted: form.consentAccepted,
         }),
       });
 
@@ -194,6 +197,20 @@ export function ReservationForm() {
             className={`${inputClass} resize-none`}
           />
         </div>
+
+        {/* Consent */}
+        <label className="flex items-start gap-3 text-[11px] font-body leading-5 text-[#aaa]">
+          <input
+            type="checkbox"
+            checked={form.consentAccepted}
+            onChange={(e) => update('consentAccepted', e.target.checked)}
+            required
+            className="mt-0.5 size-4 accent-[#c9a96e] cursor-hover"
+          />
+          <span>
+            I agree to B LEADER processing my data to manage this reservation request.
+          </span>
+        </label>
 
         {/* Submit */}
         <button
