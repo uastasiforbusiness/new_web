@@ -39,3 +39,4 @@ Web de alquiler de coches premium construida con Next.js 16 (App Router), React 
 - `src/components/velox` — componentes propios del sitio
 - `src/components/ui` — componentes shadcn/ui
 - `prisma/schema.prisma` — modelo de datos (reservas)
+# Pipeline ready
