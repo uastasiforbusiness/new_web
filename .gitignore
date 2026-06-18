@@ -68,3 +68,17 @@ db/*.db
 # local reports
 lighthouse*.json
 report.json
+
+# large archives (never commit)
+*.tar
+*.tar.gz
+*.zip
+
+# stale/legacy project artifacts
+upload/
+download/
+examples/
+mini-services/
+plans/
+Caddyfile
+scripts/

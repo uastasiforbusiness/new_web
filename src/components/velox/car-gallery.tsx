@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import type { Car } from './data';
+import type { FleetVehicle } from './data';
 
-export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) {
+export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [lensVisible, setLensVisible] = useState(false);
@@ -147,7 +147,7 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
         </div>
         <button
           onClick={onClose}
-          className="text-white/60 hover:text-white transition-colors duration-200 cursor-hover p-2"
+          className="text-white/60 hover:text-white transition-colors duration-200 cursor-pointer p-2"
           aria-label="Close"
         >
           <X size={20} />
@@ -204,14 +204,14 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
           <>
             <button
               onClick={(e) => { e.stopPropagation(); goPrev(); }}
-              className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#111]/80 border border-[#333] hover:border-[#c9a96e]/50 text-white/60 hover:text-[#c9a96e] transition-all duration-300 cursor-hover z-10"
+              className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#111]/80 border border-[#333] hover:border-[#c9a96e]/50 text-white/60 hover:text-[#c9a96e] transition-all duration-300 cursor-pointer z-10"
               aria-label="Previous"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); goNext(); }}
-              className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#111]/80 border border-[#333] hover:border-[#c9a96e]/50 text-white/60 hover:text-[#c9a96e] transition-all duration-300 cursor-hover z-10"
+              className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#111]/80 border border-[#333] hover:border-[#c9a96e]/50 text-white/60 hover:text-[#c9a96e] transition-all duration-300 cursor-pointer z-10"
               aria-label="Next"
             >
               <ChevronRight size={18} />
@@ -241,7 +241,7 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
               <button
                 key={i}
                 onClick={() => goTo(i)}
-                className={`transition-all duration-500 rounded-full cursor-hover ${
+                className={`transition-all duration-500 rounded-full cursor-pointer ${
                   i === currentIndex
                     ? 'w-5 h-[3px] bg-[#c9a96e]'
                     : 'w-[3px] h-[3px] bg-[#444] hover:bg-[#666]'
@@ -260,7 +260,7 @@ export function CarGallery({ car, onClose }: { car: Car; onClose: () => void }) 
                 key={i}
                 onClick={() => goTo(i)}
                 onMouseEnter={() => goTo(i)}
-                className={`flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 border-2 transition-all duration-300 overflow-hidden cursor-hover ${
+                className={`flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 border-2 transition-all duration-300 overflow-hidden cursor-pointer ${
                   i === currentIndex
                     ? 'border-[#c9a96e] opacity-100'
                     : 'border-transparent opacity-50 hover:opacity-80'

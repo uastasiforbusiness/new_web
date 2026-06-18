@@ -6,9 +6,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Zap, Timer, Gauge, ChevronRight } from 'lucide-react';
 import { MagneticButton } from './magnetic-button';
 import { CarGallery } from './car-gallery';
-import type { Car } from './data';
+import type { FleetVehicle } from './data';
 
-export function DisplacementCard({ car }: { car: Car }) {
+export function DisplacementCard({ car }: { car: FleetVehicle }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -206,7 +206,7 @@ export function DisplacementCard({ car }: { car: Car }) {
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="cursor-hover group relative bg-[#0d0d0d] border border-[#222] overflow-hidden transition-colors duration-500 hover:border-[#c9a96e]/25"
+        className="cursor-pointer group relative bg-[#0d0d0d] border border-[#222] overflow-hidden transition-colors duration-500 hover:border-[#c9a96e]/25"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div
@@ -222,7 +222,7 @@ export function DisplacementCard({ car }: { car: Car }) {
 
         {/* Image — click to open gallery */}
         <div
-          className="relative aspect-[16/9] overflow-hidden bg-[#0a0a0a] cursor-hover group/image"
+          className="relative aspect-[16/9] overflow-hidden bg-[#0a0a0a] cursor-pointer group/image"
           onClick={() => setGalleryOpen(true)}
         >
           <div ref={imageRef} className="w-full h-full">

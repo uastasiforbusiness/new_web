@@ -45,7 +45,7 @@ export function MagneticButton({
       href={href}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`cursor-hover inline-flex items-center ${className}`}
+      className={`cursor-pointer inline-flex items-center ${className}`}
       style={style}
     >
       {children}
