@@ -1,3 +1,7 @@
+# ═══════════════════════════════════════════════════════════════════════
+#  B LEADER — robots.txt
+# ═══════════════════════════════════════════════════════════════════════
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +14,15 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: DuckDuckBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Reserve API is a form endpoint — no need to index it
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://bleader.it/sitemap.xml
+Host: https://bleader.it
