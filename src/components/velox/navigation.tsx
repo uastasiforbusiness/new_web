@@ -22,7 +22,7 @@ export function Navigation() {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          <a href="#" className="flex-shrink-0 cursor-hover">
+          <a href="#" className="flex-shrink-0 cursor-pointer">
             <img src="/images/logo-white.webp" alt="B LEADER" className="h-12 sm:h-14 w-auto transition-opacity duration-300 hover:opacity-70" />
           </a>
 
@@ -31,7 +31,7 @@ export function Navigation() {
               <a
                 key={link.label}
                 href={link.href}
-                className="cursor-hover relative text-[11px] font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300 after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-[#c9a96e] hover:after:w-full after:transition-all after:duration-300"
+                className="cursor-pointer relative text-[11px] font-heading font-semibold tracking-[0.25em] text-[#999] hover:text-[#c9a96e] transition-colors duration-300 after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-[#c9a96e] hover:after:w-full after:transition-all after:duration-300"
               >
                 {link.label}
               </a>
@@ -48,7 +48,7 @@ export function Navigation() {
             </MagneticButton>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-white p-2 cursor-hover"
+              className="md:hidden text-white p-2 cursor-pointer"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}

@@ -1,5 +1,4 @@
 import sharp from 'sharp';
-import { readdirSync } from 'fs';
 
 const INPUT_DIR = 'public/images/yacht_360';
 

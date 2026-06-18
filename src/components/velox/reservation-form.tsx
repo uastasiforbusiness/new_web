@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { DatePicker } from './date-picker';
 import { cars } from './data';
@@ -13,6 +13,7 @@ type FormData = {
   pickupDate: string;
   returnDate: string;
   message: string;
+  consentAccepted: boolean;
 };
 
 const initialForm: FormData = {
@@ -23,6 +24,7 @@ const initialForm: FormData = {
   pickupDate: '',
   returnDate: '',
   message: '',
+  consentAccepted: false,
 };
 
 export function ReservationForm() {
@@ -30,7 +32,9 @@ export function ReservationForm() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [dateError, setDateError] = useState('');
   const [carDropdownOpen, setCarDropdownOpen] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
 
   const selectedCar = cars[form.carIndex];
 
@@ -40,19 +44,44 @@ export function ReservationForm() {
     return () => clearTimeout(timeout);
   }, [success]);
 
-  const update = (field: keyof FormData, value: string | number) => {
+  // ─── Abort in-flight request on unmount ────────────────────────────
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
+
+  const update = (field: keyof FormData, value: string | number | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+    if (field === 'pickupDate' || field === 'returnDate') {
+      setDateError('');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     setError('');
+    setDateError('');
+
+    // ─── Client-side date validation before network round-trip ───────
+    if (form.pickupDate && form.returnDate) {
+      const pickup = new Date(form.pickupDate);
+      const ret = new Date(form.returnDate);
+      if (ret <= pickup) {
+        setDateError('Return date must be after pickup date');
+        return;
+      }
+    }
+
+    setSubmitting(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const res = await fetch('/api/reserve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           carName: selectedCar.name,
           carVariant: selectedCar.variant,
@@ -62,20 +91,29 @@ export function ReservationForm() {
           pickupDate: form.pickupDate,
           returnDate: form.returnDate,
           message: form.message || undefined,
+          consentAccepted: form.consentAccepted,
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Something went wrong');
+        let message = 'Something went wrong';
+        try {
+          const data = await res.json();
+          message = data.error || message;
+        } catch {
+          // Response wasn't JSON (e.g. Vercel HTML error page) — keep generic
+        }
+        throw new Error(message);
       }
 
       setSuccess(true);
       setForm(initialForm);
     } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
       setError(err instanceof Error ? err.message : 'Failed to submit reservation');
     } finally {
       setSubmitting(false);
+      abortRef.current = null;
     }
   };
 
@@ -93,7 +131,7 @@ export function ReservationForm() {
           <button
             type="button"
             onClick={() => setCarDropdownOpen(!carDropdownOpen)}
-            className={`${inputClass} flex items-center justify-between cursor-hover`}
+            className={`${inputClass} flex items-center justify-between`}
           >
             <span className="flex items-center gap-3">
               <Car size={14} className="text-[#c9a96e]" />
@@ -108,7 +146,7 @@ export function ReservationForm() {
                   key={car.variant}
                   type="button"
                   onClick={() => { update('carIndex', i); setCarDropdownOpen(false); }}
-                  className={`w-full text-left px-4 py-3 text-sm font-body transition-colors duration-200 cursor-hover ${
+                  className={`w-full text-left px-4 py-3 text-sm font-body transition-colors duration-200 ${
                     i === form.carIndex ? 'bg-[#c9a96e]/10 text-[#c9a96e]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
                   }`}
                 >
@@ -154,6 +192,8 @@ export function ReservationForm() {
               value={form.phone}
               onChange={(e) => update('phone', e.target.value)}
               placeholder="+39 333 123 4567"
+              pattern="[+]?[\d\s().-]{5,23}"
+              title="Enter a valid phone number (digits, spaces, +, -, parentheses)"
               required
               className={inputClass}
             />
@@ -195,11 +235,27 @@ export function ReservationForm() {
           />
         </div>
 
+        {/* Consent */}
+        <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3">
+          <label className="flex items-start gap-3 text-[11px] font-body leading-5 text-[#bbb]">
+            <input
+              type="checkbox"
+              checked={form.consentAccepted}
+              onChange={(e) => update('consentAccepted', e.target.checked)}
+              required
+              className="mt-0.5 size-4 accent-[#c9a96e]"
+            />
+            <span>
+              I agree to B LEADER processing my data to manage this reservation request.
+            </span>
+          </label>
+        </div>
+
         {/* Submit */}
         <button
           type="submit"
           disabled={submitting || success}
-          className="w-full py-4 bg-gradient-to-r from-[#c9a96e] to-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] cursor-hover hover:shadow-[0_0_35px_rgba(201,169,110,0.3)] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-4 bg-gradient-to-r from-[#c9a96e] to-[#d4af37] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] hover:shadow-[0_0_35px_rgba(201,169,110,0.3)] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><Loader2 size={14} className="animate-spin" /> SUBMITTING...</>
@@ -214,6 +270,13 @@ export function ReservationForm() {
         {success && (
           <p className="text-center text-[#c9a96e] text-sm font-body mt-2">
             ✓ Your reservation request has been received. We&apos;ll contact you shortly.
+          </p>
+        )}
+
+        {/* Date validation error */}
+        {dateError && (
+          <p className="text-center text-red-400 text-sm font-body mt-2">
+            {dateError}
           </p>
         )}
 

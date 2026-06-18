@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { fleetSpecs } from './data';
 
 export function FleetDetailSection() {
@@ -69,7 +68,7 @@ export function FleetDetailSection() {
                 </tr>
               </thead>
               <tbody>
-                {fleetSpecs.map((spec, i) => (
+                {fleetSpecs.map((spec) => (
                   <tr key={spec.name} className="border-b border-[#1a1a1a] hover:bg-[#c9a96e]/[0.03] transition-colors duration-300">
                     <td className="py-4 px-4">
                       <span className="flex items-center gap-2.5">

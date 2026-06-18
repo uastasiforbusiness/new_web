@@ -3,7 +3,7 @@
 export function FilmGrain() {
   return (
     <div
-      className="fixed inset-0 z-[90] pointer-events-none opacity-[0.03] mix-blend-overlay"
+      className="fixed inset-0 z-[90] pointer-events-none opacity-[0.03] mix-blend-overlay hidden lg:block motion-reduce:hidden"
       aria-hidden="true"
     >
       <svg width="100%" height="100%">

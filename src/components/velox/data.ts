@@ -73,12 +73,12 @@ export const cars = [
       { src: '/images/mercedes_e220d_360/frame_003.webp', label: 'FRONT VIEW' },
       { src: '/images/mercedes_e220d_360/frame_007.webp', label: 'PROFILE' },
       { src: '/images/mercedes_e220d_360/frame_009.webp', label: 'IN MOTION' },
-      { src: '/images/mercedes_e220d_360/frame_015.webp', label: 'REAR VIEW' },
+      { src: '/images/mercedes_e220d_360/frame_014.webp', label: 'REAR VIEW' },
       { src: '/images/mercedes_e220d_360/frame_018.webp', label: 'COCKPIT' },
       { src: '/images/mercedes_e220d_360/frame_020.webp', label: 'INTERIOR' },
       { src: '/images/mercedes_e220d_360/frame_024.webp', label: 'DETAIL' },
     ],
-    hp: 194, acceleration: '7.7s', topSpeed: '237 km/h',
+    hp: 194, acceleration: '7.7s', topSpeed: '237 km/h', price: 450,
     tagline: 'REFINED LUXURY',
     color: '#0d0d0d',
     seats: 4, engine: '2.0L Turbodiesel', torque: '400 Nm',
@@ -101,8 +101,8 @@ export const cars = [
   },
 ];
 
-export type Car = typeof cars[number];
-export type CarImage = Car['images'][number];
+export type FleetVehicle = typeof cars[number];
+export type FleetVehicleImage = FleetVehicle['images'][number];
 
 // ═══════════════════════════════════════════════════════════════
 // SPRITE SHEETS OPTIMIZADOS
@@ -119,9 +119,6 @@ export const yachtFrames = [
   '/images/real_75s.webp',
   '/images/real_95s.webp',
 ];
-
-// Mantenemos compatibilidad con código legacy que importe sequenceFrames
-export const sequenceFrames = yachtFrames;
 
 export const frameLabels = ['NAUTICAL ADVENTURE', 'FULL SPEED', 'CRYSTAL WATERS', 'ELITE EXPERIENCE', 'PURE FREEDOM', 'OCEAN SUNSET'];
 
@@ -144,7 +141,7 @@ export const fleetSpecs = [
     color: 'White',
     colorHex: '#F5F5F0',
     seats: 2,
-    acceleration: '3.8 s',
+    acceleration: '3.9 s',
     topSpeed: '310 km/h',
     consumption: '13.1 L/100km',
     trunk: '340 L',

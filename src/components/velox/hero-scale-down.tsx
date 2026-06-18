@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Play, ChevronDown } from 'lucide-react';
 import { MagneticButton } from './magnetic-button';
 
@@ -61,7 +60,11 @@ export function HeroScaleDown() {
         0.55
       );
 
-      if (particlesRef.current) {
+      // ─── Partículas solo en desktop y sin prefers-reduced-motion (ahorro de batería) ───
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+
+      if (particlesRef.current && !reduceMotion && !isCoarse) {
         const dots = particlesRef.current.querySelectorAll('.ambient-dot');
         dots.forEach((dot) => {
           gsap.to(dot, {

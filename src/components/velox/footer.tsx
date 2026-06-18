@@ -13,7 +13,7 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-6 sm:gap-8">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href} className="cursor-hover text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
+              <a key={link.label} href={link.href} className="cursor-pointer text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
                 {link.label}
               </a>
             ))}
@@ -22,7 +22,7 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4">
             {[Instagram, Facebook, Twitter].map((Icon, i) => (
-              <a key={i} href="#" className="cursor-hover w-9 h-9 flex items-center justify-center border border-[#222] rounded-full text-[#555] hover:text-[#c9a96e] hover:border-[#c9a96e]/30 transition-all duration-300" aria-label="Social">
+              <a key={i} href="#" className="cursor-pointer w-9 h-9 flex items-center justify-center border border-[#222] rounded-full text-[#555] hover:text-[#c9a96e] hover:border-[#c9a96e]/30 transition-all duration-300" aria-label="Social">
                 <Icon size={15} />
               </a>
             ))}

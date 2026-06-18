@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Anchor, MapPin, Clock, Compass, ChevronDown, ChevronUp } from 'lucide-react';
 import { yachtData } from './data';
 

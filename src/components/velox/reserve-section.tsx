@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
 import { ReservationForm } from './reservation-form';
 
 const PHONE = process.env.NEXT_PUBLIC_PHONE || '+39 333 123 4567';
@@ -173,13 +173,28 @@ export function ReserveSection() {
           </p>
         </div>
 
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto mb-10">
+          <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3 text-center">
+            <ShieldCheck size={14} className="mx-auto mb-2 text-[#c9a96e]" />
+            <p className="text-xs font-heading tracking-[0.2em] text-[#c9a96e]">SECURE REQUEST</p>
+          </div>
+          <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3 text-center">
+            <Clock size={14} className="mx-auto mb-2 text-[#c9a96e]" />
+            <p className="text-xs font-heading tracking-[0.2em] text-[#c9a96e]">1H RESPONSE</p>
+          </div>
+          <div className="rounded-xl border border-[#c9a96e]/20 bg-[#111]/70 px-4 py-3 text-center">
+            <MessageCircle size={14} className="mx-auto mb-2 text-[#c9a96e]" />
+            <p className="text-xs font-heading tracking-[0.2em] text-[#c9a96e]">CONCIERGE</p>
+          </div>
+        </div>
+
         <ReservationForm />
 
         <div id="contact" className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 mt-14 sm:mt-16 pt-10 border-t border-[#222]">
-          <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-hover">
+          <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-pointer">
             <Phone size={14} /> <span className="text-sm font-body">{PHONE}</span>
           </a>
-          <a href={`mailto:${EMAIL}`} className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-hover">
+          <a href={`mailto:${EMAIL}`} className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-pointer">
             <Mail size={14} /> <span className="text-sm font-body">{EMAIL}</span>
           </a>
         </div>
