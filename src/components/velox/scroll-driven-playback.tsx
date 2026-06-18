@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { yachtFrames, YACHT_SPRITE_FRAMES, frameLabels } from './data';
+import { YACHT_SPRITE, YACHT_SPRITE_MOBILE, YACHT_SPRITE_FRAMES, frameLabels } from './data';
 
 export function ScrollDrivenPlayback() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -27,15 +27,11 @@ export function ScrollDrivenPlayback() {
     return () => obs.disconnect();
   }, []);
 
-  // ─── Lazy load individual frames only when section is in view ───
-  useEffect(() => {
-    if (!sectionInView) return;
-    // Preload all 6 images so they're ready when GSAP transitions
-    yachtFrames.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, [sectionInView]);
+  // ─── Elegir sprite según viewport ───
+  function getSprite() {
+    if (window.innerWidth < 768) return YACHT_SPRITE_MOBILE;
+    return YACHT_SPRITE;
+  }
 
   useEffect(() => {
     if (!sectionInView) return;
@@ -148,16 +144,20 @@ export function ScrollDrivenPlayback() {
             }}
           />
 
-          {/* ─── 6 frames individuales crossfadeados por GSAP ───
-                Cada div usa su propia imagen de fondo. GSAP se encarga
-                de la transición de opacidad al hacer scroll. */}
+          {/* ─── Sprite sheet: 5 frames en UNA sola imagen ───
+                Cada div muestra un slice diferente del sprite usando
+                background-size: 500% (= 5 frames) y background-position.
+                GSAP crossfadea la opacidad para transición suave. */}
           {Array.from({ length: YACHT_SPRITE_FRAMES }).map((_, i) => (
             <div
               key={i}
               ref={(el) => { frameRefs.current[i] = el; }}
-              className="absolute inset-0 w-full h-full bg-cover bg-center"
+              className="absolute inset-0 w-full h-full"
               style={{
-                backgroundImage: sectionInView ? `url(${yachtFrames[i]})` : undefined,
+                backgroundImage: sectionInView ? `url(${getSprite()})` : undefined,
+                backgroundSize: 'cover',
+                backgroundPosition: `${(i / (YACHT_SPRITE_FRAMES - 1)) * 100}% 0`,
+                backgroundRepeat: 'no-repeat',
                 opacity: i === 0 ? 1 : 0,
               }}
             />
