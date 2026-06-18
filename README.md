@@ -71,22 +71,27 @@ Flujo actual:
 4. `vercel build`.
 5. Deploy con `vercel deploy --prebuilt`.
 
-No se ejecuta `prisma migrate deploy` dentro de `npm run vercel-build` para evitar migraciones automáticas durante build local/preview sin contexto de DB.
+No se ejecuta `prisma migrate deploy` dentro de `npm run vercel-build` para evitar migraciones automáticas durante build local/preview sin contexto de DB. Las migraciones corren como **paso separado** en el workflow de CI (`deploy.yml`), después de validar que `DATABASE_URL` exista como secret. Así, si una migración falla, no rompe el build de Vercel.
+
+## Rate limiting
+
+El endpoint `/api/reserve` usa `@upstash/ratelimit` respaldado por Vercel KV / Upstash Redis (5 requests/minuto/IP). Configuración:
+
+- **Producción:** definir `KV_REST_API_URL` y `KV_REST_API_TOKEN` en Vercel (Storage → KV).
+- **Desarrollo local:** si las vars no existen, cae automáticamente a un rate limiter in-memory (suficiente para dev, no apto para serverless).
 
 ## Estructura
 
 - `src/app` — App Router y layout.
 - `src/app/api/reserve/route.ts` — endpoint de reservas con validación Zod, consentimiento y Prisma.
 - `src/components/velox` — componentes propios del sitio.
-- `src/components/ui` — componentes shadcn/ui.
+- `src/lib` — utilidades, cliente Prisma (`db.ts`) y rate limiter (`rate-limit.ts`).
 - `src/hooks` — hooks compartidos.
-- `src/lib` — utilidades y cliente Prisma.
 - `prisma/schema.prisma` — modelo `Reservation`.
 - `public/images` — assets estáticos.
 
 ## Notas de producción
 
-- El rate limit de `/api/reserve` es local/in-memory; sirve como protección suave, pero no sustituye Redis/KV para producción seria.
+- El rate limiting distribuido requiere configurar KV en Vercel (ver sección "Rate limiting"). Sin KV, cae a in-memory.
 - El formulario requiere consentimiento explícito antes de enviar datos personales. Falta una política de privacidad real/enlazada antes de producción.
 - No hay tests automatizados todavía.
-- `.github/workflows/ci.yml` y `.gitlab-ci.yml` son pipelines de validación duplicadas; mantenerlas solo si se quieren espejos CI.
