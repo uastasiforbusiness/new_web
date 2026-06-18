@@ -93,7 +93,7 @@ export const SITE = {
 
   /** Twitter handle for `twitter:creator` (leave '' until created). */
   twitterHandle: '',
-} as const;
+};
 
 /** Image used for OpenGraph / Twitter cards (absolute URL). */
 export const OG_IMAGE = {
