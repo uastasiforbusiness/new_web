@@ -47,16 +47,34 @@ export function DatePicker({
         <Calendar size={11} className="inline mr-1 text-[#c9a96e]" /> {label}
       </label>
 
-      {/* ─── Container del date picker ───
-            El input nativo invisible captura el tap directamente.
-            No usamos onClick en el div porque iOS ya abre el picker
-            al tocar un <input type="date"> y causaría doble apertura. */}
-      <div
-        className="relative w-full bg-[#0a0a0a] border border-[#333] text-white font-body py-3 px-4 focus-within:border-[#c9a96e] transition-colors duration-300 cursor-pointer select-none"
-        style={{ minHeight: '48px' }}
-      >
-        {/* ─── Display personalizado con formato lujoso ─── */}
-        <div className="flex items-center gap-3 pointer-events-none">
+      {/*
+        ─── Estrategia: input VISIBLE + overlay de display encima ───
+        El input nativo type="date" está totalmente funcional (opacity-100),
+        pero un div absoluto encima muestra el texto con formato lujoso.
+        El input recibe clicks y abre el date picker nativo correctamente
+        en todos los navegadores (Chrome, Edge, Firefox, Safari, iOS).
+        El overlay tiene pointer-events-none para no bloquear el input.
+      */}
+      <div className="relative w-full bg-[#0a0a0a] border border-[#333] focus-within:border-[#c9a96e] transition-colors duration-300" style={{ minHeight: '48px' }}>
+        {/* Input nativo — funcional y clicable */}
+        <input
+          ref={inputRef}
+          type="date"
+          value={value}
+          onChange={handleInputChange}
+          required={required}
+          min={min}
+          className="w-full bg-transparent text-transparent caret-transparent py-3 px-4 cursor-pointer"
+          style={{
+            fontSize: '16px', // Previene zoom en iOS
+            colorScheme: 'dark',
+            height: '48px',
+          }}
+          aria-label={label}
+        />
+
+        {/* Overlay de display — tapa el input pero deja pasar clicks */}
+        <div className="absolute inset-0 flex items-center gap-3 px-4 pointer-events-none">
           <Calendar size={14} className={`flex-shrink-0 ${hasValue ? 'text-[#c9a96e]' : 'text-[#555]'}`} />
           {hasValue ? (
             <span className="text-white font-body tracking-wide">{displayText}</span>
@@ -65,32 +83,12 @@ export function DatePicker({
           )}
         </div>
 
-        {/* ─── Si tiene fecha seleccionada, mostrar un badge sutil ─── */}
+        {/* Badge sutil cuando hay fecha */}
         {hasValue && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
             <div className="w-2 h-2 rounded-full bg-[#c9a96e]/60" />
           </div>
         )}
-
-        {/* ─── Input nativo INVISIBLE pero funcional ───
-              En iOS, al hacer tap showPicker() abre el date picker nativo.
-              En desktop, el input invisible captura el click y abre el picker. */}
-        <input
-          ref={inputRef}
-          type="date"
-          value={value}
-          onChange={handleInputChange}
-          required={required}
-          min={min}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-          style={{
-            // En iOS, el input debe ser visible para que funcione showPicker()
-            // pero lo hacemos invisible manteniendo el hit area
-            fontSize: '16px', // Previene zoom en iOS
-          }}
-          tabIndex={0}
-          aria-label={label}
-        />
       </div>
     </div>
   );
