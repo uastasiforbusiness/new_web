@@ -11,7 +11,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { useLenis } from '@/components/velox/use-lenis';
-import { CustomCursor } from '@/components/velox/custom-cursor';
 import { FilmGrain, SvgFilters } from '@/components/velox/film-grain';
 import { LoadingScreen } from '@/components/velox/loading-screen';
 import { Navigation } from '@/components/velox/navigation';
@@ -75,7 +74,6 @@ export default function Home() {
     <main className="bg-[#0a0a0a] min-h-screen">
       <SvgFilters />
       <FilmGrain />
-      <CustomCursor />
 
       <AnimatePresence>
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}

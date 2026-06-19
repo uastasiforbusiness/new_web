@@ -8,11 +8,8 @@ import type { FleetVehicle } from './data';
 export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [lensVisible, setLensVisible] = useState(false);
-  const [lensPos, setLensPos] = useState({ x: 0, y: 0 });
   const overlayRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
-  const imageWrapRef = useRef<HTMLDivElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
   const transitioning = useRef(false);
 
@@ -105,16 +102,6 @@ export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () =>
     setTouchStart(null);
   };
 
-  // Lens zoom — track relative to the slide image element
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const el = imageWrapRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-    const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
-    setLensPos({ x, y });
-  };
-
   // Close on overlay click
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === overlayRef.current) onClose();
@@ -158,14 +145,8 @@ export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () =>
       <div
         ref={imageContainerRef}
         className="relative flex-1 w-full flex items-center justify-center overflow-hidden px-4"
-        onMouseEnter={() => setLensVisible(true)}
-        onMouseLeave={() => setLensVisible(false)}
       >
-        <div
-          ref={imageWrapRef}
-          className={`relative w-full h-full flex items-center justify-center ${lensVisible ? 'cursor-none' : ''}`}
-          onMouseMove={handleMouseMove}
-        >
+        <div className="relative w-full h-full flex items-center justify-center">
           <div
             ref={slideRef}
             className="relative"
@@ -176,26 +157,6 @@ export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () =>
               className="max-h-[70vh] max-w-full object-contain select-none"
               draggable={false}
             />
-
-            {/* Lens zoom overlay — follows cursor */}
-            {lensVisible && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div
-                  className="absolute border-2 border-[#c9a96e]/70 rounded-full pointer-events-none transition-[left,top] duration-75"
-                  style={{
-                    width: '130px',
-                    height: '130px',
-                    left: `calc(${lensPos.x}% - 65px)`,
-                    top: `calc(${lensPos.y}% - 65px)`,
-                    backgroundImage: `url(${currentImage.src})`,
-                    backgroundSize: '300%',
-                    backgroundPosition: `${lensPos.x}% ${lensPos.y}%`,
-                    boxShadow: '0 0 0 1px rgba(201,169,110,0.15), 0 8px 32px rgba(0,0,0,0.6), inset 0 0 12px rgba(201,169,110,0.15)',
-                    backdropFilter: 'blur(1px)',
-                  }}
-                />
-              </div>
-            )}
           </div>
         </div>
 
