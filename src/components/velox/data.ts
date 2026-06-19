@@ -6,24 +6,6 @@ import {
 export const cars = [
   {
     name: 'Ferrari California T',
-    variant: 'Bianca Avus',
-    image: '/images/ferrari_blanca_card.webp',
-    images: [
-      { src: '/images/ferrari_bianca_360/frame_001.webp', label: 'FRONT VIEW' },
-      { src: '/images/ferrari_bianca_360/frame_002.webp', label: 'PROFILE' },
-      { src: '/images/ferrari_bianca_360/frame_003.webp', label: 'REAR VIEW' },
-      { src: '/images/ferrari_bianca_360/frame_004.webp', label: 'COCKPIT' },
-      { src: '/images/ferrari_bianca_360/frame_005.webp', label: 'INTERIOR' },
-    ],
-    hp: 560, acceleration: '3.6s', topSpeed: '316 km/h', price: 890,
-    tagline: 'THE BEAST',
-    color: '#f5f5f0',
-    seats: 2, engine: 'V8 3.9 Biturbo', torque: '755 Nm',
-    dimensions: '4.57 x 1.91 x 1.32 m',
-    keyFeatures: 'Retractable hardtop, carbon-ceramic brakes, dual-zone climate, heated seats, 7-speed DCT RWD',
-  },
-  {
-    name: 'Ferrari California',
     variant: 'Rossa Corsa',
     image: '/images/ferrari_rossa_card.webp',
     images: [
@@ -37,9 +19,27 @@ export const cars = [
       { src: '/images/ferrari_rossa_360/frame_008.webp', label: 'REAR QUARTER' },
       { src: '/images/ferrari_rossa_360/frame_009.webp', label: 'DYNAMIC' },
     ],
+    hp: 560, acceleration: '3.6s', topSpeed: '316 km/h', price: 890,
+    tagline: 'THE BEAST',
+    color: '#8b0000',
+    seats: 2, engine: 'V8 3.9 Biturbo', torque: '755 Nm',
+    dimensions: '4.57 x 1.91 x 1.32 m',
+    keyFeatures: 'Retractable hardtop, carbon-ceramic brakes, dual-zone climate, heated seats, 7-speed DCT RWD',
+  },
+  {
+    name: 'Ferrari California',
+    variant: 'Bianca Avus',
+    image: '/images/ferrari_blanca_card.webp',
+    images: [
+      { src: '/images/ferrari_bianca_360/frame_001.webp', label: 'FRONT VIEW' },
+      { src: '/images/ferrari_bianca_360/frame_002.webp', label: 'PROFILE' },
+      { src: '/images/ferrari_bianca_360/frame_003.webp', label: 'REAR VIEW' },
+      { src: '/images/ferrari_bianca_360/frame_004.webp', label: 'COCKPIT' },
+      { src: '/images/ferrari_bianca_360/frame_005.webp', label: 'INTERIOR' },
+    ],
     hp: 460, acceleration: '3.9s', topSpeed: '310 km/h', price: 890,
     tagline: 'THE CLASSIC',
-    color: '#8b0000',
+    color: '#f5f5f0',
     seats: 2, engine: 'V8 4.3 Atmosferico', torque: '485-505 Nm',
     dimensions: '4.56 x 1.91 x 1.32 m',
     keyFeatures: 'Classic naturally-aspirated V8 sound, retractable hardtop, carbon-ceramic brakes',
@@ -58,7 +58,7 @@ export const cars = [
       { src: '/images/maserati_ghibli_360/frame_007.webp', label: 'DETAIL' },
       { src: '/images/maserati_ghibli_360/frame_008.webp', label: 'REAR QUARTER' },
     ],
-    hp: 275, acceleration: '6.3s', topSpeed: '250 km/h', price: 650,
+    hp: 250, acceleration: '6.3s', topSpeed: '250 km/h', price: 650,
     tagline: 'THE SEDAN',
     color: '#1a1a2e',
     seats: 5, engine: 'V6 3.0 Turbodiesel', torque: '600 Nm',
@@ -158,7 +158,7 @@ export const fleetSpecs = [
     topSpeed: '250 km/h',
     consumption: '6.0 L/100km',
     trunk: '500 L',
-    engine: 'V6 3.0 Turbodiesel 275 HP / 600 Nm',
+    engine: 'V6 3.0 Turbodiesel 250 HP / 600 Nm',
     dimensions: '4.97 x 1.95 x 1.46 m',
     keyFeatures: 'Maserati V6 sound, Matrix LED headlights, Soft Close doors, Harman Kardon audio, 500 L trunk',
   },
@@ -194,7 +194,7 @@ export const yachtData = {
   name: 'Cranchi Atlantique 50 Flybridge',
   length: '15.60 m',
   capacity: '10 guests + crew (skipper + assistant)',
-  season: 'May - September 2026',
+  season: 'May - September',
   departure: 'Porto Gaio, Gallipoli',
   features: [
     'Full flybridge',
@@ -205,14 +205,116 @@ export const yachtData = {
     'AC reverse cycle',
     'Fully equipped galley',
     'TV/stereo system',
-    'SUP, tender, jet ski',
   ],
   destinations: [
     'Punta della Suina', 'Porto Cesareo', 'Isola S. Andrea',
     'Porto Selvaggio', 'Punta Prosciutto', 'Santa Maria di Leuca', 'Greece',
   ],
-  options: ['Half day', 'Full day', 'Sunset cruise', 'Romantic dinner', 'Overnight', 'Mini cruise'],
 };
+
+// ═══════════════════════════════════════════════════════════════
+// YACHT EXPERIENCES — seasonal pricing (owner-provided)
+// ═══════════════════════════════════════════════════════════════
+
+export interface YachtExperience {
+  id: string;
+  title: string;
+  tagline: string;
+  duration: string;
+  route: string;
+  includes: string[];
+  optionals?: string[];
+  pricing: { period: string; price: number }[];
+  note?: string;
+}
+
+export const yachtExperiences: YachtExperience[] = [
+  {
+    id: 'full-day',
+    title: 'Full Day Charter',
+    tagline: 'The complete coastal experience',
+    duration: '8 hours (10:00 AM - 6:00 PM)',
+    route: "Sant'Andrea Island, Gallipoli Bay, Punta della Suina",
+    includes: [
+      'Professional skipper and assistant',
+      'Fuel included',
+      'Premium aperitif with local specialties',
+      'Light lunch (cold pasta, cherry tomatoes, mozzarella & basil)',
+      'Fresh seasonal fruit, 2 bottles prosecco/wine',
+      'Water and soft drinks',
+      'Snorkeling, SUP, canoe',
+    ],
+    optionals: [
+      'Tender',
+      'Jet ski',
+    ],
+    pricing: [
+      { period: 'June - July', price: 1600 },
+      { period: 'August 1-9', price: 1700 },
+      { period: 'August 10-20', price: 2200 },
+      { period: 'August 21 - September', price: 1600 },
+    ],
+  },
+  {
+    id: 'half-day',
+    title: 'Half Day Charter',
+    tagline: 'Half the time, all the beauty',
+    duration: '4 hours (10:00 AM - 2:00 PM or 3:00 PM - 7:00 PM)',
+    route: "Sant'Andrea Island, Gallipoli Bay",
+    includes: [
+      'Professional skipper and assistant',
+      'Fuel included',
+      'Traditional Salento aperitif',
+      '2 bottles prosecco/wine',
+      'Unlimited water',
+      'Snorkeling, SUP, canoe',
+    ],
+    optionals: [
+      'Tender',
+      'Jet ski',
+    ],
+    pricing: [
+      { period: 'June - July', price: 1200 },
+      { period: 'August 1-9', price: 1300 },
+      { period: 'August 10-20', price: 1500 },
+      { period: 'August 21 - September', price: 1200 },
+    ],
+  },
+  {
+    id: 'sunset-aperitivo',
+    title: 'Sunset Cruise with Aperitif',
+    tagline: 'Golden hour on the Ionian Sea',
+    duration: '2 hours',
+    route: 'Gallipoli coastline, Punta della Suina',
+    includes: [
+      'Professional skipper',
+      'Fuel included',
+      'Salento aperitif with local specialties',
+      'Prosecco / wine',
+      'Water and soft drinks',
+    ],
+    pricing: [
+      { period: 'All season', price: 600 },
+    ],
+  },
+  {
+    id: 'sunset-dinner',
+    title: 'Sunset Cruise with Dinner',
+    tagline: 'Dine as the sun meets the sea',
+    duration: '2 hours',
+    route: 'Gallipoli coastline, Punta della Suina',
+    includes: [
+      'Professional skipper',
+      'Fuel included',
+      'Full dinner onboard with local cuisine',
+      'Prosecco / wine',
+      'Water and soft drinks',
+    ],
+    pricing: [
+      { period: 'All season', price: 700 },
+    ],
+  },
+];
 
 export const serviceLines = [
   {

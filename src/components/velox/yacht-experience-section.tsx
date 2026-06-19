@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Anchor, MapPin, Clock, Compass, ChevronDown, ChevronUp } from 'lucide-react';
-import { yachtData } from './data';
+import { yachtData, yachtExperiences } from './data';
 
 export function YachtExperienceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [expandedItinerary, setExpandedItinerary] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -28,42 +28,17 @@ export function YachtExperienceSection() {
     return () => ctx.revert();
   }, []);
 
-  const itineraries = [
-    {
-      id: 'full-day',
-      title: 'Full Day Charter',
-      duration: '8 hours (10:00 AM - 6:00 PM)',
-      route: "Sant'Andrea Island, Gallipoli Bay, Punta della Suina",
-      includes: [
-        'Professional skipper and assistant',
-        'Fuel included',
-        'Premium aperitif with local specialties',
-        'Light lunch (cold pasta with cherry tomatoes, mozzarella & basil)',
-        'Fresh seasonal fruit, 2 bottles prosecco/wine',
-        'Water and soft drinks',
-        'Snorkeling, SUP, canoe',
-      ],
-    },
-    {
-      id: 'half-day',
-      title: 'Half Day Charter',
-      duration: '4 hours (10:00 AM / 2:00 PM or 3:00 PM / 7:00 PM)',
-      route: "Sant'Andrea Island, Gallipoli Bay",
-      includes: [
-        'Professional skipper and assistant',
-        'Fuel included',
-        'Traditional Salento aperitif',
-        '2 bottles prosecco/wine',
-        'Unlimited water',
-        'Snorkeling, SUP, canoe',
-      ],
-    },
-  ];
+  const charterExperiences = yachtExperiences.filter(
+    (e) => e.id === 'full-day' || e.id === 'half-day'
+  );
+  const sunsetExperiences = yachtExperiences.filter(
+    (e) => e.id === 'sunset-aperitivo' || e.id === 'sunset-dinner'
+  );
 
   return (
     <section ref={sectionRef} id="yacht" className="relative py-20 sm:py-28 lg:py-36 section-gradient">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
+        {/* ── Heading ── */}
         <div ref={headingRef} className="text-center mb-14 sm:mb-20" style={{ opacity: 0 }}>
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
@@ -79,10 +54,10 @@ export function YachtExperienceSection() {
         </div>
 
         <div ref={contentRef} style={{ opacity: 0 }}>
-          {/* Yacht Info Bar */}
+          {/* ── Yacht Info Bar ── */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
             {[
-              { icon: Anchor, label: 'VESSEL', value: yachtData.name },
+              { icon: Anchor, label: 'VESSEL', value: yachtData.name, sub: yachtData.length },
               { icon: MapPin, label: 'DEPARTURE', value: yachtData.departure },
               { icon: Clock, label: 'SEASON', value: yachtData.season },
               { icon: Compass, label: 'CAPACITY', value: yachtData.capacity },
@@ -91,13 +66,13 @@ export function YachtExperienceSection() {
                 <item.icon size={16} className="text-[#c9a96e]/60 mb-3" />
                 <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-1">{item.label}</p>
                 <p className="text-xs font-body text-white leading-relaxed">{item.value}</p>
+                {item.sub && <p className="text-[10px] font-body text-[#666] mt-0.5">{item.sub}</p>}
               </div>
             ))}
           </div>
 
-          {/* Destinations + Features */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-            {/* Destinations */}
+          {/* ── Destinations + Features ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-16">
             <div className="bg-[#0d0d0d] border border-[#1a1a1a] p-6 sm:p-8">
               <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-5">DESTINATIONS</h3>
               <div className="flex flex-wrap gap-2">
@@ -109,13 +84,12 @@ export function YachtExperienceSection() {
               </div>
             </div>
 
-            {/* Features */}
             <div className="bg-[#0d0d0d] border border-[#1a1a1a] p-6 sm:p-8">
               <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-5">ONBOARD EQUIPMENT</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {yachtData.features.map((feat) => (
                   <div key={feat} className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-[#c9a96e]/60" />
+                    <div className="w-1 h-1 rounded-full bg-[#c9a96e]/60 shrink-0" />
                     <p className="text-xs font-body text-[#999]">{feat}</p>
                   </div>
                 ))}
@@ -123,51 +97,158 @@ export function YachtExperienceSection() {
             </div>
           </div>
 
-          {/* Itineraries */}
-          <div className="mb-12">
-            <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-6 text-center">STANDARD ITINERARIES</h3>
+          {/* ═══════════════════════════════════════════════════════
+              CHARTER EXPERIENCES — Full Day / Half Day
+              ═══════════════════════════════════════════════════════ */}
+          <div className="mb-16">
+            <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-2 text-center">CHARTER EXPERIENCES</h3>
+            <p className="text-[10px] font-body text-[#666] text-center mb-8 tracking-wide">SEASONAL PRICING · ALL INCLUSIVE</p>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {itineraries.map((itin) => (
-                <div key={itin.id} className="bg-[#0d0d0d] border border-[#1a1a1a] overflow-hidden">
+              {charterExperiences.map((exp) => {
+                const isOpen = expandedId === exp.id;
+                return (
                   <div
-                    className="flex items-center justify-between p-6 cursor-pointer hover:bg-[#c9a96e]/[0.02] transition-colors duration-300"
-                    onClick={() => setExpandedItinerary(expandedItinerary === itin.id ? null : itin.id)}
+                    key={exp.id}
+                    className={`bg-[#0d0d0d] border overflow-hidden transition-all duration-300 ${isOpen ? 'border-[#c9a96e]/20' : 'border-[#1a1a1a]'}`}
                   >
-                    <div>
-                      <h4 className="text-sm font-elegant font-semibold text-white">{itin.title}</h4>
-                      <p className="text-xs font-body text-[#666] mt-1">{itin.duration}</p>
+                    {/* Accordion header */}
+                    <div
+                      className="flex items-center justify-between p-6 cursor-pointer hover:bg-[#c9a96e]/[0.02] transition-colors duration-300"
+                      onClick={() => setExpandedId(isOpen ? null : exp.id)}
+                    >
+                      <div>
+                        <h4 className="text-sm font-elegant font-semibold text-white">{exp.title}</h4>
+                        <p className="text-[10px] font-body text-[#c9a96e]/50 mt-0.5 italic">{exp.tagline}</p>
+                        <p className="text-xs font-body text-[#666] mt-1">{exp.duration}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <p className="text-[9px] font-heading tracking-[0.1em] text-[#c9a96e]/40">FROM</p>
+                          <p className="text-lg font-elegant text-[#c9a96e]">€{Math.min(...exp.pricing.map(p => p.price))}</p>
+                        </div>
+                        {isOpen
+                          ? <ChevronUp size={16} className="text-[#c9a96e]/60" />
+                          : <ChevronDown size={16} className="text-[#c9a96e]/60" />
+                        }
+                      </div>
                     </div>
-                    {expandedItinerary === itin.id ? (
-                      <ChevronUp size={16} className="text-[#c9a96e]/60" />
-                    ) : (
-                      <ChevronDown size={16} className="text-[#c9a96e]/60" />
+
+                    {/* Expanded content */}
+                    {isOpen && (
+                      <div className="border-t border-[#1a1a1a] p-6 space-y-5">
+                        {/* Route */}
+                        <div>
+                          <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-1">ROUTE</p>
+                          <p className="text-xs font-body text-[#999]">{exp.route}</p>
+                        </div>
+
+                        {/* Pricing table */}
+                        <div>
+                          <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-2">SEASONAL PRICING</p>
+                          <div className="bg-[#0a0a0a] border border-[#1a1a1a]">
+                            {exp.pricing.map((p, i) => (
+                              <div key={p.period} className={`flex items-center justify-between px-4 py-2.5 ${i > 0 ? 'border-t border-[#1a1a1a]' : ''}`}>
+                                <p className="text-[11px] font-body text-[#999]">{p.period}</p>
+                                <p className="text-[13px] font-elegant text-[#c9a96e]">€{p.price.toLocaleString('en-US')}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Includes */}
+                        <div>
+                          <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-2">INCLUDED</p>
+                          <ul className="space-y-1.5">
+                            {exp.includes.map((item) => (
+                              <li key={item} className="flex items-start gap-2">
+                                <span className="text-[#c9a96e] text-[10px] mt-0.5">+</span>
+                                <p className="text-xs font-body text-[#999]">{item}</p>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Optionals */}
+                        {exp.optionals && exp.optionals.length > 0 && (
+                          <div>
+                            <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-2">OPTIONAL EXTRAS</p>
+                            <div className="flex flex-wrap gap-2">
+                              {exp.optionals.map((opt) => (
+                                <span key={opt} className="text-[10px] font-heading tracking-[0.08em] text-[#999] bg-[#ffffff08] border border-[#ffffff10] px-3 py-1.5">
+                                  {opt} — on request
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
-                  {expandedItinerary === itin.id && (
-                    <div className="border-t border-[#1a1a1a] p-6">
-                      <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-2">ROUTE</p>
-                      <p className="text-xs font-body text-[#999] mb-4">{itin.route}</p>
-                      <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-2">INCLUDED</p>
-                      <ul className="space-y-1.5">
-                        {itin.includes.map((item) => (
-                          <li key={item} className="flex items-start gap-2">
-                            <span className="text-[#c9a96e] text-[10px] mt-0.5">+</span>
-                            <p className="text-xs font-body text-[#999]">{item}</p>
-                          </li>
-                        ))}
-                      </ul>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ═══════════════════════════════════════════════════════
+              SUNSET CRUISES — Aperitivo / Dinner
+              ═══════════════════════════════════════════════════════ */}
+          <div className="mb-16">
+            <h3 className="text-sm font-elegant font-semibold tracking-wide text-white mb-2 text-center">SUNSET CRUISES</h3>
+            <p className="text-[10px] font-body text-[#666] text-center mb-8 tracking-wide">2-HOUR EXPERIENCES · FIXED PRICE ALL SEASON</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sunsetExperiences.map((exp) => (
+                <div key={exp.id} className="bg-[#0d0d0d] border border-[#1a1a1a] p-6 sm:p-8 hover:border-[#c9a96e]/15 transition-all duration-300">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h4 className="text-sm font-elegant font-semibold text-white">{exp.title}</h4>
+                      <p className="text-[10px] font-body text-[#c9a96e]/50 italic mt-0.5">{exp.tagline}</p>
                     </div>
-                  )}
+                    <div className="text-right shrink-0 ml-4">
+                      <p className="text-[9px] font-heading tracking-[0.1em] text-[#c9a96e]/40">PRICE</p>
+                      <p className="text-2xl font-elegant text-[#c9a96e]">€{exp.pricing[0].price.toLocaleString('en-US')}</p>
+                    </div>
+                  </div>
+
+                  <p className="text-xs font-body text-[#666] mb-1">{exp.duration}</p>
+                  <p className="text-xs font-body text-[#999] mb-4">{exp.route}</p>
+
+                  <div className="border-t border-[#1a1a1a] pt-4">
+                    <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-2">INCLUDED</p>
+                    <ul className="space-y-1.5">
+                      {exp.includes.map((item) => (
+                        <li key={item} className="flex items-start gap-2">
+                          <span className="text-[#c9a96e] text-[10px] mt-0.5">+</span>
+                          <p className="text-xs font-body text-[#999]">{item}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="text-[10px] font-heading tracking-[0.08em] text-[#666] bg-[#ffffff06] border border-[#ffffff0c] px-3 py-1.5">
+                      Tender — on request
+                    </span>
+                    <span className="text-[10px] font-heading tracking-[0.08em] text-[#666] bg-[#ffffff06] border border-[#ffffff0c] px-3 py-1.5">
+                      Jet ski — on request
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Payment conditions removed as per no-price strategy */}
-
-          <div className="text-center mt-12">
-            <p className="text-xs font-body text-[#c9a96e]/60 uppercase tracking-[0.2em]">
-              Bespoke luxury experiences. Contact us for a personalized quote.
+          {/* ── CTA ── */}
+          <div className="text-center">
+            <a
+              href="#reserve"
+              className="inline-flex items-center gap-2 bg-[#c9a96e] text-[#0a0a0a] font-heading font-semibold text-[11px] tracking-[0.2em] px-8 py-3.5 hover:bg-[#d4b77e] transition-colors duration-300"
+            >
+              BOOK YOUR EXPERIENCE
+            </a>
+            <p className="text-[10px] font-body text-[#666] mt-4 tracking-wide">
+              Bespoke itineraries available · Custom packages on request
             </p>
           </div>
         </div>
