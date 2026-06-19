@@ -9,6 +9,12 @@ const resend: Resend | null =
 const FROM = process.env.RESEND_FROM || 'onboarding@resend.dev';
 const ADMIN_TO = process.env.RESEND_ADMIN_TO || 'uastasiforbusiness@gmail.com';
 
+// ─── DEMO MODE ──────────────────────────────────────────────────────────────
+// When true, ALL emails go to ADMIN_TO regardless of the customer's address.
+// Required because onboarding@resend.dev can only send to the account owner.
+// Set RESEND_DEMO_MODE=false once you verify your own domain.
+const DEMO_MODE = process.env.RESEND_DEMO_MODE !== 'false';
+
 // ─── Types ──────────────────────────────────────────────────────────────────
 export interface ReservationEmailData {
   carName: string;
@@ -137,22 +143,32 @@ export async function sendReservationEmails(data: ReservationEmailData): Promise
     return;
   }
 
+  // In demo mode, force all recipients to ADMIN_TO (account owner).
+  // This bypasses the resend.dev "only send to yourself" restriction.
+  const customerTo = DEMO_MODE ? ADMIN_TO : data.email;
+
   try {
-    await resend.emails.send({
+    const customer = await resend.emails.send({
       from: `B Leader <${FROM}>`,
-      to: [data.email],
+      to: [customerTo],
       subject: `Your B Leader Reservation — #${data.reservationId.slice(-8)}`,
       html: customerHtml(data),
     });
 
-    await resend.emails.send({
+    const admin = await resend.emails.send({
       from: `B Leader <${FROM}>`,
       to: [ADMIN_TO],
       subject: `New Reservation: ${data.customerName} — ${data.carName}`,
       html: adminHtml(data),
     });
 
-    console.log(`[email] Sent 2 emails for reservation ${data.reservationId.slice(-8)}`);
+    if (DEMO_MODE) {
+      console.log(
+        `[email][DEMO] Both emails routed to ${ADMIN_TO} — customer id: ${customer.data?.id}, admin id: ${admin.data?.id}`
+      );
+    } else {
+      console.log(`[email] Sent 2 emails for reservation ${data.reservationId.slice(-8)}`);
+    }
   } catch (err) {
     console.error('[email] Failed to send reservation emails:', err);
     // Intentionally non-throwing — DB record is the source of truth
