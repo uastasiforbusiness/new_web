@@ -73,6 +73,7 @@ report.json
 *.tar
 *.tar.gz
 *.zip
+*.bundle
 
 # stale/legacy project artifacts
 upload/
