@@ -190,7 +190,64 @@ Current flow: Form → `/api/reserve` → Prisma → SQLite. To extend:
 - Add fields to `Reservation` model + `reservation-form.tsx` + API validation
 - Email notifications: integrate Resend/SendGrid in API route
 - Admin panel: build separate Next.js admin route or use Prisma Studio (`bunx prisma studio`)
-- WhatsApp integration: `whatsapp-button.tsx` opens `wa.me` with prefilled message
+
+---
+
+## WhatsApp Concierge Chat
+
+**Status**: Phase 5 complete - chat popup working in DEMO MODE.
+
+### Architecture
+```
+┌─────────────────┐      ┌──────────────────┐      ┌─────────────────┐
+│  Visitor        │◄────►│  Your Backend    │◄────►│  Meta Cloud API │
+│  (browser)      │      │  (Next.js API)   │      │  (PRODUCTION)   │
+└─────────────────┘      └────────┬─────────┘      └─────────────────┘
+                               │
+                               ▼
+                      ┌─────────────────┐
+                      │  WhatsApp       │
+                      │  Business App   │
+                      └─────────────────┘
+```
+
+### DEMO MODE (default)
+- No Meta Cloud API calls
+- Messages saved to SQLite via `ChatSession`/`ChatMessage`
+- Simulated concierge replies after 1.5-3s delay
+- Test the full UX without Meta account credentials
+
+### Production Setup (when ready)
+1. Create Meta Business account + add phone number
+2. Get `WHATSAPP_TOKEN` (permanent access token)
+3. Get `WHATSAPP_PHONE_NUMBER_ID` from dashboard
+4. Set `WHATSAPP_VERIFY_TOKEN` (custom string for webhook verification)
+5. Set `WHATSAPP_APP_SECRET` (for HMAC signature verification)
+6. Set `WHATSAPP_DEMO_MODE=false`
+7. Configure webhook in Meta dashboard: `https://yourdomain.com/api/whatsapp/webhook`
+
+### Files
+| File | Purpose |
+|------|---------|
+| `prisma/schema.prisma` | `ChatSession` & `ChatMessage` models |
+| `src/lib/whatsapp.ts` | Cloud API client + DEMO logic |
+| `src/app/api/whatsapp/send/route.ts` | POST inbound messages |
+| `src/app/api/whatsapp/messages/route.ts` | GET polling endpoint |
+| `src/app/api/whatsapp/webhook/route.ts` | Meta webhooks (GET + POST) |
+| `src/components/velox/whatsapp-popup.tsx` | Chat UI with message bubbles |
+
+### Environment Variables
+```bash
+WHATSAPP_DEMO_MODE=true    # Set to false for production
+WHATSAPP_TOKEN=EAA...      # Meta Cloud API token
+WHATSAPP_PHONE_NUMBER_ID=  # From Meta Business dashboard
+WHATSAPP_APP_SECRET=       # HMAC signing secret
+WHATSAPP_VERIFY_TOKEN=     # Custom webhook verification token
+```
+
+---
+
+## Accessibility
 
 ---
 

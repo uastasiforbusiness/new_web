@@ -6,7 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  // NOTE: dev uses SQLite via DATABASE_URL=file:./dev.db (.env).
+  // For production set DATABASE_URL to a real Postgres connection string.
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -28,5 +30,38 @@ model Reservation {
   updatedAt         DateTime  @updatedAt
 
   @@index([email])
+  @@index([createdAt])
+}
+
+// ─── WhatsApp Concierge Chat ────────────────────────────────────────────────
+// Supports both DEMO MODE (simulated bot replies) and PROD MODE (Meta Cloud API).
+// A session maps an anonymous site visitor (browser) to a conversation thread.
+model ChatSession {
+  id           String        @id @default(cuid())
+  visitorId    String        // anonymous id from localStorage
+  visitorName  String?       // optional display name
+  visitorPhone String?       // E.164, captured on first message (required for PROD API)
+  status       String        @default("active") // active | closed
+  mode         String        @default("demo")   // demo | prod — frozen at creation
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  messages     ChatMessage[]
+
+  @@index([visitorId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ChatMessage {
+  id          String      @id @default(cuid())
+  sessionId   String
+  direction   String      // "inbound" (visitor → us) | "outbound" (us → visitor)
+  body        String
+  waMessageId String?     // WhatsApp message id (null in demo / pre-send)
+  status      String      @default("sent") // sent | delivered | read | failed
+  createdAt   DateTime    @default(now())
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
   @@index([createdAt])
 }
