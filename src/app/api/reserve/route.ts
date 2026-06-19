@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { limit } from "@/lib/rate-limit";
+import { sendReservationEmails } from "@/lib/email";
 
 const MAX_LENGTH = 500;
 
@@ -106,6 +107,19 @@ export async function POST(request: Request) {
         message: message ?? null,
       },
     });
+
+    // ─── Send confirmation emails (fire-and-forget, never blocks response) ─
+    sendReservationEmails({
+      carName,
+      carVariant,
+      customerName,
+      email,
+      phone,
+      pickupDate: pickupDate.toISOString(),
+      returnDate: returnDate.toISOString(),
+      message,
+      reservationId: reservation.id,
+    }).catch(() => { /* already handled inside */ });
 
     return NextResponse.json(
       { success: true, reservationId: reservation.id },

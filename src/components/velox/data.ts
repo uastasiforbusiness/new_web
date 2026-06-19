@@ -46,7 +46,7 @@ export const cars = [
   },
   {
     name: 'Maserati Ghibli',
-    variant: 'Nero Ribelle',
+    variant: 'Blu Nobile',
     image: '/images/maserati_card.webp',
     images: [
       { src: '/images/maserati_ghibli_360/frame_001.webp', label: 'FRONT VIEW' },
