@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Mail, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
-import { ReservationForm } from './reservation-form';
+import { ReservationForm } from '../ui/reservation-form';
 
 const PHONE = process.env.NEXT_PUBLIC_PHONE || '+39 333 123 4567';
 const EMAIL = process.env.NEXT_PUBLIC_EMAIL || 'reserve@bleader.com';

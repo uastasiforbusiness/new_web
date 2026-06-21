@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { yachtFrames, YACHT_SPRITE_FRAMES, frameLabels } from './data';
+import { yachtFrames, YACHT_SPRITE_FRAMES, frameLabels } from '../data';
 
 export function ScrollDrivenPlayback() {
   const sectionRef = useRef<HTMLDivElement>(null);

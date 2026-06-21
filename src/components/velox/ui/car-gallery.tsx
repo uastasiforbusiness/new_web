@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
+import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import type { FleetVehicle } from './data';
+import type { FleetVehicle } from '../data';
 
 export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -149,11 +150,13 @@ export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () =>
         <div className="relative w-full h-full flex items-center justify-center">
           <div
             ref={slideRef}
-            className="relative"
+            className="relative w-full h-full flex items-center justify-center"
           >
-            <img
+            <Image
               src={currentImage.src}
               alt={`${car.name} ${currentImage.label}`}
+              fill
+              sizes="100vw"
               className="max-h-[70vh] max-w-full object-contain select-none"
               draggable={false}
             />
@@ -227,12 +230,16 @@ export function CarGallery({ car, onClose }: { car: FleetVehicle; onClose: () =>
                     : 'border-transparent opacity-50 hover:opacity-80'
                 }`}
               >
-                <img
-                  src={img.src}
-                  alt={img.label}
-                  className="w-full h-full object-cover"
-                  draggable={false}
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src={img.src}
+                    alt={img.label}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                    draggable={false}
+                  />
+                </div>
               </button>
             ))}
           </div>

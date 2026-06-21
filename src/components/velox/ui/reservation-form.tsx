@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { DatePicker } from './date-picker';
-import { cars } from './data';
+import { cars } from '../data';
 
 type FormData = {
   carIndex: number;

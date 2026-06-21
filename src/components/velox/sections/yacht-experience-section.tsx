@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Anchor, MapPin, Clock, Compass, ChevronDown, ChevronUp } from 'lucide-react';
-import { yachtData, yachtExperiences } from './data';
+import { yachtData, yachtExperiences } from '../data';
 
 export function YachtExperienceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

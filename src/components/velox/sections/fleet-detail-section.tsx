@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { fleetSpecs } from './data';
+import { fleetSpecs } from '../data';
 
 export function FleetDetailSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

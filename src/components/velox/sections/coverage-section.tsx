@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { MapPin, Plane } from 'lucide-react';
-import { coverageRegions, airports } from './data';
+import { coverageRegions, airports } from '../data';
 
 export function CoverageSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ArrowRight, Play, ChevronDown } from 'lucide-react';
-import { MagneticButton } from './magnetic-button';
+import { MagneticButton } from '../ui/magnetic-button';
 
 export function HeroScaleDown() {
   const containerRef = useRef<HTMLDivElement>(null);

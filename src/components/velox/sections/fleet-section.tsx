@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { DisplacementCard } from './displacement-card';
-import { cars } from './data';
+import { DisplacementCard } from '../ui/displacement-card';
+import { cars } from '../data';
 
 export function FleetSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

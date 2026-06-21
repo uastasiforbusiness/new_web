@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { MagneticButton } from './magnetic-button';
-import { navLinks } from './data';
+import Image from 'next/image';
+import { MagneticButton } from '../ui/magnetic-button';
+import { navLinks } from '../data';
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -23,7 +24,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <a href="#" className="flex-shrink-0 cursor-pointer">
-            <img src="/images/logo-white.webp" alt="B LEADER" className="h-12 sm:h-14 w-auto transition-opacity duration-300 hover:opacity-70" />
+            <Image src="/images/logo-white.webp" alt="B LEADER" width={56} height={56} className="h-12 sm:h-14 w-auto transition-opacity duration-300 hover:opacity-70" />
           </a>
 
           <div className="hidden md:flex items-center gap-8">

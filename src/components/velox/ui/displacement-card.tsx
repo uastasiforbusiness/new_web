@@ -4,9 +4,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Zap, Timer, Gauge, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import { MagneticButton } from './magnetic-button';
 import { CarGallery } from './car-gallery';
-import type { FleetVehicle } from './data';
+import type { FleetVehicle } from '../data';
 
 export function DisplacementCard({ car }: { car: FleetVehicle }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -221,21 +222,23 @@ export function DisplacementCard({ car }: { car: FleetVehicle }) {
         <div className="h-[2px] w-full" style={{ background: `linear-gradient(to right, ${car.color}, #c9a96e, ${car.color})` }} />
 
         {/* Image — click to open gallery */}
+        {car.image && (
         <div
           className="relative aspect-[16/9] overflow-hidden bg-[#0a0a0a] cursor-pointer group/image"
           onClick={() => setGalleryOpen(true)}
         >
-          <div ref={imageRef} className="w-full h-full">
-            <img 
+          <div ref={imageRef} className="relative w-full h-full">
+            <Image 
               src={car.image} 
-              alt={`${car.name} ${car.variant}`} 
-              className={`w-full h-full ${car.name.includes('Ferrari') ? 'object-contain p-4' : 'object-cover'}`} 
-              loading="lazy" 
+              alt={`${car.name} ${car.variant}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className={`${car.name.includes('Ferrari') ? 'object-contain p-4' : 'object-cover'}`}
             />
           </div>
           {/* Hover angle layer */}
           <div ref={hoverImageRef} className="absolute inset-0 z-[1]" style={{ opacity: 0 }}>
-            <img src={car.image} alt="" className="w-full h-full object-cover" />
+            <Image src={car.image} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
           <div ref={shineRef} className="absolute inset-0 z-[2] pointer-events-none" />
@@ -260,6 +263,7 @@ export function DisplacementCard({ car }: { car: FleetVehicle }) {
             {/* Price removed as per luxury brand strategy */}
           </div>
         </div>
+        )}
 
         <div className="p-5 sm:p-6 relative z-10">
           <div className="mb-4">

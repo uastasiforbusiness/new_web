@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { features } from './data';
+import { features } from '../data';
 
 export function FeaturesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

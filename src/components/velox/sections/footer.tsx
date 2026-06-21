@@ -1,7 +1,8 @@
 'use client';
 
 import { Instagram, Facebook, Twitter } from 'lucide-react';
-import { navLinks } from './data';
+import Image from 'next/image';
+import { navLinks } from '../data';
 
 export function Footer() {
   return (
@@ -9,7 +10,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex-shrink-0">
-            <img src="/images/logo-white.webp" alt="B LEADER" className="h-7 sm:h-8 w-auto opacity-70" />
+            <Image src="/images/logo-white.webp" alt="B LEADER" width={32} height={32} className="h-7 sm:h-8 w-auto opacity-70" />
           </div>
           <div className="flex items-center gap-6 sm:gap-8">
             {navLinks.map((link) => (

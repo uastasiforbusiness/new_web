@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { serviceLines } from './data';
+import { serviceLines } from '../data';
 
 export function ServiceLinesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
