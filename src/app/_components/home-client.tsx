@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -29,7 +29,6 @@ if (typeof window !== 'undefined') {
 
 export function HomeClient() {
   const [loaded, setLoaded] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   useLenis();
 
@@ -44,14 +43,6 @@ export function HomeClient() {
 
   useEffect(() => {
     if (!loaded) return;
-
-    // Fade-in suave del contenido principal
-    if (contentRef.current) {
-      gsap.fromTo(contentRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 1.2, ease: 'power2.out' },
-      );
-    }
 
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       ScrollTrigger.normalizeScroll(true);
@@ -73,7 +64,7 @@ export function HomeClient() {
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
       </AnimatePresence>
 
-      <div ref={contentRef} style={{ opacity: 0 }}>
+      <div style={{ visibility: loaded ? 'visible' : 'hidden' }}>
         <Navigation />
         <HeroScaleDown />
         <MarqueeText />
