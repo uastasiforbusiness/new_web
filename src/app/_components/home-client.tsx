@@ -64,7 +64,8 @@ export function HomeClient() {
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
       </AnimatePresence>
 
-      {loaded && <div>
+      {loaded && (
+        <div>
         <Navigation />
         <HeroScaleDown />
         <MarqueeText />
@@ -89,6 +90,7 @@ export function HomeClient() {
         <Footer />
         <WhatsAppButton />
       </div>
+      )}
     </main>
   );
 }
