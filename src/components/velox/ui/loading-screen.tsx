@@ -43,13 +43,12 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
       <video
         ref={videoRef}
-        src="/videos/Red_Ferrari_California_rotating_202606212205.webm"
+        src="/videos/Red_Ferrari_California_rotating_202606212205.mp4"
         autoPlay
         muted
         loop
         playsInline
         preload="metadata"
-        poster="/images/hero-bg.webp"
         className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"
       />
 
