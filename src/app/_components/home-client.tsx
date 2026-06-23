@@ -64,7 +64,7 @@ export function HomeClient() {
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
       </AnimatePresence>
 
-      <div style={{ visibility: loaded ? 'visible' : 'hidden' }}>
+      {loaded && <div>
         <Navigation />
         <HeroScaleDown />
         <MarqueeText />
