@@ -1,0 +1,344 @@
+Vercel CLI Overview
+https://vercel.com/docs/cli
+
+<!DOCTYPE html>Vercel CLI Overview
+
+Skip to content
+
+Copy Logo as SVGCopy Wordmark as SVGBrand Guidelines
+Docs
+
+Ask AI
+Log InSign Up
+
+Build
+
+Build with AI
+
+AI Gateway
+
+AI SDK
+
+Sandbox
+
+Workflow
+
+Vercel Agent
+
+v0
+
+Vercel MCP
+
+AI Integrations
+
+Deploy & scale
+
+Deployments
+
+CLI
+
+Functions
+
+Delivery Network
+
+Storage
+
+Integrations
+
+Microfrontends
+
+Domains
+
+Operate & protect
+
+Firewall
+
+Observability
+
+Feature Flags
+
+Toolbar
+
+Bot Management
+
+BotID
+
+Deployment Protection
+
+Compliance
+
+Learn
+
+Resources
+
+Changelog
+
+Blog
+
+Community
+
+Knowledge Base
+
+APIs & SDKs
+
+Templates
+
+Getting Started
+
+Ask AI
+Sign UpLog In
+
+Copy pageCopy page
+
+Vercel CLI Overview
+
+Copy pageCopy page
+
+Vercel gives you multiple ways to interact with and configure your Vercel Projects. With the command-line interface (CLI) you can interact with the Vercel platform using a terminal, or through an automated system, enabling you to retrieve logs, manage certificates, replicate your deployment environment locally, manage Domain Name System (DNS) records, and more.
+
+If you'd like to interface with the platform programmatically, check out the REST API documentation.
+
+Installing Vercel CLI
+
+To download and install Vercel CLI, run the following command:
+
+Terminal
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line token-line"><span class="token plain">pnpm i </span><span class="token operator">-</span><span class="token plain">g vercel</span></span></code>
+
+Updating Vercel CLI
+
+When there is a new release of Vercel CLI, running any command will show you a message letting you know that an update is available.
+
+If you have installed our command-line interface through npm or Yarn, the easiest way to update it is by running the installation command yet again.
+
+Terminal
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line token-line"><span class="token plain">pnpm i </span><span class="token operator">-</span><span class="token plain">g vercel@latest</span></span></code>
+
+If you see permission errors, please read npm's official guide. Yarn depends on the same configuration as npm.
+
+Checking the version
+
+The --version option can be used to verify the version of Vercel CLI currently being used.
+
+terminal
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">--version</span></span></code>
+
+Using the vercel command with the --version option.
+
+Using in a CI/CD environment
+
+Vercel CLI requires you to log in and authenticate before accessing resources or performing administrative tasks. In a terminal environment, you can use vercel login, which requires manual input. In a CI/CD environment where manual input is not possible, you can create a token on your tokens page and then authenticate using one of these methods:
+
+Set the VERCEL_TOKEN environment variable
+
+Pass the --token option to the command
+
+Using the VERCEL_TOKEN environment variable is recommended for CI/CD because it avoids exposing the token in command-line arguments, which can be visible in process lists and logs. If both are provided, the --token flag takes precedence over the environment variable.
+
+Experimental native CLI binaries
+
+Native CLI binaries are also available as an experimental opt-in install.
+
+Native CLI binaries can reduce setup in environments where installing and maintaining Node.js is unnecessary or inconvenient, including lightweight containers, CI jobs, or managed developer workspaces.
+
+To install the native binary, run:
+
+terminal
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">pnpm </span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">-g</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">@vercel/vc-native</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">-f</span></span></code>
+
+The -f flag is required because the native package installs the same global bin names as the standard CLI. It allows pnpm to replace existing global vercel and vc bin links. Once installed, vercel and vc run the native binary matched to your OS and CPU architecture, across macOS, Linux, and Windows on x64 and arm64.
+
+Platform-specific packages are also available when you need a specific binary:
+
+terminal
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">pnpm </span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">-g</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">@vercel/vc-native-darwin-x64</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">-f</span></span></code>
+
+Available Commands
+
+activity
+
+View activity events for your Vercel project or team, filtered by type, date range, and project.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">activity</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">activity</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">ls</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--all</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--since</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">30d</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">activity</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">ls</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--type</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">deployment</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--since</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">7d</span></span></code>
+
+Learn more about the activity command
+
+agent
+
+Generate an AGENTS.md file in the current project with Vercel deployment best practices for coding agents.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">agent</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">init</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">agent</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">init</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--yes</span></span></code>
+
+Learn more about the agent command
+
+ai-gateway
+
+Manage AI Gateway resources, including API keys, from the CLI.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">ai-gateway</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">api-keys</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">create</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">ai-gateway</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">api-keys</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">create</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--name</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">my-key</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--budget</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-constant)">500</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--refresh-period</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">monthly</span></span></code>
+
+Learn more about the ai-gateway command
+
+alerts
+
+List recent alerts for a linked project, a specific project, or an entire team.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">alerts</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">alerts</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--all</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">alerts</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--project</span><span style="color:var(--shiki-color-text)"> [project-name]</span></span></code>
+
+Learn more about the alerts command
+
+alias
+
+Apply custom domain aliases to your Vercel deployments.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">alias</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">set</span><span style="color:var(--shiki-color-text)"> [deployment-url] [custom-domain]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">alias</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">rm</span><span style="color:var(--shiki-color-text)"> [custom-domain]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">alias</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">ls</span></span></code>
+
+Learn more about the alias command
+
+api
+
+Make authenticated HTTP requests to the Vercel API from your terminal. This is a beta command.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">api</span><span style="color:var(--shiki-color-text)"> [endpoint]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">api</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">/v2/user</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">api</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">/v9/projects</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">-X</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">POST</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">-F</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">name=my-project</span></span></code>
+
+Learn more about the api command
+
+bisect
+
+Perform a binary search on your deployments to help surface issues.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">bisect</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">bisect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--good</span><span style="color:var(--shiki-color-text)"> [deployment-url] </span><span style="color:var(--shiki-token-string)">--bad</span><span style="color:var(--shiki-color-text)"> [deployment-url]</span></span></code>
+
+Learn more about the bisect command
+
+blob
+
+Interact with Vercel Blob storage to upload, download, list, delete, and copy files.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">blob</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">list</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">blob</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">put</span><span style="color:var(--shiki-color-text)"> [path-to-file]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">blob</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">get</span><span style="color:var(--shiki-color-text)"> [url-or-pathname]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">blob</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">del</span><span style="color:var(--shiki-color-text)"> [url-or-pathname]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">blob</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">copy</span><span style="color:var(--shiki-color-text)"> [from-url] [to-pathname]</span></span></code>
+
+Learn more about the blob command
+
+build
+
+Build a Vercel Project locally or in your own CI environment.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">build</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">build</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--prod</span></span></code>
+
+Learn more about the build command
+
+buy
+
+Purchase Vercel products like credits, addons, subscriptions, and domains directly from the CLI.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">buy</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">credits</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">v0</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-constant)">100</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">buy</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">addon</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">siem</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-constant)">1</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">buy</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">pro</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">buy</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">domain</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">example.com</span></span></code>
+
+Learn more about the buy command
+
+cache
+
+Manage cache for your project (CDN cache and Data cache).
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">cache</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">purge</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">cache</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">purge</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--type</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">cdn</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">cache</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">purge</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--type</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">data</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">cache</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">invalidate</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--tag</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">foo</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">cache</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">dangerously-delete</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--tag</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">foo</span></span></code>
+
+Learn more about the cache command
+
+certs
+
+Manage certificates for your domains.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">certs</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">ls</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">certs</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">issue</span><span style="color:var(--shiki-color-text)"> [domain]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">certs</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">rm</span><span style="color:var(--shiki-color-text)"> [certificate-id]</span></span></code>
+
+Learn more about the certs command
+
+connect
+
+Manage connectors: create, list, attach to projects, request runtime tokens, and remove them. This is a beta command.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">create</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">typ</span><span style="color:var(--shiki-color-text)">e</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">list</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">token</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">attach</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">detach</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">update</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">remove</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">connect</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">open</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-keyword)"><</span><span style="color:var(--shiki-token-string)">i</span><span style="color:var(--shiki-color-text)">d</span><span style="color:var(--shiki-token-keyword)">></span></span></code>
+
+Learn more about the connect command
+
+contract
+
+View contract commitment information for your Vercel account.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">contract</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">contract</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--format</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">json</span></span></code>
+
+Learn more about the contract command
+
+crons
+
+Manage Cron Jobs for a project: add cron entries to vercel.json, list them, and trigger them on demand. This command is in beta.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">crons</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">ls</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">crons</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">add</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--path</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">/api/cron</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--schedule</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string-expression)">"0 10 * * *"</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">crons</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">run</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">/api/cron</span></span></code>
+
+Learn more about the crons command
+
+curl
+
+Make HTTP requests to your Vercel deployments with automatic deployment protection bypass. This is a beta command.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">curl</span><span style="color:var(--shiki-color-text)"> [path]</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">curl</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">/api/hello</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">curl</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">/api/data</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--deployment</span><span style="color:var(--shiki-color-text)"> [deployment-url]</span></span></code>
+
+Learn more about the curl command
+
+deploy
+
+Deploy your Vercel projects. Default command when no subcommand is specified.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">deploy</span></span>
+<span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">deploy</span><span style="color:var(--shiki-color-text)"> </span><span style="color:var(--shiki-token-string)">--prod</span></span></code>
+
+Learn more about the deploy command
+
+deploy-hooks
+
+Manage Deploy Hooks: list, create, and remove deploy hook URLs that trigger new deployments when called.
+
+<code class="grid text-[var(--ds-gray-1000)] text-left whitespace-pre break-normal !text-[13px] leading-[20px] font-mono hyphens-none" style="font-feature-settings:"liga" off"><span class="line"><span style="color:var(--shiki-color-text)">vercel </span><span style="color:var(--shiki-token-string)">deploy-hooks</span><span style="color:var(--shiki-color-text)"> </span>
+
+[… truncated 63816 chars …]
