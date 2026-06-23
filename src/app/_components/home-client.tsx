@@ -9,7 +9,6 @@ import { useLenis } from '@/components/velox/use-lenis';
 import { FilmGrain, SvgFilters } from '@/components/velox/ui/film-grain';
 import { LoadingScreen } from '@/components/velox/ui/loading-screen';
 import { Navigation } from '@/components/velox/sections/navigation';
-import { CinematicIntro } from '@/components/velox/sections/cinematic-intro';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 import { MarqueeText } from '@/components/velox/ui/marquee-text';
 import { ScrollDrivenPlayback } from '@/components/velox/sections/scroll-driven-playback';
@@ -30,7 +29,6 @@ if (typeof window !== 'undefined') {
 
 export function HomeClient() {
   const [loaded, setLoaded] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
 
   useLenis();
 
@@ -43,12 +41,8 @@ export function HomeClient() {
     setLoaded(true);
   }, []);
 
-  const handleIntroComplete = useCallback(() => {
-    setIntroDone(true);
-  }, []);
-
   useEffect(() => {
-    if (!loaded || !introDone) return;
+    if (!loaded) return;
 
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       ScrollTrigger.normalizeScroll(true);
@@ -59,7 +53,7 @@ export function HomeClient() {
     const timeout = setTimeout(() => ScrollTrigger.refresh(), 200);
 
     return () => clearTimeout(timeout);
-  }, [loaded, introDone]);
+  }, [loaded]);
 
   return (
     <main className="bg-[#0a0a0a] min-h-screen">
@@ -70,11 +64,7 @@ export function HomeClient() {
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
       </AnimatePresence>
 
-      {loaded && !introDone && (
-        <CinematicIntro onComplete={handleIntroComplete} />
-      )}
-
-      <div style={{ visibility: loaded && introDone ? 'visible' : 'hidden' }}>
+      <div style={{ visibility: loaded ? 'visible' : 'hidden' }}>
         <Navigation />
         <HeroScaleDown />
         <MarqueeText />
