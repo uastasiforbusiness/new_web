@@ -48,7 +48,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
+        poster="/images/hero-bg-mobile.webp"
         className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"
       />
 
