@@ -23,12 +23,17 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 
     const handleInteraction = () => {
       attemptPlay();
-      window.removeEventListener('touchstart', handleInteraction);
-      window.removeEventListener('click', handleInteraction);
     };
 
     window.addEventListener('touchstart', handleInteraction, { once: true });
     window.addEventListener('click', handleInteraction, { once: true });
+    window.addEventListener('scroll', handleInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener('touchstart', handleInteraction);
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('scroll', handleInteraction);
+    };
   }, []);
 
   useEffect(() => {
@@ -48,8 +53,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         muted
         loop
         playsInline
-        preload="auto"
-        poster="/images/hero-bg-mobile.webp"
+        preload="metadata"
         className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"
       />
 
