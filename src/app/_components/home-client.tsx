@@ -12,6 +12,7 @@ import { Navigation } from '@/components/velox/sections/navigation';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 import { MarqueeText } from '@/components/velox/ui/marquee-text';
 import { ScrollDrivenPlayback } from '@/components/velox/sections/scroll-driven-playback';
+import { IdolsGallery } from '@/components/velox/sections/idols-gallery';
 import { FleetSection } from '@/components/velox/sections/fleet-section';
 import { FleetDetailSection } from '@/components/velox/sections/fleet-detail-section';
 import { YachtExperienceSection } from '@/components/velox/sections/yacht-experience-section';
@@ -78,6 +79,7 @@ export function HomeClient() {
           </div>
         </div>
 
+        <IdolsGallery />
         <FleetSection />
         <FleetDetailSection />
         <MarqueeText />

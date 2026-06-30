@@ -152,6 +152,34 @@ html.lenis, html.lenis body {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   IDOL'S GALLERY — Blueprint spec card gold border
+   ═══════════════════════════════════════════════════════════ */
+.car-specs-blueprint {
+  border-left: 1px solid rgba(201, 169, 110, 0.3);
+  position: relative;
+}
+
+.car-specs-blueprint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 10px;
+  height: 1px;
+  background: #c9a96e;
+}
+
+.car-specs-blueprint::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -1px;
+  width: 10px;
+  height: 1px;
+  background: #c9a96e;
+}
+
+/* ═══════════════════════════════════════════════════════════
    GOLD GLOW KEYFRAMES
    ═══════════════════════════════════════════════════════════ */
 @keyframes gold-pulse {
