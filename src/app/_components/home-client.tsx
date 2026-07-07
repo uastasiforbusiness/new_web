@@ -22,6 +22,9 @@ import { FeaturesSection } from '@/components/velox/sections/features-section';
 import { ReserveSection } from '@/components/velox/sections/reserve-section';
 import { Footer } from '@/components/velox/sections/footer';
 import { WhatsAppButton } from '@/components/velox/chat/whatsapp-button';
+import { ScrollProgress } from '@/components/velox/ui/scroll-progress';
+import { BackToTop } from '@/components/velox/ui/back-to-top';
+import { BackgroundAurora } from '@/components/velox/ui/background-aurora';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -59,7 +62,9 @@ export function HomeClient() {
   return (
     <main className="bg-[#0a0a0a] min-h-screen">
       <SvgFilters />
+      <BackgroundAurora />
       <FilmGrain />
+      <ScrollProgress />
 
       <AnimatePresence>
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
@@ -91,6 +96,7 @@ export function HomeClient() {
         <ReserveSection />
         <Footer />
         <WhatsAppButton />
+        <BackToTop />
       </div>
       )}
     </main>
