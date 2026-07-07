@@ -11,7 +11,7 @@ import { LoadingScreen } from '@/components/velox/ui/loading-screen';
 import { Navigation } from '@/components/velox/sections/navigation';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 import { MarqueeText } from '@/components/velox/ui/marquee-text';
-import { ScrollDrivenPlayback } from '@/components/velox/sections/scroll-driven-playback';
+
 import { IdolsGallery } from '@/components/velox/sections/idols-gallery';
 import { FleetSection } from '@/components/velox/sections/fleet-section';
 import { FleetDetailSection } from '@/components/velox/sections/fleet-detail-section';
@@ -75,7 +75,7 @@ export function HomeClient() {
         <Navigation />
         <HeroScaleDown />
         <MarqueeText />
-        <ScrollDrivenPlayback />
+
 
         <div className="relative py-10 sm:py-14">
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
