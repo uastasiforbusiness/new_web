@@ -6,6 +6,13 @@ const FRAME_COUNT = 60;
 const DURATION = 6000; // ms
 const SCALE = 0.78; // zoom-out para que el Ferrari se vea completo y distante
 
+/**
+ * LoadingScreen — Pantalla de carga cinematográfica.
+ * - Canvas con secuencia de 60 frames del Ferrari (crossfade suave)
+ * - Overlay oscuro con gradiente
+ * - Texto shimmer "B LEADER" con zoom-in
+ * - Barra de carga dorada sutil en la base
+ */
 export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -95,17 +102,30 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
       {/* Canvas con la animación fluida */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full grayscale brightness-50"
+        className="absolute inset-0 w-full h-full grayscale brightness-[0.45]"
         style={{ width: '100vw', height: '100vh' }}
       />
 
-      {/* Overlay oscuro */}
+      {/* Overlay oscuro con viñeta */}
       <div
-        className="absolute inset-0 hero-overlay"
+        className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to bottom, rgba(10, 10, 10, 0.35) 0%, rgba(10, 10, 10, 0.78) 100%)',
+          background: `
+            radial-gradient(ellipse at center, transparent 40%, rgba(10,10,10,0.6) 100%),
+            linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.75) 100%)
+          `,
         }}
       />
+
+      {/* Barra de carga sutil dorada en la base */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-40 md:w-64 h-[1px] bg-[#1a1a1a] overflow-hidden rounded-full">
+        <div
+          className="h-full rounded-full loader-bar-anim"
+          style={{
+            background: 'linear-gradient(90deg, transparent, #c9a96e 30%, #d4af37 50%, #c9a96e 70%, transparent)',
+          }}
+        />
+      </div>
 
       {/* Texto animado */}
       <div className="relative z-10 text-center px-6">

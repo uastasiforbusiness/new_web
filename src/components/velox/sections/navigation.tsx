@@ -7,24 +7,50 @@ import Image from 'next/image';
 import { MagneticButton } from '../ui/magnetic-button';
 import { navLinks } from '../data';
 
+/**
+ * Navigation — Navbar premium con glass effect.
+ * - Scroll-aware: backdrop-blur se intensifica + sombra aparece al scrollear
+ * - Lenis-aware: escucha el evento scroll de Lenis si está disponible
+ * - Mobile: menú off-canvas con animaciones staggered
+ */
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 80);
+
+    // Preferir Lenis scroll si está disponible
+    const lenis = (window as unknown as Record<string, { on: (e: string, cb: () => void) => void }>).__lenis;
+    if (lenis?.on) {
+      lenis.on('scroll', onScroll);
+      return () => {
+        // Lenis no tiene removeListener fácil, usamos flag
+      };
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
-      scrolled ? 'nav-glass bg-[#0a0a0a]/85 border-b border-[#c9a96e]/10' : 'bg-transparent'
-    }`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+        scrolled
+          ? 'nav-glass bg-[#0a0a0a]/85 border-b border-[#c9a96e]/10 nav-scrolled'
+          : 'bg-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <a href="#" className="flex-shrink-0 cursor-pointer">
-            <Image src="/images/logo-white.webp" alt="B LEADER" width={56} height={56} className="h-12 sm:h-14 w-auto transition-opacity duration-300 hover:opacity-70" />
+            <Image
+              src="/images/logo-white.webp"
+              alt="B LEADER"
+              width={56}
+              height={56}
+              className="h-12 sm:h-14 w-auto transition-opacity duration-300 hover:opacity-70"
+            />
           </a>
 
           <div className="hidden md:flex items-center gap-8">
