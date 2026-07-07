@@ -12,13 +12,10 @@ import { Navigation } from '@/components/velox/sections/navigation';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 import { MarqueeText } from '@/components/velox/ui/marquee-text';
 
-import { IdolsGallery } from '@/components/velox/sections/idols-gallery';
-import { FleetSection } from '@/components/velox/sections/fleet-section';
-import { FleetDetailSection } from '@/components/velox/sections/fleet-detail-section';
+import { FleetShowcase } from '@/components/velox/sections/fleet-showcase';
 import { YachtExperienceSection } from '@/components/velox/sections/yacht-experience-section';
 import { ServiceLinesSection } from '@/components/velox/sections/service-lines-section';
 import { CoverageSection } from '@/components/velox/sections/coverage-section';
-import { FeaturesSection } from '@/components/velox/sections/features-section';
 import { ReserveSection } from '@/components/velox/sections/reserve-section';
 import { Footer } from '@/components/velox/sections/footer';
 import { WhatsAppButton } from '@/components/velox/chat/whatsapp-button';
@@ -84,15 +81,12 @@ export function HomeClient() {
           </div>
         </div>
 
-        <IdolsGallery />
-        <FleetSection />
-        <FleetDetailSection />
+        <FleetShowcase />
         <MarqueeText />
         <YachtExperienceSection />
         <ServiceLinesSection />
         <CoverageSection />
         <MarqueeText />
-        <FeaturesSection />
         <ReserveSection />
         <Footer />
         <WhatsAppButton />
