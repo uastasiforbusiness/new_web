@@ -15,6 +15,12 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const createClient = () => {
+  // Use standard PrismaClient for local development (SQLite)
+  if (process.env.NODE_ENV === 'development' || !process.env.DATABASE_URL?.startsWith('postgres')) {
+    return new PrismaClient()
+  }
+  
+  // Use PG adapter for Cloudflare/Production
   const connectionString = process.env.DATABASE_URL ?? ''
   const adapter = new PrismaPg({ connectionString, maxUses: 1 })
   return new PrismaClient({ adapter })
