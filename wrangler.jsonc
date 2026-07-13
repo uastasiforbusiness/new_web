@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "bleader-italy",
+  "workers_dev": true,
   "compatibility_date": "2025-05-05",
   "compatibility_flags": [
     "nodejs_compat",
@@ -11,14 +12,5 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  "services": [
-    {
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "bleader-italy"
-    }
-  ],
-  "r2_buckets": [],
-  "images": {
-    "binding": "IMAGES"
-  }
+  "r2_buckets": []
 }
