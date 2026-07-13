@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: {
+    // true: Next.js 16 internal type bug in .next/dev/types/ (PrefetchForTypeCheckInternal).
+    // Our source code has zero TS errors — verified with tsc --noEmit.
     ignoreBuildErrors: true,
   },
   reactStrictMode: true,
