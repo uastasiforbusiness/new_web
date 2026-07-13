@@ -1,5 +1,5 @@
 import {
-  ConciergeBell, Shield, Truck, Briefcase, Plane,
+  ConciergeBell, Shield, Truck, Briefcase,
   Car, Sparkles, Ship,
 } from 'lucide-react';
 
@@ -344,13 +344,6 @@ export const serviceLines = [
     description: 'Luxury cars for non-wedding celebrations. Birthdays, baptisms, communions, private parties. Custom packages available.',
     stat: 'SOCIAL',
   },
-  {
-    icon: Plane,
-    title: 'TRANSFER SERVICE',
-    subtitle: 'Airport & Private Transfers',
-    description: 'Door-to-door pickup and drop-off. Airport, port, station to destination. Business and luxury tourism transfers.',
-    stat: '24/7',
-  },
 ];
 
 export const coverageRegions = [
@@ -360,22 +353,17 @@ export const coverageRegions = [
   { name: 'All Southern Italy', role: 'Upon request', detail: '', primary: false },
 ];
 
-export const airports = [
-  { code: 'BRI', name: 'Bari' },
-  { code: 'BDS', name: 'Brindisi' },
-  { code: 'SUF', name: 'Lamezia Terme' },
-];
+// ─── Navigation link type ───────────────────────────────────────
+export interface NavLink {
+  label: string;
+  href: string;       // used on home page (hash anchor for smooth scroll)
+  pageHref?: string;  // used on standalone pages (real route)
+}
 
-export const features = [
-  { icon: ConciergeBell, title: 'COMING SOON', description: 'We are curating exclusive experiences to elevate your journey. Stay tuned for something extraordinary.', stat: 'SOON' },
-  { icon: Shield, title: 'COMING SOON', description: 'We are curating exclusive experiences to elevate your journey. Stay tuned for something extraordinary.', stat: 'SOON' },
-  { icon: Truck, title: 'COMING SOON', description: 'We are curating exclusive experiences to elevate your journey. Stay tuned for something extraordinary.', stat: 'SOON' },
-];
-
-export const navLinks = [
-  { label: 'FLEET', href: '#fleet' },
-  { label: 'YACHT', href: '#yacht' },
-  { label: 'SERVICES', href: '#services' },
+export const navLinks: NavLink[] = [
+  { label: 'FLEET', href: '#fleet', pageHref: '/fleet' },
+  { label: 'YACHT', href: '#yacht', pageHref: '/yacht' },
+  { label: 'SERVICES', href: '#services', pageHref: '/services' },
   { label: 'RESERVE', href: '#reserve' },
   { label: 'CONTACT', href: '#contact' },
 ];

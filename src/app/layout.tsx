@@ -33,12 +33,9 @@ const BASE_URL = process.env.VERCEL_URL
   : "https://bleader.vercel.app";
 
 export const metadata: Metadata = {
-  title: {
-    default: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
-    template: "%s | B LEADER",
-  },
+  title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
   description:
-    "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, photographer, champagne, airport transfer included.",
+    "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, professional photographer, champagne included.",
   keywords: [
     "Ferrari driving experience Salento Italy",
     "luxury yacht experience Puglia",
@@ -58,7 +55,6 @@ export const metadata: Metadata = {
     canonical: "/",
     languages: {
       "en-US": "/",
-      "it-IT": "/it",
     },
   },
   icons: {
@@ -69,7 +65,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
     description:
-      "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, photographer, champagne, airport transfer included.",
+      "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, professional photographer, champagne included.",
     url: BASE_URL,
     siteName: "B LEADER",
     type: "website",

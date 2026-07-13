@@ -1,10 +1,20 @@
 'use client';
 
-import { Instagram, Facebook, Twitter } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
-import { navLinks } from '../data';
+import { Instagram, Facebook, Twitter } from 'lucide-react';
+import { navLinks, type NavLink } from '../data';
+
+function getHref(link: NavLink, isHome: boolean): string {
+  if (isHome) return link.href;
+  return link.pageHref ?? `/${link.href}`;
+}
 
 export function Footer() {
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+
   return (
     <footer className="bg-[#080808] border-t border-[#c9a96e]/8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -14,12 +24,12 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-6 sm:gap-8">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href} className="cursor-pointer text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
+              <Link key={link.label} href={getHref(link, isHome)} className="cursor-pointer text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
                 {link.label}
-              </a>
+              </Link>
             ))}
             <div className="w-[1px] h-4 bg-[#333] hidden sm:block" />
-            <a href="#reserve" className="text-[10px] font-elegant tracking-wider text-[#c9a96e]/60 hover:text-[#c9a96e] transition-colors duration-300 hidden sm:block italic">Book Now</a>
+            <Link href={isHome ? '#reserve' : '/#reserve'} className="text-[10px] font-elegant tracking-wider text-[#c9a96e]/60 hover:text-[#c9a96e] transition-colors duration-300 hidden sm:block italic">Book Now</Link>
           </div>
           <div className="flex items-center gap-4">
             {[Instagram, Facebook, Twitter].map((Icon, i) => (

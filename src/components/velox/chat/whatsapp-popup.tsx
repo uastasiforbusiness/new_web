@@ -147,10 +147,36 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, conciergeTyping]);
 
+  // Keep track of whether we've done the initial history load
+  const initialLoadDone = useRef(false);
+
   // ─── Polling for new messages ───────────────────────────────────────────
   useEffect(() => {
     if (!open || !sessionId) return;
     let cancelled = false;
+
+    // Reset initial load flag when session changes
+    initialLoadDone.current = false;
+
+    const doInitialLoad = async () => {
+      if (cancelled) return;
+      try {
+        // Load last 50 messages to populate the chat history
+        const res = await fetch(`/api/whatsapp/messages?sessionId=${sessionId}&since=0&limit=50`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+
+        if (data.messages.length > 0) {
+          setMessages(data.messages);
+          const maxTs = Math.max(...data.messages.map((m: ChatMsg) => m.ts), 0);
+          setLastTs(maxTs);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ sessionId, lastTs: maxTs }));
+          } catch { /* ignore */ }
+        }
+      } catch { /* retry next tick */ }
+    };
 
     const poll = async () => {
       if (cancelled) return;
@@ -180,7 +206,11 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
       } catch { /* network blip — retry next tick */ }
     };
 
-    poll(); // immediate
+    // First fetch: full history load, then switch to delta polling
+    doInitialLoad().then(() => {
+      if (cancelled) return;
+      initialLoadDone.current = true;
+    });
     const interval = setInterval(poll, POLL_INTERVAL);
     return () => { cancelled = true; clearInterval(interval); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -273,7 +303,6 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           visitorId: getOrCreateVisitorId(),
-          sessionId: undefined,
           body,
         }),
       });

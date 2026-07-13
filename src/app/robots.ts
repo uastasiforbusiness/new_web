@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/seo";
 
 /**
- * Dynamic robots.txt — Next.js lo sirve en /robots.txt
+ * Dynamic lo sirve en /robots.txt
  * Define qué rastrear y dónde está el sitemap.
  */
 export default function robots(): MetadataRoute.Robots {
@@ -10,12 +10,12 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "Googlebot",
-        allow: ["/", "/fleet", "/yacht", "/locations/salento", "/services", "/about", "/contact"],
+        allow: ["/", "/fleet", "/yacht", "/services", "/about"],
         disallow: ["/api/"],
       },
       {
         userAgent: "Bingbot",
-        allow: ["/", "/fleet", "/yacht", "/locations/salento", "/services", "/about", "/contact"],
+        allow: ["/", "/fleet", "/yacht", "/services", "/about"],
         disallow: ["/api/"],
       },
       {

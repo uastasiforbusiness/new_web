@@ -5,6 +5,7 @@ import { db } from '@/lib/db';
 const querySchema = z.object({
   sessionId: z.string().trim().min(8).max(64),
   since: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
 });
 
 export async function GET(request: Request) {
@@ -13,6 +14,7 @@ export async function GET(request: Request) {
     const parsed = querySchema.safeParse({
       sessionId: searchParams.get('sessionId'),
       since: searchParams.get('since'),
+      limit: searchParams.get('limit'),
     });
 
     if (!parsed.success) {
@@ -22,7 +24,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const { sessionId, since } = parsed.data;
+    const { sessionId, since, limit } = parsed.data;
 
     // ─── Sanity check: session exists ────────────────────────────────────
     const session = await db.chatSession.findUnique({
@@ -33,14 +35,19 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Session not found' }, { status: 404 });
     }
 
-    // ─── Fetch messages newer than `since` (epoch ms) ────────────────────
+    // ─── Fetch messages ──────────────────────────────────────────────────
+    // When since=0 (initial load), fetch the last N messages.
+    // When since>0 (delta poll), fetch only newer messages.
     const sinceDate = new Date(since);
+    const isInitialLoad = since === 0;
+
     const messages = await db.chatMessage.findMany({
       where: {
         sessionId,
-        createdAt: { gt: sinceDate },
+        createdAt: isInitialLoad ? undefined : { gt: sinceDate },
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: isInitialLoad ? 'desc' : 'asc' },
+      take: isInitialLoad ? limit : undefined,
       select: {
         id: true,
         direction: true,
@@ -50,8 +57,11 @@ export async function GET(request: Request) {
       },
     });
 
+    // Initial loads come in reverse-chronological order — flip to asc
+    const ordered = isInitialLoad ? messages.reverse() : messages;
+
     return NextResponse.json({
-      messages: messages.map((m) => ({
+      messages: ordered.map((m) => ({
         id: m.id,
         direction: m.direction,
         body: m.body,

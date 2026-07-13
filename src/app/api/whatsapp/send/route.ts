@@ -55,6 +55,11 @@ export async function POST(request: Request) {
     const { visitorId, body: messageBody, visitorName, visitorPhone } = parsed.data;
 
     // ─── Find or create session ──────────────────────────────────────────
+    // NOTE: concurrent requests for the same visitorId could create duplicate
+    // sessions (race between findFirst and create).  For MVP this is harmless
+    // — the next findFirst picks the most recent session and the orphan is
+    // ignored.  For production, add a unique constraint on (visitorId, status)
+    // or wrap the read+write in a serializable transaction.
     let session = await db.chatSession.findFirst({
       where: { visitorId, status: 'active' },
       orderBy: { createdAt: 'desc' },

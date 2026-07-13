@@ -13,7 +13,7 @@ export const SITE = {
   localeAlternate: "it_IT",
   defaultTitle: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
   defaultDescription:
-    "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, photographer, champagne, airport transfer included.",
+    "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, professional photographer, champagne included.",
   defaultKeywords: [
     "Ferrari driving experience Salento Italy",
     "luxury yacht experience Puglia",
@@ -43,10 +43,13 @@ export type PageMeta = {
 
 /**
  * Construye metadatos consistentes para cada página.
+ * El sufijo "| B LEADER" lo añade el root layout via title.template.
  * Uso: export const metadata = buildPageMeta({ title: "Fleet", path: "/fleet" });
  */
 export function buildPageMeta(page: PageMeta) {
-  const title = `${page.title} | ${SITE.name}`;
+  const title = page.path === '/'
+    ? page.title
+    : `${page.title} | ${SITE.name}`;
   const description = page.description || SITE.defaultDescription;
   const images = page.ogImage
     ? [{ url: page.ogImage, width: 1200, height: 630, alt: title }]
@@ -145,7 +148,7 @@ export type Vehicle = {
 };
 
 /**
- * Product schema para cada vehículo de la flota.
+ * Product schema paraota.
  * Google puede mostrar precio, disponibilidad y reviews en rich snippet.
  */
 export function productSchema(vehicle: Vehicle) {
