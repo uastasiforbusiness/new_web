@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+import {
+  localBusinessSchema,
+  productSchema,
+  breadcrumbSchema,
+} from "@/lib/seo";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -23,23 +28,38 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+const BASE_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "https://bleader.vercel.app";
+
 export const metadata: Metadata = {
-  title: "B LEADER — Premium Car Rental",
+  title: {
+    default: "B LEADER — Premium Car Rental & Yacht Charter in Salento, Italy",
+    template: "%s | B LEADER",
+  },
   description:
-    "Experience premium driving. Exclusive fleet of high-performance vehicles available for rent. Concierge service, premium insurance, hotel delivery.",
+    "Experience the thrill of driving a Ferrari California or cruising the Salento coast on a luxury yacht. Premium car rental and yacht charter in Puglia, Italy — concierge service, airport delivery, and insurance included.",
   keywords: [
-    "premium car rental",
-    "B LEADER",
-    "luxury cars",
-    "exclusive fleet",
-    "car rental",
-    "high-performance rental",
-    "Ferrari rental",
-    "Lamborghini rental",
+    "luxury car rental Salento Italy",
+    "Ferrari rental Puglia",
+    "yacht charter Salento",
+    "premium car hire Brindisi airport",
+    "B LEADER luxury rental",
+    "Ferrari California rental Italy",
+    "Maserati rental Puglia",
+    "luxury vacation Puglia car service",
+    "exotic car rental Italy US tourists",
+    "yacht tour Adriatic coast Italy",
+    "Salento luxury travel",
+    "Puglia supercar rental",
   ],
-  metadataBase: new URL("https://bleader.com"),
+  metadataBase: new URL(BASE_URL),
   alternates: {
     canonical: "/",
+    languages: {
+      "en-US": "/",
+      "it-IT": "/it",
+    },
   },
   icons: {
     icon: [
@@ -47,26 +67,27 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "B LEADER — Premium Car Rental",
+    title: "B LEADER — Premium Car Rental & Yacht Charter in Salento, Italy",
     description:
-      "Experience premium driving. Exclusive fleet of high-performance vehicles available for rent. Concierge service, premium insurance, hotel delivery.",
-    url: "https://bleader.com",
+      "Experience the thrill of driving a Ferrari California or cruising the Salento coast on a luxury yacht. Premium car rental and yacht charter in Puglia, Italy — concierge service, airport delivery, and insurance included.",
+    url: BASE_URL,
     siteName: "B LEADER",
     type: "website",
+    locale: "en_US",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "B LEADER — Premium Car Rental",
+        alt: "B LEADER — Premium Car Rental & Yacht Charter in Salento",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "B LEADER — Premium Car Rental",
+    title: "B LEADER — Premium Car Rental & Yacht Charter",
     description:
-      "Experience premium driving. Exclusive fleet of high-performance vehicles available for rent.",
+      "Experience the thrill of driving a Ferrari California or cruising the Salento coast on a luxury yacht.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -81,22 +102,53 @@ export const metadata: Metadata = {
     },
   },
   category: "Automotive",
+  verification: {
+    // ── Añadir aquí el meta tag de Google Search Console cuando lo configures ──
+    // google: "TU_CODIGO_DE_VERIFICACION",
+  },
 };
 
 /**
- * JSON-LD Structured Data — Organization + WebSite schema
- * Mejora el rich snippet en Google: logo, sitio, buscador.
+ * JSON-LD Structured Data — LocalBusiness + Product + Breadcrumb
+ * Ayuda a Google a mostrar Rich Snippets en resultados de búsqueda.
  */
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "B LEADER",
-  url: "https://bleader.com",
-  logo: "https://bleader.com/images/logo-white.webp",
-  description:
-    "Premium car rental with an exclusive fleet of high-performance vehicles.",
-  sameAs: [],
-};
+const jsonLdSchemas = [
+  localBusinessSchema(),
+  // Product schemas para la flota principal
+  productSchema({
+    name: "Ferrari California T (Rossa Corsa)",
+    brand: "Ferrari",
+    category: "Car",
+    image: `${BASE_URL}/images/ferrari_rossa_card.webp`,
+    pricePerDay: 1200,
+    currency: "EUR",
+    description:
+      "Ferrari California T 560HP — rossa corsa, 3.9s 0-100 km/h. Experiencia de conducción inolvidable en la costa de Salento.",
+  }),
+  productSchema({
+    name: "Ferrari California (Bianca Avus)",
+    brand: "Ferrari",
+    category: "Car",
+    image: `${BASE_URL}/images/ferrari_blanca_card.webp`,
+    pricePerDay: 1000,
+    currency: "EUR",
+    description:
+      "Ferrari California bianca avus 460HP. Elegancia y velocidad para recorrer Puglia con estilo.",
+  }),
+  productSchema({
+    name: "Maserati Ghibli 250HP",
+    brand: "Maserati",
+    category: "Car",
+    image: `${BASE_URL}/images/maserati_card.webp`,
+    pricePerDay: 600,
+    currency: "EUR",
+    description:
+      "Maserati Ghibli — lujo italiano, 250HP. Perfecta para viajes de negocios o placer por la costa adriática.",
+  }),
+  breadcrumbSchema([
+    { name: "Home", path: "/" },
+  ]),
+];
 
 export default function RootLayout({
   children,
@@ -106,11 +158,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        {/* JSON-LD Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        {/* JSON-LD Structured Data — LocalBusiness + Products + Breadcrumb */}
+        {jsonLdSchemas.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
         {/* Theme color para PWA / status bar en mobile */}
         <meta name="theme-color" content="#0a0a0a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
