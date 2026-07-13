@@ -28,9 +28,9 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const BASE_URL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "https://bleader.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : "https://bleader.it";
 
 export const metadata: Metadata = {
   title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",

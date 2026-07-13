@@ -7,7 +7,7 @@ export const SITE = {
   name: "B LEADER",
   tagline: "Luxury Driving & Yacht Experiences in Salento",
   // ── CAMBIAR cuando compres el dominio ──
-  url: "https://bleader.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://bleader.it",
   // ──────────────────────────────────────
   locale: "en_US",
   localeAlternate: "it_IT",
