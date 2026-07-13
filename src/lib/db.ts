@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import { neon } from '@neondatabase/serverless';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -7,20 +9,14 @@ const globalForPrisma = globalThis as unknown as {
 function createClient(): PrismaClient {
   const url = process.env.DATABASE_URL || '';
 
-  // PostgreSQL en producción (Cloudflare Workers / Neon)
+  // PostgreSQL en producción (Neon / Cloudflare Workers)
   if (url.startsWith('postgres')) {
-    try {
-      // Dynamic import for tree-shaking — only loaded when DATABASE_URL is postgres
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { PrismaPg } = require('@prisma/adapter-pg') as typeof import('@prisma/adapter-pg');
-      const adapter = new PrismaPg({ connectionString: url, maxUses: 1 });
-      return new PrismaClient({ adapter });
-    } catch (e) {
-      console.error('[db] Failed to init PG adapter, falling back to default:', e);
-    }
+    const sql = neon(url);
+    const adapter = new PrismaNeon(sql);
+    return new PrismaClient({ adapter });
   }
 
-  // SQLite local or fallback
+  // SQLite local
   return new PrismaClient();
 }
 
