@@ -1,0 +1,167 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1782215612613,
+  "projectRoot": "C:\\Users\\gabri\\Desktop\\new_web",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "16.1.1",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.0.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.0.0",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev -p 3001",
+      "build": "next build",
+      "start": "next start -p 3000",
+      "lint": "eslint .",
+      "postinstall": "prisma generate",
+      "vercel-build": "prisma generate && next build",
+      "db:push": "prisma db push",
+      "db:generate": "prisma generate",
+      "db:migrate": "prisma migrate dev",
+      "db:reset": "prisma migrate reset"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "scripts",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "prisma": {
+      "path": "prisma",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1782215612496,
+      "keyFiles": [
+        "dev.db",
+        "migration_lock.toml",
+        "schema.prisma"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 3,
+      "lastAccessed": 1782215612497,
+      "keyFiles": [
+        "favicon.svg",
+        "logo.svg",
+        "robots.txt"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1782215612507,
+      "keyFiles": [
+        "generate-yacht-sprite.mjs"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1782215612509,
+      "keyFiles": []
+    },
+    "prisma\\migrations": {
+      "path": "prisma\\migrations",
+      "purpose": "Database migrations",
+      "fileCount": 0,
+      "lastAccessed": 1782215612510,
+      "keyFiles": []
+    },
+    "public\\assets": {
+      "path": "public\\assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1782215612511,
+      "keyFiles": []
+    },
+    "src\\app": {
+      "path": "src\\app",
+      "purpose": "Application code",
+      "fileCount": 3,
+      "lastAccessed": 1782215612512,
+      "keyFiles": [
+        "globals.css",
+        "layout.tsx",
+        "page.tsx"
+      ]
+    },
+    "src\\components": {
+      "path": "src\\components",
+      "purpose": "UI components",
+      "fileCount": 0,
+      "lastAccessed": 1782215612512,
+      "keyFiles": []
+    },
+    "src\\lib": {
+      "path": "src\\lib",
+      "purpose": "Library code",
+      "fileCount": 5,
+      "lastAccessed": 1782215612513,
+      "keyFiles": [
+        "db.ts",
+        "email.ts",
+        "rate-limit.ts"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}
