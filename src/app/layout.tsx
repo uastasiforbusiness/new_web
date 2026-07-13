@@ -34,24 +34,24 @@ const BASE_URL = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   title: {
-    default: "B LEADER — Premium Car Rental & Yacht Charter in Salento, Italy",
+    default: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
     template: "%s | B LEADER",
   },
   description:
-    "Experience the thrill of driving a Ferrari California or cruising the Salento coast on a luxury yacht. Premium car rental and yacht charter in Puglia, Italy — concierge service, airport delivery, and insurance included.",
+    "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, photographer, champagne, airport transfer included.",
   keywords: [
-    "luxury car rental Salento Italy",
-    "Ferrari rental Puglia",
-    "yacht charter Salento",
-    "premium car hire Brindisi airport",
-    "B LEADER luxury rental",
-    "Ferrari California rental Italy",
-    "Maserati rental Puglia",
-    "luxury vacation Puglia car service",
-    "exotic car rental Italy US tourists",
-    "yacht tour Adriatic coast Italy",
-    "Salento luxury travel",
-    "Puglia supercar rental",
+    "Ferrari driving experience Salento Italy",
+    "luxury yacht experience Puglia",
+    "Ferrari tour Puglia US tourists",
+    "luxury vacation experiences Salento",
+    "drive Ferrari along Amalfi Coast",
+    "sunset yacht tour Salento",
+    "exotic car experience Italy",
+    "B LEADER luxury experiences",
+    "Puglia supercar experience",
+    "yacht dinner experience Adriatic",
+    "Salento luxury travel curator",
+    "Ferrari California tour Italy",
   ],
   metadataBase: new URL(BASE_URL),
   alternates: {
@@ -67,9 +67,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "B LEADER — Premium Car Rental & Yacht Charter in Salento, Italy",
+    title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
     description:
-      "Experience the thrill of driving a Ferrari California or cruising the Salento coast on a luxury yacht. Premium car rental and yacht charter in Puglia, Italy — concierge service, airport delivery, and insurance included.",
+      "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, photographer, champagne, airport transfer included.",
     url: BASE_URL,
     siteName: "B LEADER",
     type: "website",
@@ -79,15 +79,15 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "B LEADER — Premium Car Rental & Yacht Charter in Salento",
+        alt: "B LEADER — Luxury Driving & Yacht Experiences in Salento",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "B LEADER — Premium Car Rental & Yacht Charter",
+    title: "B LEADER — Luxury Driving & Yacht Experiences",
     description:
-      "Experience the thrill of driving a Ferrari California or cruising the Salento coast on a luxury yacht.",
+      "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht.",
     images: ["/og-image.jpg"],
   },
   robots: {
