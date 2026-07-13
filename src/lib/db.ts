@@ -7,15 +7,20 @@ const globalForPrisma = globalThis as unknown as {
 function createClient(): PrismaClient {
   const url = process.env.DATABASE_URL || '';
 
-  // PostgreSQL en producción (Cloudflare Workers)
+  // PostgreSQL en producción (Cloudflare Workers / Neon)
   if (url.startsWith('postgres')) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { PrismaPg } = require('@prisma/adapter-pg');
-    const adapter = new PrismaPg({ connectionString: url, maxUses: 1 });
-    return new PrismaClient({ adapter });
+    try {
+      // Dynamic import for tree-shaking — only loaded when DATABASE_URL is postgres
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { PrismaPg } = require('@prisma/adapter-pg') as typeof import('@prisma/adapter-pg');
+      const adapter = new PrismaPg({ connectionString: url, maxUses: 1 });
+      return new PrismaClient({ adapter });
+    } catch (e) {
+      console.error('[db] Failed to init PG adapter, falling back to default:', e);
+    }
   }
 
-  // SQLite local
+  // SQLite local or fallback
   return new PrismaClient();
 }
 
