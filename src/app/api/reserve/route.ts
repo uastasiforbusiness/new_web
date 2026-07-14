@@ -110,7 +110,6 @@ export async function POST(request: Request) {
         pickupDate,
         returnDate,
         consentAccepted,
-        consentAcceptedAt: new Date(),
         message: message ?? null,
       },
     });

@@ -2,32 +2,27 @@
  * D1 Database Client — direct binding (sin Prisma, sin WASM)
  * Cloudflare Workers tienen acceso nativo a D1 via binding globalThis.DB
  */
-interface D1Result<T = unknown> {
-  results: T[];
-  success: boolean;
-  error?: string;
-}
-
-function getD1(): D1Database | null {
+function getD1(): any {
   return (globalThis as any).DB ?? null;
 }
 
-async function d1Query<T>(sql: string, params?: (string | number | null)[]): Promise<T[]> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function d1Query(sql: string, params?: (string | number | null)[]): Promise<any[]> {
   const db = getD1();
   if (!db) throw new Error('D1 not available');
-  const result = await db.prepare(sql).bind(...(params ?? [])).all<T>();
+  const result = await db.prepare(sql).bind(...(params ?? [])).all();
   if (!result.success) throw new Error(result.error ?? 'D1 query failed');
-  return result.results as T[];
+  return result.results as any[];
 }
 
-async function d1Exec(sql: string, params?: (string | number | null)[]): Promise<D1Result> {
+async function d1Exec(sql: string, params?: (string | number | null)[]): Promise<any> {
   const db = getD1();
   if (!db) throw new Error('D1 not available');
   return db.prepare(sql).bind(...(params ?? [])).run();
 }
 
-async function d1First<T>(sql: string, params?: (string | number | null)[]): Promise<T | null> {
-  const rows = await d1Query<T>(sql, params);
+async function d1First(sql: string, params?: (string | number | null)[]): Promise<any> {
+  const rows = await d1Query(sql, params);
   return rows[0] ?? null;
 }
 
@@ -46,11 +41,11 @@ export const db = {
       const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
       const order = opts.orderBy?.createdAt === 'desc' ? 'ORDER BY created_at DESC' :
         opts.orderBy?.updatedAt === 'desc' ? 'ORDER BY updated_at DESC' : '';
-      return d1First<ChatSession>(`SELECT * FROM chat_sessions ${where} ${order} LIMIT 1`, params);
+      return d1First(`SELECT * FROM chat_sessions ${where} ${order} LIMIT 1`, params) as Promise<ChatSession | null>;
     },
 
     findUnique: async (opts: { where: { id: string } }) => {
-      return d1First<ChatSession>('SELECT * FROM chat_sessions WHERE id = ?', [opts.where.id]);
+      return d1First('SELECT * FROM chat_sessions WHERE id = ?', [opts.where.id]) as Promise<ChatSession | null>;
     },
 
     create: async (opts: { data: Omit<ChatSession, 'id' | 'created_at' | 'updated_at'> }) => {
@@ -62,7 +57,7 @@ export const db = {
         [id, opts.data.visitor_id, opts.data.visitor_name ?? null, opts.data.visitor_phone ?? null,
          opts.data.status ?? 'active', opts.data.mode ?? 'demo', now, now]
       );
-      return d1First<ChatSession>('SELECT * FROM chat_sessions WHERE id = ?', [id]);
+      return d1First('SELECT * FROM chat_sessions WHERE id = ?', [id]) as Promise<ChatSession | null>;
     },
 
     update: async (opts: { where: { id: string }; data: Partial<ChatSession> }) => {
@@ -77,7 +72,7 @@ export const db = {
 
   chatMessage: {
     findFirst: async (opts: { where: { waMessageId?: string } }) => {
-      return d1First<ChatMessage>('SELECT * FROM chat_messages WHERE wa_message_id = ?', [opts.where.waMessageId ?? '']);
+      return d1First('SELECT * FROM chat_messages WHERE wa_message_id = ?', [opts.where.waMessageId ?? '']);
     },
 
     findMany: async (opts: {
@@ -92,7 +87,7 @@ export const db = {
       const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
       const order = opts.orderBy?.createdAt === 'asc' ? 'ORDER BY created_at ASC' : 'ORDER BY created_at DESC';
       const limit = opts.take ? `LIMIT ${opts.take}` : '';
-      return d1Query<ChatMessage>(`SELECT * FROM chat_messages ${where} ${order} ${limit}`, params);
+      return d1Query(`SELECT * FROM chat_messages ${where} ${order} ${limit}`, params);
     },
 
     create: async (opts: { data: Omit<ChatMessage, 'id' | 'created_at'> }) => {
@@ -103,12 +98,32 @@ export const db = {
         [id, opts.data.session_id, opts.data.direction, opts.data.body,
          opts.data.wa_message_id ?? null, opts.data.status ?? 'sent', new Date().toISOString()]
       );
-      return d1First<ChatMessage>('SELECT * FROM chat_messages WHERE id = ?', [id]);
+      return d1First('SELECT * FROM chat_messages WHERE id = ?', [id]);
     },
 
     updateMany: async (opts: { where: { waMessageId: string }; data: { status: string } }) => {
       await d1Exec('UPDATE chat_messages SET status = ? WHERE wa_message_id = ?',
         [opts.data.status, opts.where.waMessageId]);
+    },
+  },
+
+  reservation: {
+    create: async (opts: { data: {
+      carName: string; carVariant: string; customerName: string; email: string;
+      phone: string; pickupDate: Date; returnDate: Date; consentAccepted: boolean;
+      message: string | null;
+    }}) => {
+      const id = crypto.randomUUID();
+      const now = new Date().toISOString();
+      await d1Exec(
+        `INSERT INTO reservations (id, car_name, car_variant, customer_name, email, phone,
+         pickup_date, return_date, message, consent_accepted, consent_accepted_at, status, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`,
+        [id, opts.data.carName, opts.data.carVariant, opts.data.customerName, opts.data.email,
+         opts.data.phone, opts.data.pickupDate.toISOString(), opts.data.returnDate.toISOString(),
+         opts.data.message, opts.data.consentAccepted ? 1 : 0, now, now, now]
+      );
+      return { id };
     },
   },
 };
@@ -130,7 +145,7 @@ interface ChatMessage {
   session_id: string;
   direction: string;
   body: string;
-  wa_message_id: string | null;
+  wa_message_id?: string | null;
   status: string;
   created_at: string;
 }

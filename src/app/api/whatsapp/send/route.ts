@@ -45,14 +45,21 @@ export async function POST(request: Request) {
           mode: 'demo',
         },
       });
-    } else if (visitorPhone && !session.visitor_phone) {
+    }
+
+    // TypeScript guard
+    if (!session) {
+      return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
+    }
+
+    if (visitorPhone && !session.visitor_phone) {
       await db.chatSession.update({ where: { id: session.id }, data: { visitor_phone: visitorPhone } });
     }
 
     // Save inbound message
-    const msg = await db.chatMessage.create({
+    const msg = (await db.chatMessage.create({
       data: { session_id: session.id, direction: 'inbound', body: messageBody, status: 'delivered' },
-    });
+    }))!;
 
     // Demo auto-reply
     const replyIdx = messageBody.length % DEMO_REPLIES.length;
