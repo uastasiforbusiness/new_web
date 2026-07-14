@@ -1,5 +1,7 @@
-import { buildPageMeta } from '@/lib/seo';
+import { buildPageMeta, breadcrumbSchema, productSchema } from '@/lib/seo';
 import { YachtExperienceSection } from '@/components/velox/sections/yacht-experience-section';
+import { JsonLd } from '@/components/velox/ui/json-ld';
+import { yachtData } from '@/components/velox/data';
 
 export const metadata = buildPageMeta({
   title: 'Yacht',
@@ -16,5 +18,26 @@ export const metadata = buildPageMeta({
 });
 
 export default function YachtPage() {
-  return <YachtExperienceSection />;
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Yacht', path: '/yacht' },
+        ])}
+      />
+      <JsonLd
+        data={productSchema({
+          name: yachtData.name,
+          brand: 'Cranchi',
+          category: 'Yacht',
+          image: '/images/floating_last.webp',
+          pricePerDay: 2000,
+          currency: 'EUR',
+          description: `Luxury yacht ${yachtData.name} (${yachtData.length}). Capacity: ${yachtData.capacity}. Departure: ${yachtData.departure}. Season: ${yachtData.season}.`,
+        })}
+      />
+      <YachtExperienceSection />
+    </>
+  );
 }

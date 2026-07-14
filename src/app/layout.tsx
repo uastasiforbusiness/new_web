@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import {
-  localBusinessSchema,
-  productSchema,
-  breadcrumbSchema,
-} from "@/lib/seo";
+import { localBusinessSchema, CONTACT } from "@/lib/seo";
 
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -58,9 +54,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
@@ -72,7 +66,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "B LEADER — Luxury Driving & Yacht Experiences in Salento",
@@ -84,7 +78,7 @@ export const metadata: Metadata = {
     title: "B LEADER — Luxury Driving & Yacht Experiences",
     description:
       "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht.",
-    images: ["/og-image.jpg"],
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
@@ -99,52 +93,16 @@ export const metadata: Metadata = {
   },
   category: "Automotive",
   verification: {
-    // ── Añadir aquí el meta tag de Google Search Console cuando lo configures ──
-    // google: "TU_CODIGO_DE_VERIFICACION",
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
   },
 };
 
 /**
- * JSON-LD Structured Data — LocalBusiness + Product + Breadcrumb
- * Ayuda a Google a mostrar Rich Snippets en resultados de búsqueda.
+ * JSON-LD Structured Data — ONLY LocalBusiness en root layout.
+ * Los schemas de Product y Breadcrumb contextuales se inyectan
+ * desde cada page.tsx (fleet, yacht, services, about).
  */
-const jsonLdSchemas = [
-  localBusinessSchema(),
-  // Product schemas para la flota principal
-  productSchema({
-    name: "Ferrari California T (Rossa Corsa)",
-    brand: "Ferrari",
-    category: "Car",
-    image: `${BASE_URL}/images/ferrari_rossa_card.webp`,
-    pricePerDay: 1200,
-    currency: "EUR",
-    description:
-      "Ferrari California T 560HP — rossa corsa, 3.9s 0-100 km/h. Experiencia de conducción inolvidable en la costa de Salento.",
-  }),
-  productSchema({
-    name: "Ferrari California (Bianca Avus)",
-    brand: "Ferrari",
-    category: "Car",
-    image: `${BASE_URL}/images/ferrari_blanca_card.webp`,
-    pricePerDay: 1000,
-    currency: "EUR",
-    description:
-      "Ferrari California bianca avus 460HP. Elegancia y velocidad para recorrer Puglia con estilo.",
-  }),
-  productSchema({
-    name: "Maserati Ghibli 250HP",
-    brand: "Maserati",
-    category: "Car",
-    image: `${BASE_URL}/images/maserati_card.webp`,
-    pricePerDay: 600,
-    currency: "EUR",
-    description:
-      "Maserati Ghibli — lujo italiano, 250HP. Perfecta para viajes de negocios o placer por la costa adriática.",
-  }),
-  breadcrumbSchema([
-    { name: "Home", path: "/" },
-  ]),
-];
+const jsonLdSchemas = [localBusinessSchema()];
 
 export default function RootLayout({
   children,
@@ -154,7 +112,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        {/* JSON-LD Structured Data — LocalBusiness + Products + Breadcrumb */}
+        {/* JSON-LD Structured Data — LocalBusiness */}
         {jsonLdSchemas.map((schema, i) => (
           <script
             key={i}
@@ -164,11 +122,21 @@ export default function RootLayout({
         ))}
         {/* Theme color para PWA / status bar en mobile */}
         <meta name="theme-color" content="#0a0a0a" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta
+          name="apple-mobile-web-app-capable"
+          content="yes"
+        />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
         <meta name="format-detection" content="telephone=no" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${outfit.variable} ${inter.variable} ${cormorant.variable} antialiased bg-[#0a0a0a] text-white overflow-x-hidden`}

@@ -1,5 +1,6 @@
-import { buildPageMeta } from '@/lib/seo';
+import { buildPageMeta, breadcrumbSchema } from '@/lib/seo';
 import Link from 'next/link';
+import { JsonLd } from '@/components/velox/ui/json-ld';
 import { Shield, Heart, MapPin, Award } from 'lucide-react';
 
 export const metadata = buildPageMeta({
@@ -45,73 +46,84 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
-      {/* Nav spacer */}
-      <div className="h-20" />
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'About', path: '/about' },
+        ])}
+      />
+      <main className="min-h-screen bg-[#0a0a0a]">
+        {/* Nav spacer */}
+        <div className="h-20" />
 
-      {/* Hero */}
-      <section className="relative py-20 sm:py-28 border-b border-[#222]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
-            <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">EST. 2023</p>
-            <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+        {/* Hero */}
+        <section className="relative py-20 sm:py-28 border-b border-[#222]">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+              <p className="text-[10px] font-heading font-semibold tracking-[0.5em] text-[#c9a96e]">
+                EST. 2023
+              </p>
+              <div className="w-8 h-[1px] bg-[#c9a96e]/50" />
+            </div>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-elegant font-light tracking-wide text-white mb-6 italic">
+              The B LEADER
+              <br />
+              <span className="shimmer-text not-italic">Story</span>
+            </h1>
+            <p className="text-base sm:text-lg font-body font-light text-[#999] max-w-2xl mx-auto leading-relaxed">
+              Founded in the heart of Salento, Puglia, B LEADER was born from a
+              vision to offer the world&apos;s most discerning travelers access
+              to Italy&apos;s finest automotive and nautical experiences.
+            </p>
           </div>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-elegant font-light tracking-wide text-white mb-6 italic">
-            The B LEADER
-            <br />
-            <span className="shimmer-text not-italic">Story</span>
-          </h1>
-          <p className="text-base sm:text-lg font-body font-light text-[#999] max-w-2xl mx-auto leading-relaxed">
-            Founded in the heart of Salento, Puglia, B LEADER was born from a vision to offer the world&apos;s most
-            discerning travelers access to Italy&apos;s finest automotive and nautical experiences.
-          </p>
-        </div>
-      </section>
+        </section>
 
-      {/* Values */}
-      <section className="py-20 sm:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-            {values.map((v) => {
-              const Icon = v.icon;
-              return (
-                <div
-                  key={v.title}
-                  className="group bg-[#0d0d0d] border border-[#1a1a1a] p-8 sm:p-10 hover:border-[#c9a96e]/20 transition-all duration-500"
-                >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div className="w-12 h-12 flex items-center justify-center border border-[#c9a96e]/20 rounded-full group-hover:bg-[#c9a96e]/5 transition-all duration-500">
-                      <Icon size={20} className="text-[#c9a96e]/80" />
+        {/* Values */}
+        <section className="py-20 sm:py-28">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+              {values.map((v) => {
+                const Icon = v.icon;
+                return (
+                  <div
+                    key={v.title}
+                    className="group bg-[#0d0d0d] border border-[#1a1a1a] p-8 sm:p-10 hover:border-[#c9a96e]/20 transition-all duration-500"
+                  >
+                    <div className="flex items-center gap-4 mb-5">
+                      <div className="w-12 h-12 flex items-center justify-center border border-[#c9a96e]/20 rounded-full group-hover:bg-[#c9a96e]/5 transition-all duration-500">
+                        <Icon size={20} className="text-[#c9a96e]/80" />
+                      </div>
+                      <h3 className="text-lg font-elegant font-semibold tracking-wide text-white">
+                        {v.title}
+                      </h3>
                     </div>
-                    <h3 className="text-lg font-elegant font-semibold tracking-wide text-white">
-                      {v.title}
-                    </h3>
+                    <p className="text-sm font-body font-light text-[#999] leading-relaxed">
+                      {v.description}
+                    </p>
                   </div>
-                  <p className="text-sm font-body font-light text-[#999] leading-relaxed">
-                    {v.description}
-                  </p>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="py-20 border-t border-[#222]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-4xl font-elegant font-light tracking-wide text-white mb-6 italic">
-            Ready to experience Puglia your way?
-          </h2>
-          <Link
-            href="/#reserve"
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] hover:bg-[#d4af37] transition-all duration-300 hover:shadow-[0_0_25px_rgba(201,169,110,0.3)]"
-          >
-            RESERVE YOUR EXPERIENCE
-          </Link>
-        </div>
-      </section>
-    </main>
+        {/* CTA */}
+        <section className="py-20 border-t border-[#222]">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-2xl sm:text-4xl font-elegant font-light tracking-wide text-white mb-6 italic">
+              Ready to experience Puglia your way?
+            </h2>
+            <Link
+              href="/#reserve"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0a0a0a] text-[11px] font-heading font-bold tracking-[0.25em] hover:bg-[#d4af37] transition-all duration-300 hover:shadow-[0_0_25px_rgba(201,169,110,0.3)]"
+            >
+              RESERVE YOUR EXPERIENCE
+            </Link>
+          </div>
+        </section>
+      </main>
+    </>
   );
 }

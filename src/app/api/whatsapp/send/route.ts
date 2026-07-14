@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { db } from '@/lib/db';
+import { limit } from '@/lib/rate-limit';
+import {
+  DEMO_MODE,
+  normalizePhone,
+  scheduleDemoReply,
+} from '@/lib/whatsapp';
 
 const MAX_BODY = 2000;
 
@@ -10,61 +17,25 @@ const sendSchema = z.object({
   visitorPhone: z.string().trim().max(30).optional(),
 });
 
-// ─── In-memory store for development ───
-interface InMemoryMessage {
-  id: string;
-  sessionId: string;
-  direction: string;
-  body: string;
-  status: string;
-  createdAt: Date;
+function getClientIp(request: Request): string {
+  return (
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
+  );
 }
-
-interface InMemorySession {
-  id: string;
-  visitorId: string;
-  visitorName: string | null;
-  visitorPhone: string | null;
-  status: string;
-  messages: InMemoryMessage[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const sessions = new Map<string, InMemorySession>();
-let messageCounter = 0;
-
-function getOrCreateSession(visitorId: string, name?: string, phone?: string): InMemorySession {
-  // Find existing active session
-  for (const s of sessions.values()) {
-    if (s.visitorId === visitorId && s.status === 'active') return s;
-  }
-
-  const id = `dev_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-  const session: InMemorySession = {
-    id,
-    visitorId,
-    visitorName: name ?? null,
-    visitorPhone: phone ?? null,
-    status: 'active',
-    messages: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-  sessions.set(id, session);
-  return session;
-}
-
-const DEMO_REPLIES = [
-  'Thank you for your message. Our concierge team will assist you shortly.',
-  'We appreciate your interest in B Leader. How may we tailor this to your needs?',
-  'Excellent choice. Could you share your preferred dates so we can check availability?',
-  'Consider it arranged. A team member will follow up with full details.',
-  'Of course — all our experiences include a dedicated chauffeur and 24/7 support.',
-];
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await limit(ip);
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Too many messages. Please slow down.' },
+        { status: 429 }
+      );
+    }
+
     let raw: unknown;
     try {
       raw = await request.json();
@@ -74,40 +45,70 @@ export async function POST(request: Request) {
 
     const parsed = sendSchema.safeParse(raw);
     if (!parsed.success) {
+      const firstIssue = parsed.error.issues[0];
       return NextResponse.json(
-        { error: parsed.error.issues[0]?.message ?? 'Invalid request body' },
+        { error: firstIssue?.message ?? 'Invalid request body' },
         { status: 400 }
       );
     }
 
     const { visitorId, body: messageBody, visitorName, visitorPhone } = parsed.data;
-    const session = getOrCreateSession(visitorId, visitorName, visitorPhone);
 
-    const msg: InMemoryMessage = {
-      id: `msg_${++messageCounter}`,
-      sessionId: session.id,
-      direction: 'inbound',
-      body: messageBody,
-      status: 'delivered',
-      createdAt: new Date(),
-    };
-    session.messages.push(msg);
-    session.updatedAt = new Date();
+    // ─── Find or create session ──────────────────────────────────────────
+    // NOTE: concurrent requests for the same visitorId could create duplicate
+    // sessions (race between findFirst and create).  For MVP this is harmless
+    // — the next findFirst picks the most recent session and the orphan is
+    // ignored.  For production, add a unique constraint on (visitorId, status)
+    // or wrap the read+write in a serializable transaction.
+    let session = await db.chatSession.findFirst({
+      where: { visitorId, status: 'active' },
+      orderBy: { createdAt: 'desc' },
+    });
 
-    // Demo auto-reply
-    const replyIdx = messageBody.length % DEMO_REPLIES.length;
-    const reply: InMemoryMessage = {
-      id: `msg_${++messageCounter}`,
-      sessionId: session.id,
-      direction: 'outbound',
-      body: DEMO_REPLIES[replyIdx],
-      status: 'delivered',
-      createdAt: new Date(Date.now() + 1500),
-    };
-    session.messages.push(reply);
+    if (!session) {
+      session = await db.chatSession.create({
+        data: {
+          visitorId,
+          visitorName: visitorName ?? null,
+          visitorPhone: visitorPhone ? normalizePhone(visitorPhone) : null,
+          status: 'active',
+          mode: DEMO_MODE ? 'demo' : 'prod',
+        },
+      });
+    } else if (visitorPhone && !session.visitorPhone) {
+      // Backfill phone if visitor provides it on a later message
+      const phone = normalizePhone(visitorPhone);
+      if (phone) {
+        await db.chatSession.update({
+          where: { id: session.id },
+          data: { visitorPhone: phone },
+        });
+      }
+    }
+
+    // ─── Persist the visitor's inbound message ───────────────────────────
+    const message = await db.chatMessage.create({
+      data: {
+        sessionId: session.id,
+        direction: 'inbound',
+        body: messageBody,
+        status: 'delivered',
+      },
+    });
+    await db.chatSession.update({
+      where: { id: session.id },
+      data: { updatedAt: new Date() },
+    });
+
+    // ─── Demo: schedule a simulated concierge reply ──────────────────────
+    // ─── Prod: in this MVP, the admin replies from their WhatsApp app and
+    //     the webhook stores the outbound message. No proactive send here.
+    if (DEMO_MODE) {
+      scheduleDemoReply(session.id, messageBody);
+    }
 
     return NextResponse.json(
-      { success: true, sessionId: session.id, messageId: msg.id, reply: reply.body },
+      { success: true, sessionId: session.id, messageId: message.id },
       { status: 201 }
     );
   } catch (error) {

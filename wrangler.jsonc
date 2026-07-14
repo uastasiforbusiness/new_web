@@ -12,5 +12,12 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  "r2_buckets": []
+  "r2_buckets": [],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bleader-db",
+      "database_id": "ccb5ea03-0e0a-47c3-9a6f-04654350d10d"
+    }
+  ]
 }

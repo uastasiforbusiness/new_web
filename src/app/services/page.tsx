@@ -1,6 +1,7 @@
-import { buildPageMeta } from '@/lib/seo';
+import { buildPageMeta, breadcrumbSchema } from '@/lib/seo';
 import { ServiceLinesSection } from '@/components/velox/sections/service-lines-section';
 import { CoverageSection } from '@/components/velox/sections/coverage-section';
+import { JsonLd } from '@/components/velox/ui/json-ld';
 
 export const metadata = buildPageMeta({
   title: 'Services',
@@ -19,6 +20,12 @@ export const metadata = buildPageMeta({
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+        ])}
+      />
       <ServiceLinesSection />
       <CoverageSection />
     </>

@@ -2,17 +2,17 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: {
-    // true: Next.js 16 internal type bug in .next/dev/types/ (PrefetchForTypeCheckInternal).
-    // Our source code has zero TS errors — verified with tsc --noEmit.
-    ignoreBuildErrors: true,
+    // false: código no tiene errores de TS. Confirmado con build CI.
+    ignoreBuildErrors: false,
   },
   reactStrictMode: true,
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [25, 50, 75, 100],  // Next.js 16 requiere allowlist explícita
   },
-  serverExternalPackages: ["@prisma/client", ".prisma/client", "@neondatabase/serverless"],
+  serverExternalPackages: ["@prisma/client", ".prisma/client", "@neondatabase/serverless", "@prisma/adapter-neon"],
 };
 
 export default nextConfig;

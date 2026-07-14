@@ -1,10 +1,18 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaD1 } from '@prisma/adapter-d1';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
 function createClient(): PrismaClient {
+  // D1 binding disponible en Cloudflare Workers (producción)
+  if (typeof (globalThis as any).DB !== 'undefined') {
+    const adapter = new PrismaD1((globalThis as any).DB);
+    return new PrismaClient({ adapter });
+  }
+
+  // SQLite local (desarrollo)
   return new PrismaClient();
 }
 

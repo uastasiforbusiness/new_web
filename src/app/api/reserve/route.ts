@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { limit } from "@/lib/rate-limit";
 import { sendReservationEmails } from "@/lib/email";
+import { checkOrigin } from "@/lib/csrf";
 
 const MAX_LENGTH = 500;
 
@@ -14,7 +15,7 @@ const reservationSchema = z
     carName: z.string().trim().min(1).max(MAX_LENGTH),
     carVariant: z.string().trim().min(1).max(MAX_LENGTH),
     customerName: z.string().trim().min(1).max(MAX_LENGTH),
-    email: z.email().max(MAX_LENGTH),
+    email: z.string().email().max(MAX_LENGTH),
     phone: z
       .string()
       .trim()
@@ -51,6 +52,12 @@ function getClientIp(request: Request): string {
 
 export async function POST(request: Request) {
   try {
+    // ─── CSRF protection ────────────────────────────────────────────────────
+    const originCheck = checkOrigin(request);
+    if (!originCheck.ok) {
+      return NextResponse.json({ error: originCheck.error }, { status: 403 });
+    }
+
     const ip = getClientIp(request);
 
     const { success } = await limit(ip);

@@ -28,8 +28,18 @@ export const SITE = {
     "Salento luxury travel curator",
     "Ferrari California tour Italy",
   ],
-  ogImage: "/og-image.jpg",
-  twitterHandle: undefined,
+  /** Default OG image — generado dinámicamente por app/opengraph-image.tsx */
+  ogImage: "/opengraph-image",
+  twitterHandle: undefined as string | undefined,
+};
+
+/**
+ * Contact info desde variables de entorno (con fallbacks para desarrollo).
+ * Actualizar en producción con datos reales.
+ */
+export const CONTACT = {
+  phone: process.env.NEXT_PUBLIC_PHONE || "+39-XXX-XXXXXXX",
+  email: process.env.NEXT_PUBLIC_EMAIL || "info@bleader.com",
 };
 
 export type PageMeta = {
@@ -47,9 +57,10 @@ export type PageMeta = {
  * Uso: export const metadata = buildPageMeta({ title: "Fleet", path: "/fleet" });
  */
 export function buildPageMeta(page: PageMeta) {
-  const title = page.path === '/'
-    ? page.title
-    : `${page.title} | ${SITE.name}`;
+  const title =
+    page.path === "/"
+      ? page.title
+      : `${page.title} | ${SITE.name}`;
   const description = page.description || SITE.defaultDescription;
   const images = page.ogImage
     ? [{ url: page.ogImage, width: 1200, height: 630, alt: title }]
@@ -98,6 +109,7 @@ export function buildPageMeta(page: PageMeta) {
 /**
  * Organization + LocalBusiness schema.
  * Google usa LocalBusiness para aparecer en el Local Pack / Google Maps.
+ * Usa CONTACT.phone y CONTACT.email desde env vars.
  */
 export function localBusinessSchema() {
   return {
@@ -109,8 +121,8 @@ export function localBusinessSchema() {
     description: SITE.defaultDescription,
     image: `${SITE.url}/images/hero-bg.webp`,
     priceRange: "$$$$",
-    telephone: "+39-XXX-XXXXXXX",      // ── reemplazar con nº real ──
-    email: "info@bleader.com",          // ── reemplazar ──
+    telephone: CONTACT.phone,
+    email: CONTACT.email,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Salento",
@@ -148,8 +160,11 @@ export type Vehicle = {
 };
 
 /**
- * Product schema paraota.
- * Google puede mostrar precio, disponibilidad y reviews en rich snippet.
+ * Product schema para vehículos en alquiler.
+ *
+ * ✅ Corrección: usa UnitPriceSpecification para indicar que es
+ *    alquiler por día (no venta), y no declara itemCondition
+ *    (no aplica "NewCondition" a vehículos en alquiler).
  */
 export function productSchema(vehicle: Vehicle) {
   return {
@@ -164,8 +179,14 @@ export function productSchema(vehicle: Vehicle) {
       "@type": "Offer",
       priceCurrency: vehicle.currency ?? "EUR",
       price: vehicle.pricePerDay ?? undefined,
+      priceSpecification: vehicle.pricePerDay
+        ? {
+            "@type": "UnitPriceSpecification",
+            unitText: "DAY",
+            price: vehicle.pricePerDay,
+          }
+        : undefined,
       availability: "https://schema.org/InStock",
-      itemCondition: "https://schema.org/NewCondition",
     },
   };
 }
