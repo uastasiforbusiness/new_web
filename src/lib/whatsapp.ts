@@ -6,16 +6,9 @@ const TOKEN = process.env.WHATSAPP_TOKEN;
 const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 const APP_SECRET = process.env.WHATSAPP_APP_SECRET;
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
-const GRAPH_API_VERSION = process.env.WHATSAPP_GRAPH_API_VERSION || 'v21.0';
+const GRAPH_API_VERSION = process.env.WHATSAPP_GRAPH_API_VERSION || 'v25.0';
 
-/**
- * DEMO MODE — mirrors the RESEND_DEMO_MODE pattern in email.ts.
- *
- * When true (default), no calls are made to the Meta Cloud API. Visitor
- * messages are stored in the DB and a simulated concierge bot replies after
- * a short delay. Flip to false once your Meta Business number is approved.
- */
-export const DEMO_MODE = process.env.WHATSAPP_DEMO_MODE !== 'false';
+export const DEMO_MODE = process.env.WHATSAPP_DEMO_MODE === 'true' || !process.env.WHATSAPP_TOKEN;
 
 export function isConfigured(): boolean {
   return Boolean(TOKEN && PHONE_NUMBER_ID);

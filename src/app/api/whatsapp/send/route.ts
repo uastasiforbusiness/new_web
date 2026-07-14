@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
+import { DEMO_MODE, sendTextMessage, normalizePhone } from '@/lib/whatsapp';
 
 const MAX_BODY = 2000;
 
@@ -34,26 +35,28 @@ export async function POST(request: Request) {
     const { visitorId, body: messageBody, visitorName, visitorPhone } = parsed.data;
 
     // Find or create session
-    let session = await db.chatSession.findFirst({ where: { visitorId, status: 'active' }, orderBy: { createdAt: 'desc' } });
+    let session = await db.chatSession.findFirst({
+      where: { visitorId, status: 'active' },
+      orderBy: { createdAt: 'desc' },
+    });
     if (!session) {
       session = await db.chatSession.create({
         data: {
           visitor_id: visitorId,
           visitor_name: visitorName ?? null,
-          visitor_phone: visitorPhone ?? null,
+          visitor_phone: visitorPhone ? normalizePhone(visitorPhone) : null,
           status: 'active',
-          mode: 'demo',
+          mode: DEMO_MODE ? 'demo' : 'prod',
         },
       });
     }
 
-    // TypeScript guard
     if (!session) {
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
 
     if (visitorPhone && !session.visitor_phone) {
-      await db.chatSession.update({ where: { id: session.id }, data: { visitor_phone: visitorPhone } });
+      await db.chatSession.update({ where: { id: session.id }, data: { visitor_phone: normalizePhone(visitorPhone) } });
     }
 
     // Save inbound message
@@ -61,14 +64,21 @@ export async function POST(request: Request) {
       data: { session_id: session.id, direction: 'inbound', body: messageBody, status: 'delivered' },
     }))!;
 
-    // Demo auto-reply
-    const replyIdx = messageBody.length % DEMO_REPLIES.length;
-    await db.chatMessage.create({
-      data: { session_id: session.id, direction: 'outbound', body: DEMO_REPLIES[replyIdx], status: 'delivered' },
-    });
+    // Reply
+    let reply = '';
+    if (DEMO_MODE) {
+      const replyIdx = messageBody.length % DEMO_REPLIES.length;
+      reply = DEMO_REPLIES[replyIdx];
+      await db.chatMessage.create({
+        data: { session_id: session.id, direction: 'outbound', body: reply, status: 'delivered' },
+      });
+    } else if (visitorPhone) {
+      // Modo real: notificar al concierge (se responde desde WhatsApp real)
+      reply = 'Message received. Our concierge will reply shortly via WhatsApp.';
+    }
 
     return NextResponse.json({
-      success: true, sessionId: session.id, messageId: msg.id, reply: DEMO_REPLIES[replyIdx],
+      success: true, sessionId: session.id, messageId: msg.id, reply,
     }, { status: 201 });
   } catch (error) {
     console.error('WhatsApp send error:', error);
