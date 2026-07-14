@@ -156,15 +156,11 @@ export function scheduleDemoReply(sessionId: string, visitorMessage: string): vo
     try {
       await db.chatMessage.create({
         data: {
-          sessionId,
+          session_id: sessionId,
           direction: 'outbound',
           body: reply,
           status: 'delivered',
         },
-      });
-      await db.chatSession.update({
-        where: { id: sessionId },
-        data: { updatedAt: new Date() },
       });
       console.log(`[whatsapp][DEMO] auto-reply queued for session ${sessionId.slice(-8)}`);
     } catch (err) {
