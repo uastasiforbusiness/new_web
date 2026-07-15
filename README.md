@@ -17,7 +17,7 @@ Landing premium para alquiler de superdeportivos, experiencias en yate y servici
 
 ## Infraestructura
 
-| Componente | Proveedor |
+| Componente | Proveedor | ...
 |---|---|
 | Hosting | Cloudflare Pages + Workers |
 | Base de datos | Cloudflare D1 (SQLite serverless) |
