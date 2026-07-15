@@ -44,3 +44,7 @@ next-env.d.ts
 
 # Other
 scripts/
+.zcode/
+
+# Local secrets / docs with credentials
+whatsapp_config.md

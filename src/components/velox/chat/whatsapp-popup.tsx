@@ -17,6 +17,19 @@ interface ChatMsg {
   ts: number;
 }
 
+interface MessagesApiResponse {
+  messages: ChatMsg[];
+  serverTime?: number;
+}
+
+interface SendApiResponse {
+  error?: string;
+  sessionId?: string;
+  messageId?: string;
+  reply?: string;
+  success?: boolean;
+}
+
 /* ─── Gold Particles (same pattern as reserve-section) ─── */
 const PARTICLE_COUNT = 12;
 const popupParticles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
@@ -164,7 +177,7 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
         // Load last 50 messages to populate the chat history
         const res = await fetch(`/api/whatsapp/messages?sessionId=${sessionId}&since=0&limit=50`);
         if (!res.ok) return;
-        const data = await res.json();
+        const data: MessagesApiResponse = await res.json();
         if (cancelled) return;
 
         if (data.messages.length > 0) {
@@ -183,7 +196,7 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
       try {
         const res = await fetch(`/api/whatsapp/messages?sessionId=${sessionId}&since=${lastTs}`);
         if (!res.ok) return;
-        const data = await res.json();
+        const data: MessagesApiResponse = await res.json();
         if (cancelled) return;
 
         const newOutbound = data.messages.filter((m: ChatMsg) => m.direction === 'outbound');
@@ -251,11 +264,12 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+        const data = await res.json().catch(() => ({})) as SendApiResponse;
         throw new Error(data.error || 'Failed to start chat');
       }
 
-      const data = await res.json();
+      const data: SendApiResponse = await res.json();
+      if (!data.sessionId) throw new Error('No session id returned');
       setSessionId(data.sessionId);
       setMessages([{
         id: 'seed-' + Date.now(),
@@ -307,7 +321,7 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
         }),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+        const data = await res.json().catch(() => ({})) as SendApiResponse;
         throw new Error(data.error || 'Failed to send');
       }
       // Polling will pick up the concierge's reply (demo or real)

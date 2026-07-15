@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import { DEMO_MODE, sendTextMessage, normalizePhone } from '@/lib/whatsapp';
+import { normalizePhone } from '@/lib/whatsapp';
 
 const MAX_BODY = 2000;
 
@@ -11,14 +11,6 @@ const sendSchema = z.object({
   visitorName: z.string().trim().max(100).optional(),
   visitorPhone: z.string().trim().max(30).optional(),
 });
-
-const DEMO_REPLIES = [
-  'Thank you for your message. Our concierge team will assist you shortly.',
-  'We appreciate your interest in B Leader. How may we tailor this to your needs?',
-  'Excellent choice. Could you share your preferred dates so we can check availability?',
-  'Consider it arranged. A team member will follow up with full details.',
-  'Of course — all our experiences include a dedicated chauffeur and 24/7 support.',
-];
 
 export async function POST(request: Request) {
   try {
@@ -46,7 +38,7 @@ export async function POST(request: Request) {
           visitor_name: visitorName ?? null,
           visitor_phone: visitorPhone ? normalizePhone(visitorPhone) : null,
           status: 'active',
-          mode: DEMO_MODE ? 'demo' : 'prod',
+          mode: 'prod',
         },
       });
     }
@@ -59,26 +51,18 @@ export async function POST(request: Request) {
       await db.chatSession.update({ where: { id: session.id }, data: { visitor_phone: normalizePhone(visitorPhone) } });
     }
 
-    // Save inbound message
+    // Save inbound message from the visitor
     const msg = (await db.chatMessage.create({
       data: { session_id: session.id, direction: 'inbound', body: messageBody, status: 'delivered' },
     }))!;
 
-    // Reply
-    let reply = '';
-    if (DEMO_MODE) {
-      const replyIdx = messageBody.length % DEMO_REPLIES.length;
-      reply = DEMO_REPLIES[replyIdx];
-      await db.chatMessage.create({
-        data: { session_id: session.id, direction: 'outbound', body: reply, status: 'delivered' },
-      });
-    } else if (visitorPhone) {
-      // Modo real: notificar al concierge (se responde desde WhatsApp real)
-      reply = 'Message received. Our concierge will reply shortly via WhatsApp.';
-    }
-
+    // In production the concierge replies from their own WhatsApp; the outbound
+    // message arrives via the webhook and is picked up by the frontend polling.
     return NextResponse.json({
-      success: true, sessionId: session.id, messageId: msg.id, reply,
+      success: true,
+      sessionId: session.id,
+      messageId: msg.id,
+      reply: 'Message received. Our concierge will reply shortly via WhatsApp.',
     }, { status: 201 });
   } catch (error) {
     console.error('WhatsApp send error:', error);

@@ -29,6 +29,11 @@ jobs:
       - name: Build with OpenNext
         run: npx opennextjs-cloudflare build
 
+      - name: Apply D1 schema (idempotent)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler d1 execute bleader-db --remote --file=prisma/d1/init.sql
+
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

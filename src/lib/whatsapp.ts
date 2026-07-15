@@ -1,5 +1,4 @@
 import { createHmac, timingSafeEqual } from 'crypto';
-import { db } from './db';
 
 // ─── Config ─────────────────────────────────────────────────────────────────
 const TOKEN = process.env.WHATSAPP_TOKEN;
@@ -8,7 +7,9 @@ const APP_SECRET = process.env.WHATSAPP_APP_SECRET;
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
 const GRAPH_API_VERSION = process.env.WHATSAPP_GRAPH_API_VERSION || 'v25.0';
 
-export const DEMO_MODE = process.env.WHATSAPP_DEMO_MODE === 'true' || !process.env.WHATSAPP_TOKEN;
+// Flag informativo: el chat funciona en producción con la Meta Cloud API.
+// DEMO_MODE solo está activo si falta el token (no debería en prod).
+export const DEMO_MODE = !TOKEN;
 
 export function isConfigured(): boolean {
   return Boolean(TOKEN && PHONE_NUMBER_ID);
@@ -39,12 +40,9 @@ export interface SendResult {
 
 /**
  * Send a text message to a visitor via the WhatsApp Cloud API.
- * No-op (returns ok:false) in DEMO MODE or when unconfigured.
+ * Returns ok:false if WhatsApp is not configured (missing token/phone id).
  */
 export async function sendTextMessage(to: string, body: string): Promise<SendResult> {
-  if (DEMO_MODE) {
-    return { ok: false, error: 'demo-mode' };
-  }
   if (!isConfigured()) {
     console.warn('[whatsapp] WHATSAPP_TOKEN / PHONE_NUMBER_ID not set — skipping send');
     return { ok: false, error: 'not-configured' };
@@ -71,7 +69,7 @@ export async function sendTextMessage(to: string, body: string): Promise<SendRes
       }
     );
 
-    const data = await res.json();
+    const data: { error?: unknown; messages?: { id?: string }[] } = await res.json();
     if (!res.ok) {
       console.error('[whatsapp] send failed:', data);
       return { ok: false, error: JSON.stringify(data?.error || data) };
@@ -118,50 +116,6 @@ export function verifyWebhookSignature(rawBody: string, signatureHeader: string)
   }
 }
 
-// ─── Demo concierge bot ─────────────────────────────────────────────────────
-const DEMO_RESPONSES = [
-  'Thank you for your message. Our concierge team will assist you shortly.',
-  'We appreciate your interest in B Leader. How may we tailor this to your needs?',
-  'Excellent choice. Could you share your preferred dates so we can check availability?',
-  'Consider it arranged. A team member will follow up with full details.',
-  'Of course — all our experiences include a dedicated chauffeur and 24/7 support.',
-];
-
-/**
- * In DEMO MODE, generate a plausible concierge reply to the visitor's message.
- * Deterministic-ish: picks based on message length so it varies naturally.
- */
-export function generateDemoReply(visitorMessage: string): string {
-  const idx = visitorMessage.length % DEMO_RESPONSES.length;
-  return DEMO_RESPONSES[idx];
-}
-
-/**
- * Schedule a simulated outbound reply in DEMO MODE.
- * Writes an "outbound" message after a delay (non-blocking — uses setImmediate
- * so the request can return immediately).
- */
-export function scheduleDemoReply(sessionId: string, visitorMessage: string): void {
-  const reply = generateDemoReply(visitorMessage);
-  const delay = 1500 + Math.random() * 1500; // 1.5s – 3s
-
-  setTimeout(async () => {
-    try {
-      await db.chatMessage.create({
-        data: {
-          session_id: sessionId,
-          direction: 'outbound',
-          body: reply,
-          status: 'delivered',
-        },
-      });
-      console.log(`[whatsapp][DEMO] auto-reply queued for session ${sessionId.slice(-8)}`);
-    } catch (err) {
-      console.error('[whatsapp][DEMO] failed to queue reply:', err);
-    }
-  }, delay);
-}
-
 // ─── Status helpers ─────────────────────────────────────────────────────────
 /**
  * Update the delivery/read status of a previously-sent message.
@@ -171,6 +125,7 @@ export async function updateMessageStatus(
   waMessageId: string,
   status: string
 ): Promise<void> {
+  const { db } = await import('./db');
   try {
     await db.chatMessage.updateMany({
       where: { waMessageId },

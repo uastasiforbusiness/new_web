@@ -1,23 +1,34 @@
 /**
  * D1 Database Client — direct binding (sin Prisma, sin WASM)
- * Cloudflare Workers tienen acceso nativo a D1 via binding globalThis.DB
+ *
+ * OpenNext expone los bindings del Worker a través de getCloudflareContext(),
+ * NO a través de globalThis. Los secrets tipo string sí llegan vía process.env
+ * (el adapter los copia), pero los bindings (D1, R2, KV) requieren este canal.
  */
-function getD1(): any {
-  return (globalThis as any).DB ?? null;
+import { getCloudflareContext } from '@opennextjs/cloudflare';
+
+async function getD1(): Promise<D1Database> {
+  const ctx = await getCloudflareContext({ async: true });
+  const db = ctx.env.DB;
+  if (!db) {
+    throw new Error(
+      'D1 binding "DB" no disponible. Verifica que wrangler.jsonc declare ' +
+      'd1_databases con binding "DB" y que el entorno tenga acceso.'
+    );
+  }
+  return db;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function d1Query(sql: string, params?: (string | number | null)[]): Promise<any[]> {
-  const db = getD1();
-  if (!db) throw new Error('D1 not available');
+  const db = await getD1();
   const result = await db.prepare(sql).bind(...(params ?? [])).all();
   if (!result.success) throw new Error(result.error ?? 'D1 query failed');
   return result.results as any[];
 }
 
 async function d1Exec(sql: string, params?: (string | number | null)[]): Promise<any> {
-  const db = getD1();
-  if (!db) throw new Error('D1 not available');
+  const db = await getD1();
   return db.prepare(sql).bind(...(params ?? [])).run();
 }
 

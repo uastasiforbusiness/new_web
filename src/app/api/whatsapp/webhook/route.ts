@@ -86,7 +86,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ received: true });
-  } catch {
+  } catch (error) {
+    // Log para diagnóstico en `wrangler tail`. Meta requiere 200 OK para no
+    // reintentar, pero al menos dejamos evidencia del fallo.
+    console.error('[whatsapp webhook] error processing payload:', error);
     return NextResponse.json({ received: true });
   }
 }
