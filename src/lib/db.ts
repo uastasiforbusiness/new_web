@@ -94,7 +94,7 @@ export const db = {
       const conditions: string[] = [];
       const params: (string | number)[] = [];
       if (opts.where.sessionId) { conditions.push('session_id = ?'); params.push(opts.where.sessionId); }
-      if (opts.where.createdAt?.gt) { conditions.push('created_at > ?'); params.push(opts.where.createdAt.gt.getTime()); }
+      if (opts.where.createdAt?.gt) { conditions.push('created_at > ?'); params.push(opts.where.createdAt.gt.toISOString()); }
       const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
       const order = opts.orderBy?.createdAt === 'asc' ? 'ORDER BY created_at ASC' : 'ORDER BY created_at DESC';
       const limit = opts.take ? `LIMIT ${opts.take}` : '';
