@@ -19,5 +19,8 @@
       "database_name": "bleader-db",
       "database_id": "ccb5ea03-0e0a-47c3-9a6f-04654350d10d"
     }
-  ]
+  ],
+  "vars": {
+    "WHATSAPP_GRAPH_API_VERSION": "v21.0"
+  }
 }
