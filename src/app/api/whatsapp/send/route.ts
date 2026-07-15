@@ -13,6 +13,7 @@ const sendSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  console.log('[whatsapp send] POST request received');
   try {
     let raw: unknown;
     try { raw = await request.json(); } catch {
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     }
 
     const { visitorId, body: messageBody, visitorName, visitorPhone } = parsed.data;
+    console.log('[whatsapp send] data parsed:', { visitorId, visitorPhone });
 
     // Find or create session
     let session = await db.chatSession.findFirst({
@@ -44,8 +46,10 @@ export async function POST(request: Request) {
     }
 
     if (!session) {
+      console.error('[whatsapp send] failed to create session');
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
+    console.log('[whatsapp send] session active:', session.id);
 
     if (visitorPhone && !session.visitor_phone) {
       await db.chatSession.update({ where: { id: session.id }, data: { visitor_phone: normalizePhone(visitorPhone) } });

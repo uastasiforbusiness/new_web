@@ -3,23 +3,28 @@ import { verifyWebhookToken, verifyWebhookSignature } from '@/lib/whatsapp';
 import { db } from '@/lib/db';
 
 export async function GET(request: Request) {
+  console.log('[whatsapp webhook] GET verification request');
   const { searchParams } = new URL(request.url);
   const mode = searchParams.get('hub.mode');
   const token = searchParams.get('hub.verify_token');
   const challenge = searchParams.get('hub.challenge');
 
   if (mode === 'subscribe' && verifyWebhookToken(token)) {
+    console.log('[whatsapp webhook] verification successful');
     return new NextResponse(challenge ?? '', { status: 200 });
   }
+  console.error('[whatsapp webhook] verification failed: mode=%s, token=%s', mode, token);
   return new NextResponse('Forbidden', { status: 403 });
 }
 
 export async function POST(request: Request) {
+  console.log('[whatsapp webhook] POST message received');
   try {
     const rawBody = await request.text();
     const signature = request.headers.get('x-hub-signature-256') ?? '';
 
     if (!verifyWebhookSignature(rawBody, signature)) {
+      console.error('[whatsapp webhook] signature mismatch');
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
