@@ -184,7 +184,7 @@ export const metadata: Metadata = buildPageMeta({
 - **Sin stop words** en slugs: `/experiences/luxury`, NO `/experiences/the-luxury`
 - **US English spelling**: `/experiences/personalized`, NO `/experiences/personalised`
 - **Sin trailing slashes**
-- **Canonical**: URL completa `https://bleader.vercel.app/path`
+- **Canonical**: URL completa `https://bleaderitaly.com/path`
 - **Sitemap priority**: Home 1.0, Fleet/Yacht 0.9, Services 0.8, Guides 0.7, About 0.5
 
 ## i18n Roadmap
@@ -222,7 +222,7 @@ Al iniciar una sesión de DeerFlow para B LEADER:
 
 - **NUNCA** exponer claves de API en el cliente. Solo `NEXT_PUBLIC_*` para variables públicas.
 - **NUNCA** hacer commit de `.env.local` o `.env.production`.
-- Las API keys de Resend, Upstash, y base de datos van en variables de entorno de Vercel.
+- Las API keys de Resend, Upstash, y base de datos van en variables de entorno de Cloudflare Workers (via `wrangler secret put`).
 - Rate limiting está activo en `/api/reserve`. No desactivar sin autorización explícita.
 
 ## Dónde están las cosas

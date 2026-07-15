@@ -64,7 +64,7 @@ Questa guida vi accompagnerà passo passo.
 | **Nome in Codice del Progetto** | B Leader |
 | **Mercato di Riferimento** | Italia (IT) + Stati Uniti (USA) |
 | **Preparato da** | UastasiProject Team — in collaborazione con Gabriele (sviluppo tecnico) |
-| **Stack Tecnologico** | Next.js + TypeScript + Vercel |
+| **Stack Tecnologico** | Next.js + TypeScript + Cloudflare Pages |
 | **Conformità Dati** | GDPR (UE 2016/679), Codice della Privacy Italiano (D.Lgs. 196/2003) |
 
 ---
@@ -273,7 +273,7 @@ Una volta registrati i domini, abbiamo bisogno di queste informazioni per metter
 No. Useremo il sistema di **Sub-Account** di Dynadot: voi ci inviterete come collaboratori con accesso limitato solo alla gestione DNS. La vostra password e i dati di pagamento rimangono privati.
 
 **D: Quanto tempo ci vuole per il deploy?**
-Una volta ricevute le informazioni, possiamo completare la configurazione DNS e il deploy su Vercel in circa **30-60 minuti**. La propagazione DNS completa può richiedere fino a 48 ore, ma solitamente è molto più rapida (pochi minuti o qualche ora).
+Una volta ricevute le informazioni, possiamo completare la configurazione DNS su Cloudflare e il deploy in circa **30-60 minuti**. La propagazione DNS completa può richiedere fino a 48 ore, ma solitamente è molto più rapida (pochi minuti o qualche ora).
 
 **D: Cosa succede se non registro subito i domini?**
 Qualcun altro potrebbe registrarli prima di voi. I domini sono attualmente disponibili, ma è questione di tempo. Vi consigliamo di procedere oggi stesso.

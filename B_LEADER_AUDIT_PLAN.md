@@ -1,20 +1,21 @@
 # B LEADER — Plan de Acción: Auditoría Crítica
 
 > Basado en auditoría del 13 Julio 2026.
-> Project: `C:\Users\gabri\Desktop\new_web` · Live: https://bleader.vercel.app
+> Project: `C:\Users\gabri\Desktop\new_web` · Live: https://bleader-italy.uastasiforbusiness.workers.dev
 
 ---
 
 ## NOTA DE INFRAESTRUCTURA
 
-**Decisión**: Vercel Hobby (gratis) con `bleader.vercel.app` por ahora.
-**No comprar Vercel Pro ni dominio hasta que el cliente vea tracción.**
+**Decisión**: Cloudflare Pages + Workers (gratis) con D1 database.
+**Dominios personalizados**: `bleaderitaly.com` y `bleaderitaly.it` (configuración DNS pendiente).
 
-- ✅ `bleader.vercel.app` funciona en producción y Google lo indexa
-- ✅ Todas las API routes, Prisma + PostgreSQL, SEO, sitemap funcionan
-- ✅ Migrar a dominio personalizado después son **10 minutos** (configurar DNS + Vercel Pro por $20)
-- ❌ Cloudflare Pages no es recomendado: migrar Next.js 16 + Prisma a su runtime rompe demasiado
-- ✅ Si el cliente se lo gasta después, se actualiza. Sin prisa.
+- ✅ **Cloudflare Pages** → hosting del sitio Next.js 16 via `@opennextjs/cloudflare`
+- ✅ **Cloudflare Workers** → API routes (reservas, WhatsApp webhook)
+- ✅ **Cloudflare D1** → base de datos SQLite serverless (WhatsApp, reservas)
+- ✅ **Meta Cloud API** → WhatsApp en producción
+- ✅ **Upstash Redis** → rate limiting distribuido
+- ✅ Migrar a dominio personalizado es **gratis** en Cloudflare (sin Vercel Pro)
 
 ## Fases
 
@@ -304,7 +305,7 @@ Semana 2:
 |---|---|---|
 | Teléfono real | Valor para `NEXT_PUBLIC_PHONE` | JSON-LD muestra placeholder |
 | Email real | Valor para `NEXT_PUBLIC_EMAIL` | JSON-LD muestra placeholder |
-| Dominio + Vercel Pro | 🔴 **No urgente**: `bleader.vercel.app` funciona | Solo branding, no bloquea |
+| Dominios personalizados | Configurar DNS en Cloudflare | Branding, post-MVP |
 | Google Search Console | Código de verificación | Analytics, no bloquea |
 | Fotos de testimonios | Fotos reales de clientes | Conversión, post-MVP |
 | FAQ oficial | Respuestas aprobadas por el cliente | Conversión, post-MVP |

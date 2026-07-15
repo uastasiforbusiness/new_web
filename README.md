@@ -1,46 +1,71 @@
-# B LEADER — Premium Car Rental
+# B LEADER — Luxury Experiences in Salento, Puglia
 
-Landing premium para alquiler de vehículos de lujo y yates, construida con Next.js 16, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, GSAP, Lenis y Prisma sobre PostgreSQL.
+Landing premium para alquiler de superdeportivos, experiencias en yate y servicios concierge de lujo en Salento (sur de Italia). Construida con **Next.js 16 + Cloudflare Pages**.
+
+[![Deployed on Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?logo=cloudflare)](https://bleader-italy.uastasiforbusiness.workers.dev)
 
 ## Stack
 
-- Next.js 16 App Router
-- React 19 + TypeScript
-- Tailwind CSS 4 + shadcn/ui
-- GSAP ScrollTrigger + Lenis para animaciones/scroll
-- Prisma 6 + PostgreSQL
-- Vercel para build/deploy
+- **Next.js 16** App Router (con `@opennextjs/cloudflare`)
+- **React 19** + TypeScript
+- **Tailwind CSS 4** + tw-animate-css
+- **GSAP** ScrollTrigger + **Lenis** para animaciones/scroll
+- **Framer Motion** para transiciones
+- **Prisma 7** + **Cloudflare D1** (SQLite via `@prisma/adapter-d1`)
+- **Resend** para emails de confirmación
+- **Meta Cloud API** para WhatsApp Business
+
+## Infraestructura
+
+| Componente | Proveedor |
+|---|---|
+| Hosting | Cloudflare Pages + Workers |
+| Base de datos | Cloudflare D1 (SQLite serverless) |
+| Emails | Resend |
+| WhatsApp | Meta Cloud API (producción) |
+| Rate limiting | Upstash Redis + fallback in-memory |
+| CI/CD | GitHub Actions → `wrangler deploy` |
+
+## URLs
+
+| Entorno | URL |
+|---|---|
+| **Workers (actual)** | `https://bleader-italy.uastasiforbusiness.workers.dev` |
+| **Dominio principal** | `bleaderitaly.com` (configuración pendiente) |
+| **Dominio Italia** | `bleaderitaly.it` (configuración pendiente) |
+| **Desarrollo local** | `http://localhost:3001` |
 
 ## Requisitos
 
-- Node.js 20+
-- npm
-- DATABASE_URL de PostgreSQL para Prisma y Vercel
+- Node.js 22+
+- pnpm (recomendado) o npm
+- Wrangler CLI (`npm install -g wrangler`)
 
 ## Variables de entorno
 
 Copia `.env.example` a `.env` y configura:
 
 ```bash
-cp .env.example .env
+copy .env.example .env
 ```
 
-Variables:
+Variables clave:
 
-- `DATABASE_URL` — conexión PostgreSQL/Neon con SSL.
-- `NEXT_PUBLIC_PHONE` — teléfono mostrado en reserva/contacto.
-- `NEXT_PUBLIC_EMAIL` — email mostrado en reserva/contacto.
-- `NEXT_PUBLIC_WHATSAPP_NUMBER` — número WhatsApp sin `+`.
-
-Para Vercel, las variables públicas deben existir en Vercel Environment Variables. Para migraciones desde GitHub Actions, `DATABASE_URL` debe existir como GitHub secret.
+- `DATABASE_URL` — `file:./dev.db` (SQLite local)
+- `NEXT_PUBLIC_PHONE` — teléfono del negocio
+- `NEXT_PUBLIC_EMAIL` — email del negocio
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` — número WhatsApp sin `+`
+- `RESEND_API_KEY` — API key de Resend
+- `WHATSAPP_TOKEN` — Token de Meta Cloud API (producción)
+- `WHATSAPP_PHONE_NUMBER_ID` — ID del número en Meta
 
 ## Desarrollo
 
 ```bash
-npm install
-npm run db:generate
-npm run db:migrate
-npm run dev
+pnpm install
+pnpm run db:generate
+pnpm run db:push
+pnpm run dev
 ```
 
 La app corre en http://localhost:3001.
@@ -49,49 +74,72 @@ La app corre en http://localhost:3001.
 
 | Comando | Descripción |
 | --- | --- |
-| `npm run dev` | Servidor de desarrollo en puerto 3001 |
-| `npm run build` | Build de producción |
-| `npm run start` | Servidor de producción en puerto 3000 |
-| `npm run lint` | ESLint |
-| `npm run vercel-build` | `prisma generate && next build`, usado por Vercel |
-| `npm run db:generate` | Genera cliente Prisma |
-| `npm run db:migrate` | Migraciones Prisma en desarrollo |
-| `npm run db:push` | Empuja schema localmente; usar con cuidado en producción |
-| `npm run db:reset` | Resetea DB local/desarrollo |
+| `pnpm run dev` | Servidor de desarrollo en puerto 3001 |
+| `pnpm run build` | Build de producción local |
+| `pnpm run start` | Servidor de producción en puerto 3000 |
+| `pnpm run lint` | ESLint |
+| `pnpm run cf:build` | Build para Cloudflare (`opennextjs-cloudflare build`) |
+| `pnpm run cf:preview` | Preview local con Wrangler |
+| `pnpm run cf:deploy` | Deploy a Cloudflare Pages |
+| `pnpm run db:generate` | Genera cliente Prisma |
+| `pnpm run db:push` | Empuja schema a D1 |
+| `pnpm run db:migrate` | Migraciones Prisma en desarrollo |
 
-## Producción / Vercel
+## Producción / Cloudflare Pages
 
-El workflow fuente de verdad es `.github/workflows/deploy.yml`.
+El deploy automático corre via GitHub Actions (`.github/workflows/deploy.yml`):
 
-Flujo actual:
+1. `ci`: `pnpm install`, `pnpm run lint`, `pnpm run cf:build`
+2. `deploy`: `wrangler deploy` con secrets desde GitHub Actions
 
-1. Job `ci`: `npm ci`, `npm run lint`, `npm run build`.
-2. Preview o production pull de Vercel environment.
-3. Migraciones opcionales con `npx prisma migrate deploy` solo si `DATABASE_URL` existe como secret.
-4. `vercel build`.
-5. Deploy con `vercel deploy --prebuilt`.
+También puedes hacer deploy manual:
 
-No se ejecuta `prisma migrate deploy` dentro de `npm run vercel-build` para evitar migraciones automáticas durante build local/preview sin contexto de DB. Las migraciones corren como **paso separado** en el workflow de CI (`deploy.yml`), después de validar que `DATABASE_URL` exista como secret. Así, si una migración falla, no rompe el build de Vercel.
+```bash
+pnpm run cf:deploy
+```
 
-## Rate limiting
+### WhatsApp API
 
-El endpoint `/api/reserve` usa `@upstash/ratelimit` respaldado por Vercel KV / Upstash Redis (5 requests/minuto/IP). Configuración:
-
-- **Producción:** definir `KV_REST_API_URL` y `KV_REST_API_TOKEN` en Vercel (Storage → KV).
-- **Desarrollo local:** si las vars no existen, cae automáticamente a un rate limiter in-memory (suficiente para dev, no apto para serverless).
+WhatsApp está en **producción** con Meta Cloud API. El webhook recibe mensajes, se guardan en D1, y el concierge puede responder desde su WhatsApp. Ver `whatsapp_config.md` para detalles.
 
 ## Estructura
 
-- `src/app` — App Router y layout.
-- `src/app/api/reserve/route.ts` — endpoint de reservas con validación Zod, consentimiento y Prisma.
-- `src/components/velox` — componentes propios del sitio.
-- `src/lib` — utilidades, cliente Prisma (`db.ts`) y rate limiter (`rate-limit.ts`).
-- `src/hooks` — hooks compartidos.
-- `prisma/schema.prisma` — modelo `Reservation`.
-- `public/images` — assets estáticos.
+```
+src/
+├── app/                           # Next.js App Router
+│   ├── api/reserve/               # POST endpoint de reservas
+│   ├── api/whatsapp/              # Webhook + mensajes WhatsApp
+│   ├── fleet/page.tsx             # Flota de vehículos
+│   ├── yacht/page.tsx             # Experiencias en yate
+│   ├── services/page.tsx          # Servicios concierge
+│   ├── about/page.tsx             # Sobre B LEADER
+│   ├── _components/home-client.tsx # Home page (cliente)
+│   ├── layout.tsx                 # Root layout + JSON-LD
+│   ├── sitemap.ts                 # Sitemap dinámico
+│   └── robots.ts                  # Robots.txt dinámico
+├── components/velox/              # Componentes UI
+│   ├── sections/                  # Fleet, Hero, Reserve, etc.
+│   ├── chat/                      # WhatsApp chat
+│   └── ui/                        # Botones, cards, navbar, footer
+├── lib/                           # Utilidades
+│   ├── db.ts                      # Cliente Prisma (D1)
+│   ├── email.ts                   # Resend
+│   ├── rate-limit.ts              # Upstash + fallback
+│   ├── seo.ts                     # buildPageMeta + JSON-LD schemas
+│   └── whatsapp.ts                # Meta Cloud API client
+└── hooks/                         # Custom hooks
+```
+
+## Rate limiting
+
+El endpoint `/api/reserve` usa `@upstash/ratelimit` respaldado por Upstash Redis (5 requests/minuto/IP). Configuración:
+
+- **Producción:** definir `KV_REST_API_URL` y `KV_REST_API_TOKEN` en Cloudflare Workers (via `wrangler secret put`).
+- **Desarrollo local:** si las vars no existen, cae automáticamente a un rate limiter in-memory (suficiente para dev, no apto para serverless).
 
 ## Notas de producción
 
-- El rate limiting distribuido requiere configurar KV en Vercel (ver sección "Rate limiting"). Sin KV, cae a in-memory.
-- El formulario requiere consentimiento explícito antes de enviar datos personales. Falta una política de privacidad real/enlazada antes de producción.
+- WhatsApp está activo con Meta Cloud API real. Webhook: `https://bleader-italy.uastasiforbusiness.workers.dev/api/whatsapp/webhook`
+- Los secrets de Cloudflare se gestionan con `wrangler secret put`
+- El formulario de reserva requiere consentimiento explícito antes de enviar datos personales.
 - No hay tests automatizados todavía.

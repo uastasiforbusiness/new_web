@@ -1,59 +1,25 @@
 # B LEADER — Plan de Acción Completo
 
 > Proyecto: `C:\Users\gabri\Desktop\new_web`
-> Live: https://bleader.vercel.app
+> Live: https://bleader-italy.uastasiforbusiness.workers.dev
 > Repo: github.com/uastasiforbusiness/new_web
-> Última actualización: 13 Julio 2026
+> Ultima actualización: 13 Julio 2026
 >
-> **Público objetivo**: #1 Turistas USA de alto poder adquisitivo → vacaciones en Salento, Italia. #2 Público italiano local.
-
----
-
-## CONFIGURACIÓN DEERFLOW RECOMENDADA
-
-### Skills a activar
-
-| Skill | Para qué |
-|---|---|
-| `frontend-design` | Implementar i18n, testimonios, FAQ, chat WhatsApp, nuevas páginas |
-| `web-design-guidelines` | Revisar UX de conversión y layout antes de tocar código |
-| `vercel-deploy` | Manejar deploys seguros a staging/producción |
-| `code-documentation` | Documentar lo ya construido (útil porque el código no tiene comentarios) |
-
-### Soul del agente (`AGENTS.md`)
-
-> "Soy un desarrollador frontend senior especializado en sitios de lujo y hospitality. Stack: Next.js 16 + React 19 + TypeScript + Tailwind CSS v4 + Prisma + GSAP. Priorizo performance, SEO y conversión. El producto es una agencia de experiencias de lujo en Salento, Italia, para público estadounidense de alto poder adquisitivo. Trato el código como si fuera parte de la marca: limpio, elegante, sin atajos. Todo el código se escribe en `C:/Users/gabri/Desktop/new_web` (montaje lectura/escritura del proyecto)."
-
-### Modelos recomendados (ya en `config.yaml`)
-
-| Tarea | Modelo sugerido |
-|---|---|
-| Código rápido / correcciones | Groq (Llama/Mixtral) o Together AI |
-| Decisiones de arquitectura / razonamiento | DeepSeek (`supports_thinking: true`) |
-| Tareas complejas multi-archivo | Claude Code vía ACP |
+> **Publico objetivo**: #1 Turistas USA de alto poder adquisitivo → vacaciones en Salento, Italia. #2 Publico italiano local.
 
 ---
 
 ## 🔴 PRIORIDAD 1 — HOY/MAÑANA
 
-### □ 1.1 Comprar dominios
+### ✅ 1.1 Dominios comprados
+`bleaderitaly.com` y `bleaderitaly.it` adquiridos. Pendiente configurar DNS en Cloudflare.
 
-| Dominio | Dónde | Año 1 | Renovación |
-|---|---|---|---|
-| `bleaderitaly.com` | Cloudflare ($9.77) | $9.77 | $9.77/año |
-| `bleaderitaly.it` | Namecheap (~€8) | ~€8 | ~€15/año |
-
-DNS: CNAME `@` → `cname.vercel-dns.com`
-
-### □ 1.2 Vercel Pro ($20/mes)
-Hobby NO permite dominios personalizados. Necesitas Pro sí o sí.
-
-### □ 1.3 Google Search Console
+### □ 1.2 Google Search Console
 - Verificar `bleaderitaly.com`
-- Subir sitemap: `https://bleader.vercel.app/sitemap.xml`
+- Subir sitemap: `https://bleader-italy.uastasiforbusiness.workers.dev/sitemap.xml`
 - Request indexing de la home
 
-### □ 1.4 Google Business Profile
+### □ 1.3 Google Business Profile
 - Crear perfil "B LEADER" en Salento, Puglia
 - Categoría: Car rental / Luxury experience
 - Fotos: Ferrari rossa, Maserati, barco
@@ -89,9 +55,9 @@ Hobby NO permite dominios personalizados. Necesitas Pro sí o sí.
 
 ### □ 2.4 Chat de WhatsApp funcional
 - Schema ya existe (`ChatSession`, `ChatMessage` en Prisma)
-- Falta implementar: API route para enviar/recibir, componente en frontend
+- API routes ya implementadas (send, messages, webhook)
 - Botón flotante de WhatsApp visible en toda la web
-- Los americanos en el extranjero usan mucho WhatsApp para confirmar — tenerlo roto o ausente da mala impresión
+- Meta Cloud API en producción
 
 ### □ 2.5 Precios en doble moneda (EUR + USD)
 - Toggle discreto EUR ↔ USD (tasa de cambio aprox., actualizable)
@@ -109,11 +75,11 @@ Hobby NO permite dominios personalizados. Necesitas Pro sí o sí.
 
 | Página | Propósito | Keywords target |
 |---|---|---|
-| `/fleet` | Flota completa con specs técnicas | "Ferrari driving experience Salento" |
-| `/yacht` | Experiencias en barco (full/half day, sunset, dinner) | "yacht tour Puglia US tourists" |
+| `/fleet` | Flota completa con specs técnicas (ya implementado) | "Ferrari driving experience Salento" |
+| `/yacht` | Experiencias en barco (ya implementado) | "yacht tour Puglia US tourists" |
 | `/locations/salento` | Guía de viaje para US: cómo llegar, qué hacer, rutas costeras | "Salento luxury travel guide" |
-| `/services` | Concierge, airport delivery, seguro, fotógrafo | — |
-| `/about` | Quiénes son, historia, valores | — |
+| `/services` | Concierge, airport delivery, seguro, fotógrafo (ya implementado) | — |
+| `/about` | Quiénes son, historia, valores (ya implementado) | — |
 | `/blog` o `/experiences` | Contenido largo SEO: guías, rutas, experiencias | "Top 10 coastal routes Salento supercar", "Ultimate guide Ferrari Puglia" |
 
 ---
@@ -138,7 +104,7 @@ Hobby NO permite dominios personalizados. Necesitas Pro sí o sí.
 ## 🟢 PRIORIDAD 5 — TECH DEBT & MANTENIMIENTO
 
 ### □ 5.1 Panel de administración (MVP)
-- Las reservas se guardan en la DB pero no hay forma de verlas sin PostgreSQL directo
+- Las reservas se guardan en la DB pero no hay forma de verlas sin D1 directo
 - Mínimo viable: listado de reservas con filtro por fecha/vehículo
 - Ideal: status (pending/confirmed/completed/cancelled) + notificaciones
 - **Nueva ruta**: `/admin/reservations`
@@ -167,60 +133,33 @@ Hobby NO permite dominios personalizados. Necesitas Pro sí o sí.
 
 ## 🔵 PRIORIDAD 6 — MANTENIMIENTO CONTINUO
 
-□ Analytics (Vercel Analytics o Plausible)
+□ Analytics (Cloudflare Web Analytics o Plausible)
 □ Teléfono y email reales en `src/lib/seo.ts`
 □ Verification tag de Google Search Console en `layout.tsx`
 □ Backlinks básicos (Google Business Profile, redes)
 □ Instagram @bleader.luxury
 □ Schema `FAQPage` y `Review` en JSON-LD (cuando haya FAQ y testimonios)
-□ Monitoreo de errores (Sentry o Vercel Error Monitoring)
+□ Monitoreo de errores (Sentry o Cloudflare Tail Workers)
 
 ---
 
 ## ✅ YA COMPLETADO
 
 ```
-src/lib/seo.ts              — utility SEO con metadatos, JSON-LD (LocalBusiness + Product + Breadcrumb)
-src/app/sitemap.ts          — sitemap.xml dinámico (7 URLs)
-src/app/robots.ts           — robots.txt dinámico
-src/app/layout.tsx          — metadataBase corregido, keywords US, JSON-LD
-src/app/not-found.tsx       — 404 con branding gold
-public/hero-video.mp4       — comprimido 6.1MB → 1.7MB
-prisma/schema.prisma        — modelos: Reservation, ChatSession, ChatMessage
-src/lib/email.ts            — sistema de emails con Resend + DEMO_MODE
-src/lib/rate-limit.ts       — rate limiting Upstash Redis + fallback en memoria
-src/components/velox/       — componentes UI: chat, sections, ui, animaciones GSAP
-Copy renombrada de "rental" → "experience"
-Git push → Vercel deploy automático
-```
-
----
-
-## 🗺️ ARQUITECTURA DEL PROYECTO
-
-```
-src/
-├── app/
-│   ├── api/reserve/route.ts     ← POST: validación Zod + rate limit + email
-│   ├── _components/             ← Componentes server/page
-│   │   └── home-client.tsx      ← Componente principal de la home
-│   ├── layout.tsx               ← Metadata + JSON-LD + fuentes
-│   ├── page.tsx                 ← Home page
-│   ├── sitemap.ts               ← Sitemap dinámico
-│   └── robots.ts                ← Robots dinámico
-├── components/velox/
-│   ├── sections/                ← Fleet, Reserve, Hero, Services, Yacht, Contact
-│   ├── chat/                    ← Componentes de chat WhatsApp
-│   ├── ui/                      ← Botones, inputs, cards, navbar, footer
-│   ├── data.ts                  ← Datos de flota, servicios, experiencias
-│   └── use-lenis.ts             ← Smooth scrolling
-├── lib/
-│   ├── db.ts                    ← Cliente Prisma
-│   ├── email.ts                 ← Resend: sendReservationEmails
-│   ├── rate-limit.ts            ← Upstash + fallback
-│   └── seo.ts                   ← buildPageMeta, JSON-LD schemas
-├── hooks/                       ← Custom hooks
-└── scripts/                     ← Scripts de build/optimización
-prisma/
-└── schema.prisma                ← Modelos: Reservation, ChatSession, ChatMessage
+src/lib/seo.ts                     — utility SEO con metadatos, JSON-LD (LocalBusiness + Product + Breadcrumb)
+src/app/sitemap.ts                 — sitemap.xml dinámico (5 URLs reales)
+src/app/robots.ts                  — robots.txt dinámico
+src/app/layout.tsx                 — metadataBase corregido, keywords US, JSON-LD
+src/app/not-found.tsx              — 404 con branding gold
+src/app/opengraph-image.tsx        — OG image dinámica
+src/components/velox/ui/json-ld.tsx — Componente JsonLd para inyectar schemas
+src/lib/csrf.ts                    — Protección CSRF
+src/lib/whatsapp.ts                — Meta Cloud API client
+public/hero-video.mp4              — comprimido 6.1MB → 1.7MB
+prisma/schema.prisma               — Modelos: Reservation, ChatSession, ChatMessage
+src/lib/email.ts                   — Sistema de emails con Resend + DEMO_MODE
+src/lib/rate-limit.ts              — Rate limiting Upstash Redis + fallback en memoria
+src/components/velox/              — Componentes UI: chat, sections, ui, animaciones GSAP
+API WhatsApp                       — Webhook Meta Cloud API + endpoints send/messages
+Infra Cloudflare                   — Pages + Workers + D1 operando
 ```
