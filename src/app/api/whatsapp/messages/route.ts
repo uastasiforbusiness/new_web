@@ -12,9 +12,9 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const parsed = querySchema.safeParse({
-      sessionId: searchParams.get('sessionId'),
-      since: searchParams.get('since'),
-      limit: searchParams.get('limit'),
+      sessionId: searchParams.get('sessionId') ?? undefined,
+      since: searchParams.get('since') ?? undefined,
+      limit: searchParams.get('limit') ?? undefined,
     });
     if (!parsed.success) return NextResponse.json({ error: 'Missing sessionId' }, { status: 400 });
 

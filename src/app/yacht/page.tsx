@@ -4,9 +4,9 @@ import { JsonLd } from '@/components/velox/ui/json-ld';
 import { yachtData } from '@/components/velox/data';
 
 export const metadata = buildPageMeta({
-  title: 'Yacht',
+  title: 'Private Yacht Charter & Sunset Cruises in Salento, Puglia',
   description:
-    'Luxury yacht experiences in Salento, Puglia. Full-day, half-day, sunset aperitivo, and dinner cruises aboard Cranchi Atlantique 50 Flybridge. Depart from Porto Gaio, Gallipoli.',
+    'Luxury yacht experiences in Salento, Puglia. Full-day, half-day, sunset aperitivo, and dinner cruises aboard Cranchi Atlantique 50 Flybridge. Depart from Porto Gaio, Gallipoli. Reserve your experience.',
   path: '/yacht',
   keywords: [
     'luxury yacht experience Puglia',
@@ -14,6 +14,8 @@ export const metadata = buildPageMeta({
     'yacht dinner experience Adriatic',
     'yacht charter Gallipoli',
     'boat rental Salento Italy',
+    'private yacht Puglia',
+    'Gallipoli sunset cruise',
   ],
 });
 

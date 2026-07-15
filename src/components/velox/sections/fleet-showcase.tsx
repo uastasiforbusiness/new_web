@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Gauge, Cpu, Zap } from 'lucide-react';
+import Image from 'next/image';
 import { cars, fleetSpecs } from '../data';
 
 // ─── Helper: extract brand name for watermark ───
@@ -205,9 +206,11 @@ export function FleetShowcase() {
                       className="relative w-full overflow-hidden"
                       style={{ height: 'clamp(180px, 45vw, 60vh)' }}
                     >
-                      <img
+<Image
                         src={car.image}
-                        alt={car.name}
+                        alt={`${car.name} ${car.variant} \u2014 luxury ${car.name.toLowerCase().includes('cranchi') ? 'yacht' : 'car'} rental in Salento, Puglia`}
+                        width={800}
+                        height={600}
                         className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] lg:drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)]"
                         style={{
                           display: 'block',
@@ -215,7 +218,8 @@ export function FleetShowcase() {
                           maxWidth: '100%',
                           margin: '0 auto',
                         }}
-                        loading={idx < 2 ? 'eager' : 'lazy'}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        priority={idx < 2}
                       />
                     </div>
                   </div>
