@@ -356,7 +356,7 @@ export const coverageRegions = [
 // ─── Navigation link type ───────────────────────────────────────
 export interface NavLink {
   label: string;
-  href: string;       // used on home page (hash anchor for smooth scroll)
+  href?: string;       // used on home page (hash anchor for smooth scroll)
   pageHref?: string;  // used on standalone pages (real route)
 }
 
@@ -364,6 +364,7 @@ export const navLinks: NavLink[] = [
   { label: 'FLEET', href: '#fleet', pageHref: '/fleet' },
   { label: 'YACHT', href: '#yacht', pageHref: '/yacht' },
   { label: 'SERVICES', href: '#services', pageHref: '/services' },
+  { label: 'ABOUT', pageHref: '/about' },
   { label: 'RESERVE', href: '#reserve' },
   { label: 'CONTACT', href: '#contact' },
 ];

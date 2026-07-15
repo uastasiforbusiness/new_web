@@ -17,6 +17,7 @@ import { navLinks, type NavLink } from '../data';
  * - Los items sin pageHref (RESERVE, CONTACT) siempre enlazan a /#seccion.
  */
 function getHref(link: NavLink, isHome: boolean): string {
+  if (!link.href) return link.pageHref!;
   if (isHome) return link.href;
   return link.pageHref ?? `/${link.href}`;
 }
@@ -29,15 +30,6 @@ export function Navigation() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
-
-    // Preferir Lenis scroll si está disponible
-    const lenis = (window as unknown as Record<string, { on: (e: string, cb: () => void) => void }>).__lenis;
-    if (lenis?.on) {
-      lenis.on('scroll', onScroll);
-      return () => {
-        // Lenis no tiene removeListener fácil
-      };
-    }
 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);

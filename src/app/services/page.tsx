@@ -4,9 +4,9 @@ import { CoverageSection } from '@/components/velox/sections/coverage-section';
 import { JsonLd } from '@/components/velox/ui/json-ld';
 
 export const metadata = buildPageMeta({
-  title: 'Services',
+  title: 'Luxury Concierge & Event Services in Southern Italy',
   description:
-    'B LEADER concierge services in Salento, Puglia: luxury car rental, yacht charter, wedding car, corporate events, and party service. English-speaking chauffeurs worldwide.',
+    'B LEADER premium services in Salento, Puglia: luxury car rental with chauffeur, yacht charter, wedding car, corporate events, and party service. English-speaking chauffeurs across Southern Italy.',
   path: '/services',
   keywords: [
     'luxury concierge Salento',
@@ -14,6 +14,8 @@ export const metadata = buildPageMeta({
     'corporate car service Italy',
     'luxury event rental Puglia',
     'B LEADER services',
+    'chauffeur service Puglia',
+    'private driver Southern Italy',
   ],
 });
 

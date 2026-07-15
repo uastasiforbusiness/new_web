@@ -4,9 +4,9 @@ import { JsonLd } from '@/components/velox/ui/json-ld';
 import { cars } from '@/components/velox/data';
 
 export const metadata = buildPageMeta({
-  title: 'Fleet',
+  title: 'Exclusive Ferrari & Luxury Car Rental in Salento, Puglia',
   description:
-    "Discover B LEADER's exclusive collection: Ferrari California T (560HP), Ferrari California (460HP), Maserati Ghibli, Mercedes E220d Cabrio, and Cranchi Atlantique 50 Flybridge yacht. Specs, photos, and pricing.",
+    'Discover B LEADER\'s curated fleet: Ferrari California T (560HP), Ferrari California (460HP), Maserati Ghibli, Mercedes E220d Cabrio, and Cranchi Atlantique 50 yacht. Specs, photos, and pricing. Book your driving experience.',
   path: '/fleet',
   keywords: [
     'Ferrari driving experience Salento Italy',
@@ -14,7 +14,9 @@ export const metadata = buildPageMeta({
     'supercar rental Italy',
     'Maserati Ghibli Salento',
     'luxury car rental Puglia',
+    'drive Ferrari Adriatic coast',
     'Cranchi yacht Puglia',
+    'luxury fleet Salento',
   ],
 });
 

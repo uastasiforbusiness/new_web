@@ -101,7 +101,7 @@ export function ReservationForm() {
           const data = await res.json() as { error?: string };
           message = data.error || message;
         } catch {
-          // Response wasn't JSON (e.g. Vercel HTML error page) — keep generic
+          // Response wasn't JSON — keep generic message
         }
         throw new Error(message);
       }

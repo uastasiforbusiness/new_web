@@ -2,7 +2,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 /**
- * Distributed rate limiter backed by Upstash Redis / Vercel KV.
+ * Distributed rate limiter backed by Upstash Redis (memory fallback when Redis unavailable).
  *
  * Requires KV_REST_API_URL and KV_REST_API_TOKEN (or UPSTASH_REDIS_REST_URL
  * and UPSTASH_REDIS_REST_TOKEN) to be set. When the env vars are absent

@@ -4,9 +4,9 @@ import { JsonLd } from '@/components/velox/ui/json-ld';
 import { Shield, Heart, MapPin, Award } from 'lucide-react';
 
 export const metadata = buildPageMeta({
-  title: 'About',
+  title: 'About B LEADER — Luxury Experience Curator in Salento, Puglia',
   description:
-    'B LEADER is a luxury experience curator based in Salento, Puglia. Founded in 2023, we specialize in Ferrari driving tours, yacht charters, and premium concierge services for discerning travelers.',
+    'B LEADER is a luxury experience curator based in Salento, Puglia. Founded in 2023, we specialize in Ferrari driving tours, yacht charters, and premium concierge services for discerning travelers from around the world.',
   path: '/about',
   keywords: [
     'about B LEADER',
@@ -14,6 +14,7 @@ export const metadata = buildPageMeta({
     'Puglia luxury travel',
     'B LEADER team',
     'Italian luxury experiences',
+    'Salento Ferrari tours',
   ],
 });
 
