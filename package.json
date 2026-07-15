@@ -37,6 +37,7 @@
     "zod": "^4.0.2"
   },
   "devDependencies": {
+    "@prisma/config": "^7.8.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "25.9.2",
     "@types/react": "^19",
@@ -49,5 +50,15 @@
     "tw-animate-css": "^1.3.5",
     "typescript": "^5",
     "wrangler": "^4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "esbuild",
+      "prisma",
+      "sharp",
+      "unrs-resolver",
+      "workerd"
+    ]
   }
 }
