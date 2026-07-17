@@ -36,9 +36,9 @@ export async function POST(request: Request) {
     if (!session) {
       session = await db.chatSession.create({
         data: {
-          visitor_id: visitorId,
-          visitor_name: visitorName ?? null,
-          visitor_phone: visitorPhone ? normalizePhone(visitorPhone) : null,
+          visitorId,
+          visitorName: visitorName ?? null,
+          visitorPhone: visitorPhone ? normalizePhone(visitorPhone) : null,
           status: 'active',
           mode: 'prod',
         },
@@ -51,13 +51,13 @@ export async function POST(request: Request) {
     }
     console.log('[whatsapp send] session active:', session.id);
 
-    if (visitorPhone && !session.visitor_phone) {
-      await db.chatSession.update({ where: { id: session.id }, data: { visitor_phone: normalizePhone(visitorPhone) } });
+    if (visitorPhone && !session.visitorPhone) {
+      await db.chatSession.update({ where: { id: session.id }, data: { visitorPhone: normalizePhone(visitorPhone) } });
     }
 
     // Save inbound message from the visitor
     const msg = (await db.chatMessage.create({
-      data: { session_id: session.id, direction: 'inbound', body: messageBody, status: 'delivered' },
+      data: { sessionId: session.id, direction: 'inbound', body: messageBody, status: 'delivered' },
     }))!;
 
     // In production the concierge replies from their own WhatsApp; the outbound
