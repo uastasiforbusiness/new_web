@@ -21,6 +21,6 @@
     }
   ],
   "vars": {
-    "WHATSAPP_GRAPH_API_VERSION": "v21.0"
+    "WHATSAPP_GRAPH_API_VERSION": "v25.0"
   }
 }
