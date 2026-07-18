@@ -24,25 +24,25 @@ const values = [
     icon: Shield,
     title: 'Excellence',
     description:
-      'Every vehicle is meticulously maintained, every itinerary carefully planned. We accept nothing less than perfection.',
+      'Every vehicle receives meticulous care and every itinerary is designed down to the smallest detail. We accept nothing less than perfection, because our clients deserve only the best.',
   },
   {
     icon: Heart,
     title: 'Passion',
     description:
-      'Born from a love for Italian automotive heritage and the breathtaking landscapes of Puglia. We share what moves us.',
+      'Born from a passion for Italian automotive heritage and the breathtaking landscapes of Puglia, we share with our guests the emotion of roads and seas that leave their mark.',
   },
   {
     icon: MapPin,
-    title: 'Local Mastery',
+    title: 'Exclusive Knowledge',
     description:
-      'Deep roots in Salento mean we know the hidden coves, the scenic roads, and the best vineyards that tourists never find.',
+      'Our deep roots in Salento allow us to reveal hidden coves, scenic cliffside roads, and historic vineyards — places no travel guide tells you about.',
   },
   {
     icon: Award,
     title: 'Discretion',
     description:
-      'White-glove service from booking to drop-off. Your privacy and comfort are our highest priority.',
+      'Impeccable service, from booking to return. Your privacy and your comfort are and will always remain our absolute priority.',
   },
 ];
 
