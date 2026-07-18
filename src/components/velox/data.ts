@@ -320,7 +320,7 @@ export const serviceLines = [
     icon: Ship,
     title: 'YACHT CHARTER',
     subtitle: 'Nautical Experiences',
-    description: 'Luxury yacht rentals along the Salento coast. Depart from Porto Gaio, Gallipoli, and explore Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and Greece. Half-day, full-day, sunset cruises, and overnight options with professional skipper.',
+    description: 'Sail the crystal-clear waters of the Salento coast aboard our luxury yachts. Exclusive departures from Porto Gaio, Gallipoli, with routes to the wonders of Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and the evocative shores of Greece. Choose your experience: half-day cruise, full day, sunset, or overnight on board — always with a professional skipper at your service.',
     stat: 'PREMIUM',
   },
   {
