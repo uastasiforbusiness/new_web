@@ -24,7 +24,10 @@
   // Public runtime vars (secrets via `wrangler secret put`)
   "vars": {
     "WHATSAPP_GRAPH_API_VERSION": "v25.0",
-    "NEXT_PUBLIC_SITE_URL": "https://bleaderitaly.com"
+    "NEXT_PUBLIC_SITE_URL": "https://bleaderitaly.com",
+    "RESEND_FROM": "B LEADER <info@bleaderitaly.com>",
+    "RESEND_ADMIN_TO": "info@bleaderitaly.com",
+    "RESEND_DEMO_MODE": "false"
   },
   // Official custom domains (managed by Workers Domains API / dashboard)
   "routes": [
