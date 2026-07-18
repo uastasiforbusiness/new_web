@@ -74,9 +74,7 @@ export default function AboutPage() {
               <span className="shimmer-text not-italic">Story</span>
             </h1>
             <p className="text-base sm:text-lg font-body font-light text-[#999] max-w-2xl mx-auto leading-relaxed">
-              Founded in the heart of Salento, Puglia, B LEADER was born from a
-              vision to offer the world&apos;s most discerning travelers access
-              to Italy&apos;s finest automotive and nautical experiences.
+              Born in the heart of Salento, Puglia, B LEADER brings the world&apos;s most discerning travelers to discover what few have the privilege to experience: the Ionian and Adriatic coasts of Salento — among the most spectacular and iconic in the Mediterranean — through automotive and nautical experiences of absolute excellence.
             </p>
           </div>
         </section>
