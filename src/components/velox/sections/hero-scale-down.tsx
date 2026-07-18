@@ -190,8 +190,8 @@ export function HeroScaleDown() {
           </h1>
 
           <p className="text-gray-400 font-light max-w-xs sm:max-w-sm leading-relaxed text-sm sm:text-base">
-            B LEADER defines the new standard of Mediterranean luxury.
-            Precision-engineered rentals for those who demand the extraordinary.
+            B LEADER defines the new standard of luxury in the heart of Salento.
+            Precision-engineered car and yacht rental experiences for those who demand the exceptional.
           </p>
         </div>
 
