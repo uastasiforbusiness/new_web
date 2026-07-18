@@ -27,7 +27,8 @@ jobs:
         run: npm ci
 
       - name: Build OpenNext Worker
-        run: npm run cf:build
+        run: npx opennextjs-cloudflare build
+        timeout-minutes: 20
 
       - name: Apply D1 schema
         continue-on-error: true
