@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { limit } from "@/lib/rate-limit";
 import { sendReservationEmails } from "@/lib/email";
 import { checkOrigin } from "@/lib/csrf";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const MAX_LENGTH = 500;
 
@@ -114,20 +115,44 @@ export async function POST(request: Request) {
       },
     });
 
-    // ─── Send confirmation emails (fire-and-forget, never blocks response) ──
-    sendReservationEmails({
-      carName: car_name,
-      carVariant: car_variant,
-      customerName: customer_name,
-      email,
-      phone,
-      pickupDate: pickup_date.toISOString(),
-      returnDate: return_date.toISOString(),
-      message,
-      reservationId: reservation.id,
-    }).catch((err) => {
-      console.error("[email] Failed to send reservation emails:", err);
-    });
+    // ─── Send confirmation emails ────────────────────────────────────────
+    // Must use waitUntil: in Cloudflare Workers, fire-and-forget after return
+    // is NOT guaranteed to execute. The runtime may tear down the isolate
+    // before the fetch to Resend completes.
+    const ctx = await getCloudflareContext({ async: true });
+    const waitUntil = (ctx as { waitUntil?: (p: Promise<unknown>) => void }).waitUntil;
+    if (waitUntil) {
+      waitUntil(
+        sendReservationEmails({
+          carName: car_name,
+          carVariant: car_variant,
+          customerName: customer_name,
+          email,
+          phone,
+          pickupDate: pickup_date.toISOString(),
+          returnDate: return_date.toISOString(),
+          message,
+          reservationId: reservation.id,
+        }).catch((err) => {
+          console.error("[email] Failed to send reservation emails:", err);
+        })
+      );
+    } else {
+      // Fallback (local dev / non-Workers runtime): block until done.
+      await sendReservationEmails({
+        carName: car_name,
+        carVariant: car_variant,
+        customerName: customer_name,
+        email,
+        phone,
+        pickupDate: pickup_date.toISOString(),
+        returnDate: return_date.toISOString(),
+        message,
+        reservationId: reservation.id,
+      }).catch((err) => {
+        console.error("[email] Failed to send reservation emails:", err);
+      });
+    }
 
     return NextResponse.json(
       { success: true, reservationId: reservation.id },
