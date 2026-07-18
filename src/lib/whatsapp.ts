@@ -139,28 +139,35 @@ export async function sendTemplateMessage(
 }
 
 /**
- * First outreach: try free text; if Meta rejects (outside window / not allowed),
- * fall back to the approved template.
+ * First outreach: send the approved template (required for business-initiated
+ * first contact when no 24h customer-care window exists).
+ *
+ * The old logic tried free-form text first, but the Graph API returns HTTP 200
+ * with `message_status: "accepted"` even when it cannot deliver outside the
+ * window, so the template fallback was never reached.
+ *
+ * If the template itself fails, falls back to free-form text (useful when a
+ * window already exists from a prior inbound message).
  */
 export async function sendFirstContact(to: string, textBody: string): Promise<SendResult> {
+  const tmpl = await sendTemplateMessage(to);
+  if (tmpl.ok) {
+    console.log('[whatsapp] template "%s" sent to %s', TEMPLATE_NAME, to);
+    return tmpl;
+  }
+
+  // Template not available / not approved — try free-form as emergency fallback.
+  console.warn(
+    '[whatsapp] template failed (%s); falling back to free-form text',
+    tmpl.error
+  );
   const text = await sendTextMessage(to, textBody);
   if (text.ok) return text;
 
-  // Common Graph codes: 131047 (re-engagement), 131026 (not allowed), 132000 (template)
-  const fallback = await sendTemplateMessage(to);
-  if (fallback.ok) {
-    console.warn(
-      '[whatsapp] free-form failed (%s); template "%s" sent instead',
-      text.error,
-      TEMPLATE_NAME
-    );
-    return fallback;
-  }
-
   return {
     ok: false,
-    error: `text: ${text.error || 'fail'}; template: ${fallback.error || 'fail'}`,
-    errorCode: text.errorCode ?? fallback.errorCode,
+    error: `template: ${tmpl.error || 'fail'}; text: ${text.error || 'fail'}`,
+    errorCode: tmpl.errorCode ?? text.errorCode,
   };
 }
 
