@@ -340,8 +340,8 @@ export const serviceLines = [
   {
     icon: Sparkles,
     title: 'PARTY SERVICE',
-    subtitle: 'Social Events',
-    description: 'Luxury cars for non-wedding celebrations. Birthdays, baptisms, communions, private parties. Custom packages available.',
+    subtitle: 'Events & Celebrations',
+    description: 'Every special occasion deserves a car that matches the moment. We provide luxury vehicles for birthdays, baptisms, communions, confirmations, and private parties — with a dedicated chauffeur and fully customized packages. Because every important moment in life deserves style.',
     stat: 'SOCIAL',
   },
 ];
