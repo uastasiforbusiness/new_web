@@ -326,8 +326,8 @@ export const serviceLines = [
   {
     icon: Car,
     title: 'WEDDING CAR RENTAL',
-    subtitle: 'Weddings',
-    description: 'Bridal vehicle (arrival/departure), uniformed professional chauffeur, wedding decoration included, coordination with your wedding planner.',
+    subtitle: 'Weddings & Ceremonies',
+    description: 'Make the most beautiful day of your life unforgettable. Luxury vehicles with professional chauffeur, personalized wedding decorations, and direct coordination with your wedding planner. Every detail curated for you, so nothing is left to chance.',
     stat: 'AWARDS 2023',
   },
   {
