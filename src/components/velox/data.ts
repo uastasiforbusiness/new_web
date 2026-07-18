@@ -333,8 +333,8 @@ export const serviceLines = [
   {
     icon: Briefcase,
     title: 'LUXURY CAR',
-    subtitle: 'Corporate / Business',
-    description: 'Executive rentals for companies, executives, and congresses. Premium corporate image. English-speaking professional chauffeurs.',
+    subtitle: 'Corporate / Commercial',
+    description: 'Prestige and style for companies, executives, and conferences. High-end vehicles with bilingual professional chauffeurs, for an impeccable corporate image at every appointment. Luxury that makes a difference, even in business.',
     stat: 'B2B',
   },
   {
