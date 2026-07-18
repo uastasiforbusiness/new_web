@@ -9,6 +9,26 @@ const resend: Resend | null =
 const FROM = process.env.RESEND_FROM || 'onboarding@resend.dev';
 const ADMIN_TO = process.env.RESEND_ADMIN_TO || 'uastasiforbusiness@gmail.com';
 
+/**
+ * Normalize FROM into a valid RFC 5322 "Name <email@domain>" string.
+ * Accepts either a bare email ("foo@bar.com") or "Name <foo@bar.com>".
+ * Prevents double-wrapping when FROM already includes a display name.
+ */
+function formatFrom(raw: string): string {
+  const trimmed = raw.trim();
+  const match = trimmed.match(/^([^<]*)<([^>]+)>$/);
+  if (match) {
+    // Already in "Name <email>" form — keep as-is (normalize whitespace).
+    const name = match[1].trim();
+    const email = match[2].trim();
+    return name ? `${name} <${email}>` : email;
+  }
+  // Bare email — return as-is, Resend accepts it.
+  return trimmed;
+}
+
+const FROM_FORMATTED = formatFrom(FROM);
+
 // ─── DEMO MODE ──────────────────────────────────────────────────────────────
 // When true, ALL emails go to ADMIN_TO regardless of the customer's address.
 // Required because onboarding@resend.dev can only send to the account owner.
@@ -149,18 +169,28 @@ export async function sendReservationEmails(data: ReservationEmailData): Promise
 
   try {
     const customer = await resend.emails.send({
-      from: `B Leader <${FROM}>`,
+      from: FROM_FORMATTED,
       to: [customerTo],
       subject: `Your B Leader Reservation — #${data.reservationId.slice(-8)}`,
       html: customerHtml(data),
     });
 
     const admin = await resend.emails.send({
-      from: `B Leader <${FROM}>`,
+      from: FROM_FORMATTED,
       to: [ADMIN_TO],
       subject: `New Reservation: ${data.customerName} — ${data.carName}`,
       html: adminHtml(data),
     });
+
+    // Resend SDK does NOT throw on 4xx — errors come back in `.error`.
+    if (customer.error || admin.error) {
+      console.error(
+        `[email] Resend API error for reservation ${data.reservationId.slice(-8)}:`,
+        'customer:', customer.error,
+        'admin:', admin.error
+      );
+      return;
+    }
 
     if (DEMO_MODE) {
       console.log(
