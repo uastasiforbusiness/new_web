@@ -26,7 +26,7 @@ const cormorant = Cormorant_Garamond({
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL
   ? process.env.NEXT_PUBLIC_SITE_URL
-  : "https://bleader.it";
+  : "https://bleaderitaly.com";
 
 export const metadata: Metadata = {
   title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     "luxury yacht experience Puglia",
     "Ferrari tour Puglia US tourists",
     "luxury vacation experiences Salento",
-    "drive Ferrari along Amalfi Coast",
+    "drive Ferrari Salento coast Italy",
     "sunset yacht tour Salento",
     "exotic car experience Italy",
     "B LEADER luxury experiences",

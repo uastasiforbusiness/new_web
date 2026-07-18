@@ -7,39 +7,46 @@ import { checkOrigin } from "@/lib/csrf";
 
 const MAX_LENGTH = 500;
 
-// ─── Phone: digits, spaces, parens, hyphens, optional leading + ───────────
+// ─── Phone: digits, spaces, parens, hyphens, optional leading + ────────────
 const phoneRegex = /^[+]?[\d\s().-]{5,23}$/;
 
 const reservationSchema = z
   .object({
-    carName: z.string().trim().min(1).max(MAX_LENGTH),
-    carVariant: z.string().trim().min(1).max(MAX_LENGTH),
-    customerName: z.string().trim().min(1).max(MAX_LENGTH),
+    car_name: z.string().trim().min(1).max(MAX_LENGTH),
+    car_variant: z
+      .string()
+      .trim()
+      .min(1, "Car variant must be at least 1 character")
+      .max(MAX_LENGTH, "Car variant must be less than 500 characters")
+      .regex(/^[\p{L}\p{N} \-_.]+$/iu, "Car variant contains invalid characters"),
+    customer_name: z.string().trim().min(1).max(MAX_LENGTH),
     email: z.string().email().max(MAX_LENGTH),
     phone: z
       .string()
       .trim()
-      .min(6)
-      .max(20)
+      .min(6, "Phone number must be at least 6 characters")
+      .max(20, "Phone number must be less than 20 characters")
       .regex(phoneRegex, "Phone number contains invalid characters"),
-    pickupDate: z.coerce.date(),
-    returnDate: z.coerce.date(),
-    consentAccepted: z.boolean().refine((value) => value === true, {
-      message: "You must accept data processing consent",
-    }),
-    message: z.string().trim().max(MAX_LENGTH).nullish(),
+    pickup_date: z.coerce.date(),
+    return_date: z.coerce.date(),
+    consent_accepted: z
+      .boolean()
+      .refine((value) => value === true, {
+        message: "You must accept data processing consent",
+      }),
+    message: z.string().trim().max(MAX_LENGTH, "Message must be less than 500 characters").nullish(),
   })
-  .refine((data) => data.returnDate > data.pickupDate, {
+  .refine((data) => data.return_date > data.pickup_date, {
     message: "Return date must be after pickup date",
-    path: ["returnDate"],
+    path: ["return_date"],
   })
   .refine(
     (data) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      return data.pickupDate >= today;
+      return data.pickup_date >= today;
     },
-    { message: "Pickup date cannot be in the past", path: ["pickupDate"] }
+    { message: "Pickup date cannot be in the past", path: ["pickup_date"] }
   );
 
 function getClientIp(request: Request): string {
@@ -55,13 +62,16 @@ export async function POST(request: Request) {
     // ─── CSRF protection ────────────────────────────────────────────────────
     const originCheck = checkOrigin(request);
     if (!originCheck.ok) {
-      return NextResponse.json({ error: originCheck.error }, { status: 403 });
+      return NextResponse.json(
+        { error: originCheck.error },
+        { status: 403 }
+      );
     }
 
     const ip = getClientIp(request);
-
     const { success } = await limit(ip);
     if (!success) {
+      console.warn(`[rate-limit] IP ${ip} exceeded requests`);
       return NextResponse.json(
         { error: "Too many requests. Please try again later." },
         { status: 429 }
@@ -88,44 +98,36 @@ export async function POST(request: Request) {
       );
     }
 
-    const {
-      carName,
-      carVariant,
-      customerName,
-      email,
-      phone,
-      pickupDate,
-      returnDate,
-      consentAccepted,
-      message,
-    } = parsed.data;
+    const { car_name, car_variant, customer_name, email, phone, pickup_date, return_date, consent_accepted, message } = parsed.data;
 
     const reservation = await db.reservation.create({
       data: {
-        carName,
-        carVariant,
-        customerName,
+        carName: car_name,
+        carVariant: car_variant,
+        customerName: customer_name,
         email,
         phone,
-        pickupDate,
-        returnDate,
-        consentAccepted,
+        pickupDate: pickup_date,
+        returnDate: return_date,
+        consentAccepted: consent_accepted,
         message: message ?? null,
       },
     });
 
-    // ─── Send confirmation emails (fire-and-forget, never blocks response) ─
+    // ─── Send confirmation emails (fire-and-forget, never blocks response) ──
     sendReservationEmails({
-      carName,
-      carVariant,
-      customerName,
+      carName: car_name,
+      carVariant: car_variant,
+      customerName: customer_name,
       email,
       phone,
-      pickupDate: pickupDate.toISOString(),
-      returnDate: returnDate.toISOString(),
+      pickupDate: pickup_date.toISOString(),
+      returnDate: return_date.toISOString(),
       message,
       reservationId: reservation.id,
-    }).catch(() => { /* already handled inside */ });
+    }).catch((err) => {
+      console.error("[email] Failed to send reservation emails:", err);
+    });
 
     return NextResponse.json(
       { success: true, reservationId: reservation.id },

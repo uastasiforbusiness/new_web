@@ -22,6 +22,8 @@ npm run cf:deploy         # OpenNext build and deploy to Cloudflare Workers
 
 Production data uses the `DB` D1 binding. Do not introduce a Node-only database runtime or depend on local SQLite for Worker behavior. Run `npx wrangler d1 execute bleader-db --remote --file=prisma/d1/init.sql` only when intentionally applying the idempotent remote schema.
 
+**Official domains:** `bleaderitaly.com` (primary / canonical) and `bleaderitaly.it`. Set `NEXT_PUBLIC_SITE_URL=https://bleaderitaly.com` for production SEO. Attach both domains (and `www`) as Custom Domains on the `bleader-italy` Worker in Cloudflare.
+
 ## Coding and content conventions
 
 Write TypeScript, use two-space indentation, and follow the existing ESLint configuration. Name React components in `PascalCase`, hooks as `use-*.ts`, and route folders in lowercase kebab case. Keep client boundaries minimal: add `'use client'` only to components requiring browser APIs, state, or animation.

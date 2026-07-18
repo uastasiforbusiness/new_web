@@ -36,7 +36,6 @@ cloudflare-env.d.ts
 # Tooling
 .omc/
 .reasonix/
-.vercel/
 
 # TypeScript
 *.tsbuildinfo

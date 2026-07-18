@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { verifyWebhookToken, verifyWebhookSignature } from '@/lib/whatsapp';
 import { db } from '@/lib/db';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: Request) {
   console.log('[whatsapp webhook] GET verification request');
   const { searchParams } = new URL(request.url);
@@ -9,11 +11,20 @@ export async function GET(request: Request) {
   const token = searchParams.get('hub.verify_token');
   const challenge = searchParams.get('hub.challenge');
 
-  if (mode === 'subscribe' && verifyWebhookToken(token)) {
+  if (mode === 'subscribe' && verifyWebhookToken(token) && challenge) {
     console.log('[whatsapp webhook] verification successful');
-    return new NextResponse(challenge ?? '', { status: 200 });
+    // Meta requires plain-text challenge body (not JSON)
+    return new NextResponse(challenge, {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain' },
+    });
   }
-  console.error('[whatsapp webhook] verification failed: mode=%s, token=%s', mode, token);
+  console.error(
+    '[whatsapp webhook] verification failed: mode=%s tokenPresent=%s challengePresent=%s',
+    mode,
+    Boolean(token),
+    Boolean(challenge)
+  );
   return new NextResponse('Forbidden', { status: 403 });
 }
 

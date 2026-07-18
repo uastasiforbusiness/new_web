@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 
+export const runtime = 'nodejs';
+
 const querySchema = z.object({
   sessionId: z.string().trim().min(1),
   since: z.coerce.number().int().min(0).default(0),

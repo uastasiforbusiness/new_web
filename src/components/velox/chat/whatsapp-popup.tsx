@@ -260,23 +260,53 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
           visitorId,
           visitorPhone: trimmed,
           body: `Hi, my number is ${trimmed}.`,
+          firstContact: true,
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({})) as SendApiResponse;
-        throw new Error(data.error || 'Failed to start chat');
+        const data = await res.json().catch(() => ({})) as SendApiResponse & {
+          detail?: string;
+          whatsapp?: { error?: string };
+        };
+        throw new Error(
+          data.whatsapp?.error || data.detail || data.error || 'Failed to start chat'
+        );
       }
 
-      const data: SendApiResponse = await res.json();
+      const data: SendApiResponse & {
+        whatsapp?: { sent?: boolean; error?: string; kind?: string };
+      } = await res.json();
       if (!data.sessionId) throw new Error('No session id returned');
       setSessionId(data.sessionId);
-      setMessages([{
+      const seedMsgs: ChatMsg[] = [{
         id: 'seed-' + Date.now(),
         direction: 'inbound',
         body: `Hi, my number is ${trimmed}.`,
         ts: Date.now(),
-      }]);
+      }];
+      if (data.whatsapp?.sent) {
+        seedMsgs.push({
+          id: 'wa-ack-' + Date.now(),
+          direction: 'outbound',
+          body:
+            data.whatsapp.kind === 'template'
+              ? 'A WhatsApp welcome was sent to your number. Please check WhatsApp.'
+              : 'Thank you — our concierge will reply shortly on WhatsApp.',
+          ts: Date.now() + 1,
+        });
+      } else if (data.whatsapp?.error) {
+        // Keep chat open but surface that WA delivery failed (token/template)
+        seedMsgs.push({
+          id: 'wa-err-' + Date.now(),
+          direction: 'outbound',
+          body:
+            'We saved your number. WhatsApp delivery is temporarily unavailable — please write us on WhatsApp directly or try again shortly.',
+          ts: Date.now() + 1,
+        });
+        console.warn('[whatsapp popup] outbound not sent:', data.whatsapp.error);
+      }
+      setMessages(seedMsgs);
       setLastTs(Date.now());
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({

@@ -1,8 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -11,53 +10,54 @@ datasource db {
 }
 
 model Reservation {
-  id                String    @id @default(uuid())
-  carName           String
-  carVariant        String
-  customerName      String
-  email             String
-  phone             String
-  pickupDate        DateTime
-  returnDate        DateTime
-  message           String?
-  consentAccepted   Boolean   @default(false)
-  consentAcceptedAt DateTime?
-  status            String    @default("pending")
-  userId            String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id String @id @default(uuid())
+  car_name String
+  car_variant String
+  customer_name String
+  email String
+  phone String
+  pickup_date DateTime
+  return_date DateTime
+  message String?
+  consent_accepted Boolean
+  consent_accepted_at DateTime?
+  status String @default("pending")
+  user_id String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
   @@index([createdAt])
 }
 
-// ─── WhatsApp Concierge Chat ────────────────────────────────────────────────
-model ChatSession {
-  id           String        @id @default(cuid())
-  visitorId    String
-  visitorName  String?
-  visitorPhone String?
-  status       String        @default("active")
-  mode         String        @default("demo")
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  messages     ChatMessage[]
+// ─── WhatsApp Concierge Chat ────────────────────────────────────────────────────
 
-  @@index([visitorId])
+model ChatSession {
+  id String @id @default(cuid())
+  visitor_id String
+  visitor_name String?
+  visitor_phone String?
+  status String @default("active")
+  mode String @default("demo")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ChatMessage[]
+  @@index([visitor_id])
   @@index([status])
   @@index([createdAt])
 }
 
 model ChatMessage {
-  id          String      @id @default(cuid())
-  sessionId   String
-  direction   String
-  body        String
-  waMessageId String?
-  status      String      @default("sent")
-  createdAt   DateTime    @default(now())
-  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  id String @id @default(cuid())
+  session_id String
+  direction String
+  body String
+  wa_message_id String?
+  status String @default("sent")
+  createdAt DateTime @default(now())
 
-  @@index([sessionId])
+  session ChatSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  @@index([session_id])
   @@index([createdAt])
 }

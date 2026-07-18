@@ -45,9 +45,13 @@ function checkMemoryLimit(ip: string): { success: boolean } {
 }
 
 export async function limit(ip: string): Promise<{ success: boolean }> {
-  if (ratelimit) {
-    const result = await ratelimit.limit(ip);
-    return { success: result.success };
+  if (!ratelimit) {
+    console.warn("[rate-limit] Redis not configured — falling back to in-memory limiter");
+    return checkMemoryLimit(ip);
   }
-  return checkMemoryLimit(ip);
+  const result = await ratelimit.limit(ip);
+  if (!result.success) {
+    console.warn(`[rate-limit] IP ${ip} exceeded limit with result:`, result);
+  }
+  return { success: result.success };
 }

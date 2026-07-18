@@ -6,13 +6,29 @@ const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 const APP_SECRET = process.env.WHATSAPP_APP_SECRET;
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
 const GRAPH_API_VERSION = process.env.WHATSAPP_GRAPH_API_VERSION || 'v25.0';
+/** Approved template for business-initiated first contact (default Meta sandbox: hello_world). */
+const TEMPLATE_NAME = process.env.WHATSAPP_TEMPLATE_NAME || 'hello_world';
+const TEMPLATE_LANG = process.env.WHATSAPP_TEMPLATE_LANG || 'en_US';
 
-// Flag informativo: el chat funciona en producción con la Meta Cloud API.
-// DEMO_MODE solo está activo si falta el token (no debería en prod).
+// DEMO only when token missing — never force demo when secrets exist.
 export const DEMO_MODE = !TOKEN;
 
 export function isConfigured(): boolean {
   return Boolean(TOKEN && PHONE_NUMBER_ID);
+}
+
+export function getWhatsAppPublicStatus() {
+  return {
+    configured: isConfigured(),
+    hasToken: Boolean(TOKEN),
+    hasPhoneNumberId: Boolean(PHONE_NUMBER_ID),
+    hasAppSecret: Boolean(APP_SECRET),
+    hasVerifyToken: Boolean(VERIFY_TOKEN),
+    graphApiVersion: GRAPH_API_VERSION,
+    templateName: TEMPLATE_NAME,
+    templateLang: TEMPLATE_LANG,
+    demoMode: DEMO_MODE,
+  };
 }
 
 // ─── Phone normalization ────────────────────────────────────────────────────
@@ -31,25 +47,21 @@ export function isValidPhone(input: string): boolean {
   return normalizePhone(input) !== null;
 }
 
-// ─── Cloud API: send a text message ─────────────────────────────────────────
+// ─── Cloud API: send helpers ────────────────────────────────────────────────
 export interface SendResult {
   ok: boolean;
   waMessageId?: string;
   error?: string;
+  /** Graph error code when available (e.g. 190 = invalid token) */
+  errorCode?: number;
+  kind?: 'text' | 'template';
 }
 
-/**
- * Send a text message to a visitor via the WhatsApp Cloud API.
- * Returns ok:false if WhatsApp is not configured (missing token/phone id).
- */
-export async function sendTextMessage(to: string, body: string): Promise<SendResult> {
+async function graphSend(payload: Record<string, unknown>): Promise<SendResult> {
   if (!isConfigured()) {
     console.warn('[whatsapp] WHATSAPP_TOKEN / PHONE_NUMBER_ID not set — skipping send');
     return { ok: false, error: 'not-configured' };
   }
-
-  const phone = normalizePhone(to);
-  if (!phone) return { ok: false, error: 'invalid-phone' };
 
   try {
     const res = await fetch(
@@ -60,19 +72,22 @@ export async function sendTextMessage(to: string, body: string): Promise<SendRes
           Authorization: `Bearer ${TOKEN}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          messaging_product: 'whatsapp',
-          to: phone,
-          type: 'text',
-          text: { body, preview_url: false },
-        }),
+        body: JSON.stringify(payload),
       }
     );
 
-    const data: { error?: unknown; messages?: { id?: string }[] } = await res.json();
+    const data: {
+      error?: { message?: string; code?: number; error_subcode?: number; type?: string };
+      messages?: { id?: string }[];
+    } = await res.json();
+
     if (!res.ok) {
       console.error('[whatsapp] send failed:', data);
-      return { ok: false, error: JSON.stringify(data?.error || data) };
+      return {
+        ok: false,
+        error: data?.error?.message || JSON.stringify(data?.error || data),
+        errorCode: data?.error?.code,
+      };
     }
 
     const waMessageId = data?.messages?.[0]?.id;
@@ -83,15 +98,118 @@ export async function sendTextMessage(to: string, body: string): Promise<SendRes
   }
 }
 
+/**
+ * Send a free-form text message (only allowed inside the 24h customer-care window,
+ * i.e. after the user has messaged the business number).
+ */
+export async function sendTextMessage(to: string, body: string): Promise<SendResult> {
+  const phone = normalizePhone(to);
+  if (!phone) return { ok: false, error: 'invalid-phone' };
+
+  const result = await graphSend({
+    messaging_product: 'whatsapp',
+    to: phone,
+    type: 'text',
+    text: { body, preview_url: false },
+  });
+  return { ...result, kind: 'text' };
+}
+
+/**
+ * Send an approved template (required for business-initiated first contact).
+ */
+export async function sendTemplateMessage(
+  to: string,
+  templateName: string = TEMPLATE_NAME,
+  languageCode: string = TEMPLATE_LANG
+): Promise<SendResult> {
+  const phone = normalizePhone(to);
+  if (!phone) return { ok: false, error: 'invalid-phone' };
+
+  const result = await graphSend({
+    messaging_product: 'whatsapp',
+    to: phone,
+    type: 'template',
+    template: {
+      name: templateName,
+      language: { code: languageCode },
+    },
+  });
+  return { ...result, kind: 'template' };
+}
+
+/**
+ * First outreach: try free text; if Meta rejects (outside window / not allowed),
+ * fall back to the approved template.
+ */
+export async function sendFirstContact(to: string, textBody: string): Promise<SendResult> {
+  const text = await sendTextMessage(to, textBody);
+  if (text.ok) return text;
+
+  // Common Graph codes: 131047 (re-engagement), 131026 (not allowed), 132000 (template)
+  const fallback = await sendTemplateMessage(to);
+  if (fallback.ok) {
+    console.warn(
+      '[whatsapp] free-form failed (%s); template "%s" sent instead',
+      text.error,
+      TEMPLATE_NAME
+    );
+    return fallback;
+  }
+
+  return {
+    ok: false,
+    error: `text: ${text.error || 'fail'}; template: ${fallback.error || 'fail'}`,
+    errorCode: text.errorCode ?? fallback.errorCode,
+  };
+}
+
+/** Lightweight Graph probe — does not send messages. */
+export async function probeGraphToken(): Promise<{
+  ok: boolean;
+  displayPhoneNumber?: string;
+  verifiedName?: string;
+  error?: string;
+  errorCode?: number;
+}> {
+  if (!isConfigured()) {
+    return { ok: false, error: 'not-configured' };
+  }
+  try {
+    const res = await fetch(
+      `https://graph.facebook.com/${GRAPH_API_VERSION}/${PHONE_NUMBER_ID}?fields=display_phone_number,verified_name,quality_rating`,
+      { headers: { Authorization: `Bearer ${TOKEN}` } }
+    );
+    const data: {
+      display_phone_number?: string;
+      verified_name?: string;
+      error?: { message?: string; code?: number };
+    } = await res.json();
+    if (!res.ok) {
+      return {
+        ok: false,
+        error: data?.error?.message || 'graph-error',
+        errorCode: data?.error?.code,
+      };
+    }
+    return {
+      ok: true,
+      displayPhoneNumber: data.display_phone_number,
+      verifiedName: data.verified_name,
+    };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
 // ─── Webhook verification ───────────────────────────────────────────────────
 /**
  * Meta calls GET /webhook with hub.verify_token & hub.challenge during setup.
- * Returns the challenge string if the token matches, else null.
+ * Returns true if token matches.
  */
-export function verifyWebhookToken(token: string | null): string | null {
-  if (!VERIFY_TOKEN || !token) return null;
-  if (token === VERIFY_TOKEN) return token;
-  return null;
+export function verifyWebhookToken(token: string | null): boolean {
+  if (!VERIFY_TOKEN || !token) return false;
+  return token === VERIFY_TOKEN;
 }
 
 /**

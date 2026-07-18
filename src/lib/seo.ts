@@ -3,12 +3,18 @@
  * Next.js App Router — metadata, JSON-LD schemas, canonical helpers.
  */
 
+/** Official production domains (Cloudflare Workers custom domains). */
+export const OFFICIAL_DOMAINS = {
+  primary: "bleaderitaly.com",
+  italy: "bleaderitaly.it",
+} as const;
+
 export const SITE = {
   name: "B LEADER",
   tagline: "Luxury Driving & Yacht Experiences in Salento",
-  // ── CAMBIAR cuando compres el dominio ──
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://bleader.it",
-  // ──────────────────────────────────────
+  // Primary public URL — override with NEXT_PUBLIC_SITE_URL in prod if needed
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://bleaderitaly.com",
+  domains: OFFICIAL_DOMAINS,
   locale: "en_US",
   localeAlternate: "it_IT",
   defaultTitle: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
@@ -19,7 +25,7 @@ export const SITE = {
     "luxury yacht experience Puglia",
     "Ferrari tour Puglia US tourists",
     "luxury vacation experiences Salento",
-    "drive Ferrari along Amalfi Coast",
+    "drive Ferrari Salento coast Italy",
     "sunset yacht tour Salento",
     "exotic car experience Italy",
     "B LEADER luxury experiences",
@@ -39,7 +45,7 @@ export const SITE = {
  */
 export const CONTACT = {
   phone: process.env.NEXT_PUBLIC_PHONE || "+39-XXX-XXXXXXX",
-  email: process.env.NEXT_PUBLIC_EMAIL || "info@bleader.com",
+  email: process.env.NEXT_PUBLIC_EMAIL || "info@bleaderitaly.com",
 };
 
 export type PageMeta = {

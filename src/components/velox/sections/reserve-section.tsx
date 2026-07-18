@@ -7,7 +7,7 @@ import { Phone, Mail, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
 import { ReservationForm } from '../ui/reservation-form';
 
 const PHONE = process.env.NEXT_PUBLIC_PHONE || '+39 333 123 4567';
-const EMAIL = process.env.NEXT_PUBLIC_EMAIL || 'reserve@bleader.com';
+const EMAIL = process.env.NEXT_PUBLIC_EMAIL || 'reserve@bleaderitaly.com';
 
 const PARTICLE_COUNT = 35;
 const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({

@@ -13,6 +13,7 @@
     "binding": "ASSETS"
   },
   "r2_buckets": [],
+  "queues": {},
   "d1_databases": [
     {
       "binding": "DB",
@@ -20,7 +21,17 @@
       "database_id": "ccb5ea03-0e0a-47c3-9a6f-04654350d10d"
     }
   ],
+  // Public runtime vars (secrets via `wrangler secret put`)
   "vars": {
-    "WHATSAPP_GRAPH_API_VERSION": "v25.0"
-  }
+    "WHATSAPP_GRAPH_API_VERSION": "v25.0",
+    "NEXT_PUBLIC_SITE_URL": "https://bleaderitaly.com"
+  },
+  // Official custom domains (managed by Workers Domains API / dashboard)
+  "routes": [
+    { "pattern": "bleaderitaly.com", "custom_domain": true },
+    { "pattern": "www.bleaderitaly.com", "custom_domain": true }
+  ],
+  "rules": [
+    { "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }
+  ]
 }

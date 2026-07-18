@@ -7,15 +7,19 @@
  */
 
 const ALLOWED_ORIGINS = process.env.CSRF_ALLOWED_ORIGINS
-  ? process.env.CSRF_ALLOWED_ORIGINS.split(",")
+  ? process.env.CSRF_ALLOWED_ORIGINS.split(",").map((s) => s.trim()).filter(Boolean)
   : [
       "http://localhost:3000",
       "http://localhost:3001",
+      // Official domains
+      "https://bleaderitaly.com",
+      "https://www.bleaderitaly.com",
+      "https://bleaderitaly.it",
+      "https://www.bleaderitaly.it",
+      // Cloudflare Workers (pre-custom-domain / preview)
+      "https://bleader-italy.uastasiforbusiness.workers.dev",
       "https://bleader-italy.pages.dev",
       "https://*.bleader-italy.pages.dev",
-      "https://bleader.vercel.app",
-      "https://bleader.it",
-      "https://www.bleader.it",
     ];
 
 export interface OriginCheckResult {
