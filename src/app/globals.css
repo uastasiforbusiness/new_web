@@ -313,7 +313,7 @@ html.lenis, html.lenis body {
    ═══════════════════════════════════════════════════════════ */
 .back-to-top {
   position: fixed;
-  bottom: 32px;
+  bottom: 96px;
   right: 32px;
   width: 48px;
   height: 48px;
@@ -350,7 +350,7 @@ html.lenis, html.lenis body {
 }
 @media (pointer: coarse) {
   .back-to-top {
-    bottom: 24px;
+    bottom: 88px;
     right: 24px;
     width: 42px;
     height: 42px;
