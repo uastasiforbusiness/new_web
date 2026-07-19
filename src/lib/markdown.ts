@@ -2,44 +2,31 @@
  * Markdown content negotiation utilities for AI agents.
  *
  * Converts server-rendered HTML to Markdown on-the-fly when a client sends
- * `Accept: text/markdown`. Implements the pattern documented at
- * https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/
- * and https://llmstxt.org/.
+ * `Accept: text/markdown`. Uses node-html-markdown (DOM-free, ~40 KB)
+ * instead of jsdom + turndown (~5 MB) for Cloudflare Workers compatibility.
  *
- * Why this exists: Cloudflare's "Markdown for Agents" (dashboard toggle) is a
- * paid Pro+ feature. This module provides the same content-negotiation
- * behavior in the Worker for free.
+ * @see https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/
  */
-import TurndownService from "turndown";
-import { JSDOM } from "jsdom";
+import { NodeHtmlMarkdown } from "node-html-markdown";
 
-/**
- * Create a fresh turndown instance per request. Turndown mutates its internal
- * DOM reference on convert, so sharing a singleton across concurrent requests
- * in the Worker would be unsafe.
- */
-function createTurndown(): TurndownService {
-  const td = new TurndownService({
-    headingStyle: "atx",
-    codeBlockStyle: "fenced",
-    bulletListMarker: "-",
-    emDelimiter: "*",
-    hr: "---",
-  });
+// Tags whose entire subtree should be removed before conversion.
+const STRIP_TAGS = [
+  "script", "style", "noscript", "iframe", "template",
+  "nav", "footer", "header",
+];
 
-  // Turndown walks the DOM we hand it; we already strip chrome via
-  // querySelectorAll before conversion, so these remove() calls are a
-  // second-pass safety net.
-  td.remove(["script", "style", "noscript", "iframe", "template"]);
-
-  return td;
-}
+// Singleton instance — node-html-markdown is stateless and safe to share.
+const nhm = new NodeHtmlMarkdown({
+  bulletMarker: "-",
+  codeFence: "```",
+});
 
 /**
  * Convert an HTML string to Markdown.
  *
  * - Prepends YAML frontmatter with title/description/image extracted from
  *   <meta> tags, matching the Cloudflare Markdown for Agents output format.
+ * - Strips chrome (nav, footer, scripts) via pre-processing regex.
  * - Appends JSON-LD blocks as fenced ```json blocks at the end.
  */
 export function htmlToMarkdown(html: string, baseUrl: string): string {
@@ -48,24 +35,20 @@ export function htmlToMarkdown(html: string, baseUrl: string): string {
   const description = extractMeta(html, "og:description") || extractMeta(html, "description");
   const image = extractMeta(html, "og:image");
 
-  // Pull JSON-LD blocks out before turndown strips scripts.
+  // Pull JSON-LD blocks out before we strip script tags.
   const jsonLdBlocks = extractJsonLd(html);
 
-  // Parse with jsdom so turndown has a DOM to walk.
-  const dom = new JSDOM(html, { url: baseUrl });
-  const document = dom.window.document;
-
-  // Strip non-content elements directly on the DOM before conversion.
-  document.querySelectorAll("script, style, noscript, iframe, template").forEach((n) => n.remove());
-  document.querySelectorAll("nav, footer, header, [aria-hidden='true']").forEach((n) => n.remove());
-
-  const body = document.body;
-  if (!body) {
-    return "";
+  // Strip chrome elements (and their children) before conversion.
+  // We use regex instead of a DOM because we don't have jsdom.
+  for (const tag of STRIP_TAGS) {
+    html = html.replace(new RegExp(`<${tag}[^>]*>[\\s\\S]*?<\\/${tag}>`, "gi"), "");
   }
+  // Also strip elements with aria-hidden="true" (presentational only).
+  html = html.replace(/<[^>]+aria-hidden=["']true["'][^>]*>[\s\S]*?<\/[^>]+>/gi, "");
 
-  const turndown = createTurndown();
-  let markdown = turndown.turndown(body).trim();
+  // Convert to markdown — no DOM needed, node-html-markdown parses the
+  // string directly using its own lightweight HTML parser.
+  let markdown = nhm.translate(html).trim();
 
   // Make relative URLs absolute so agents can follow them.
   markdown = absolutizeUrls(markdown, baseUrl);
@@ -128,7 +111,6 @@ function extractJsonLd(html: string): string[] {
 function absolutizeUrls(markdown: string, baseUrl: string): string {
   try {
     const base = new URL(baseUrl);
-    const origin = base.origin;
     return markdown.replace(/\]\((\/?[^)\s]*)\)/g, (full, p1) => {
       if (/^https?:\/\//i.test(p1) || p1.startsWith("#") || p1.startsWith("mailto:")) {
         return full;
@@ -143,7 +125,7 @@ function absolutizeUrls(markdown: string, baseUrl: string): string {
 
 function yamlScalar(value: string): string {
   // Quote if it contains characters that need escaping in YAML.
-  if (/[:#\n'"{}\[\]]/.test(value)) {
+  if (/[:#\n'\"{}\[\]]/.test(value)) {
     return `"${value.replace(/"/g, '\\"')}"`;
   }
   return value;
