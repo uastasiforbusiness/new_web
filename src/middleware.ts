@@ -1,23 +1,16 @@
 /**
- * Markdown content negotiation for AI agents (Next.js 16 proxy layer).
+ * Edge Middleware — Markdown content negotiation for AI agents.
  *
- * When a client sends `Accept: text/markdown`, rewrite to the internal
- * markdown converter endpoint `/api/_md?p=<original-path>`. The handler
- * fetches the HTML version and converts it on the fly.
+ * When a client sends `Accept: text/markdown` with higher preference than
+ * text/html, rewrite transparently to /api/md/<path> so agents receive a
+ * markdown version without changing the canonical URL.
  *
- * Why a proxy layer (not the route handler directly): it lets us
- * transparently serve markdown at the canonical URL (/about, /fleet, ...)
- * so agents don't need to know about /api/_md. The original URL is
- * preserved for caching, SEO, and link discovery.
+ * The actual HTML→markdown conversion happens in the route handler at
+ * /api/md/[...path]/route.ts (Node.js runtime, uses jsdom + turndown).
+ * This middleware only does the Accept header check + rewrite — all
+ * Edge-compatible, no Node.js deps.
  *
- * Matchers exclude everything that is not an HTML page:
- *   - /api/*          (handlers)
- *   - /_next/*        (static assets, RSC payloads)
- *   - /favicon.svg, /robots.txt, /sitemap.xml, /opengraph-image
- *   - /images/*       (static media)
- *   - anything with a file extension (handled by static router)
- *
- * @see https://datatracker.ietf.org/doc/html/rfc9110 (Accept, §12.5.1)
+ * @see RFC 9110 (Accept, §12.5.1)
  * @see https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/
  */
 import { NextResponse } from "next/server";
@@ -41,15 +34,14 @@ function wantsMarkdown(accept: string | null): boolean {
   return mdQ > 0 && mdQ >= htmlQ;
 }
 
-export function proxy(req: NextRequest): NextResponse {
+export function middleware(req: NextRequest): NextResponse {
   if (!wantsMarkdown(req.headers.get("accept"))) {
     return NextResponse.next();
   }
 
   const url = req.nextUrl;
-  // Rewrite to the catch-all route handler /api/md/<path>. We pass the
-  // original path as URL segments (not query string) because Next.js
-  // reliably forwards path segments through rewrites.
+  // Rewrite to the catch-all route handler /api/md/<path>. The path segment
+  // is more reliable with Next.js rewrites than query strings.
   // Homepage "/" maps to /api/md/_root because catch-all requires >=1 segment.
   const pathPart = url.pathname === "/" ? "/_root" : url.pathname;
   const target = new URL(`/api/md${pathPart}`, url.origin);
@@ -59,6 +51,6 @@ export function proxy(req: NextRequest): NextResponse {
 export const config = {
   matcher: [
     // Match all paths except: /api, /_next, static assets, well-known files.
-    "/((?!api|_next|favicon\\.svg|robots\\.txt|sitemap\\.xml|opengraph-image|images|.*\\.).*)",
+    "/((?!api|_next|favicon\\.svg|robots\\.txt|sitemap\\.xml|opengraph-image|images|.*\\..*).*)",
   ],
 };

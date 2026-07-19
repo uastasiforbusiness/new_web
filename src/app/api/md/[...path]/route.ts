@@ -1,7 +1,7 @@
 /**
  * Internal markdown-for-agents endpoint.
  *
- * Invoked by src/proxy.ts when a request carries Accept: text/markdown.
+ * Invoked by src/middleware.ts when a request carries Accept: text/markdown.
  * Fetches the original page (without the markdown Accept header to avoid
  * loops), converts the HTML to markdown, and returns it with the headers
  * documented in the Markdown for Agents spec:
