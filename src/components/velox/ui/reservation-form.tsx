@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { ChevronDown, Check, Loader2, Sparkles, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { DatePicker } from './date-picker';
 import { bookableExperiences } from '@/lib/experiences';
@@ -262,6 +263,11 @@ export function ReservationForm() {
             />
             <span>
               I agree to B LEADER processing my data to manage this reservation request.
+              Read our{' '}
+              <Link href="/privacy" className="text-[#c9a96e] hover:underline" target="_blank">Privacy Policy</Link>
+              {' '}and{' '}
+              <Link href="/terms" className="text-[#c9a96e] hover:underline" target="_blank">Terms &amp; Conditions</Link>
+              .
             </span>
           </label>
         </div>

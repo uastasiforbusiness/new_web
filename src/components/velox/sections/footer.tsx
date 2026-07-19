@@ -42,6 +42,11 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-10 pt-6 border-t border-[#1a1a1a] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-4 text-[9px] font-heading tracking-[0.2em]">
+            <Link href="/privacy" className="text-[#555] hover:text-[#c9a96e] transition-colors duration-300">PRIVACY</Link>
+            <span className="text-[#333]">·</span>
+            <Link href="/terms" className="text-[#555] hover:text-[#c9a96e] transition-colors duration-300">TERMS</Link>
+          </div>
           <p className="text-[9px] font-heading tracking-[0.2em] text-[#444]">© {new Date().getFullYear()} B LEADER. ALL RIGHTS RESERVED.</p>
           <div className="flex items-center gap-2">
             <div className="w-6 h-[1px] bg-[#c9a96e]/20" />
