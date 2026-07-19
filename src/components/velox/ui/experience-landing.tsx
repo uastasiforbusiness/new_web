@@ -14,6 +14,8 @@ export type ExperienceLandingProps = {
   primaryCta?: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
   showUsBlock?: boolean;
+  /** Custom content injected between the intro paragraphs and the highlights grid. */
+  children?: React.ReactNode;
 };
 
 /**
@@ -30,6 +32,7 @@ export function ExperienceLanding({
   primaryCta = { href: '/#reserve', label: 'RESERVE EXPERIENCE' },
   secondaryCta,
   showUsBlock = true,
+  children,
 }: ExperienceLandingProps) {
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
@@ -78,6 +81,8 @@ export function ExperienceLanding({
           ))}
         </div>
       </section>
+
+      {children}
 
       <section className="py-12 sm:py-16 border-y border-[#1a1a1a] bg-[#0c0c0c]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid sm:grid-cols-2 gap-5">
