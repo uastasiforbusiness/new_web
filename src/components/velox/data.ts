@@ -346,6 +346,14 @@ export const serviceLines = [
   },
 ];
 
+// Bookable experiences catalog lives in @/lib/experiences (form + API).
+// Re-export for UI convenience.
+export {
+  bookableExperiences,
+  BOOKABLE_EXPERIENCE_NAMES,
+  type BookableExperience,
+} from '@/lib/experiences';
+
 export const coverageRegions = [
   { name: 'Puglia', role: 'Headquarters', detail: 'Lecce / Carmiano', primary: true },
   { name: 'Basilicata', role: 'Extended coverage', detail: '', primary: false },

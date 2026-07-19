@@ -1,28 +1,28 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
+import { ChevronDown, Check, Loader2, Sparkles, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { DatePicker } from './date-picker';
-import { cars } from '../data';
+import { bookableExperiences } from '@/lib/experiences';
 
 type FormData = {
-  carIndex: number;
+  experienceIndex: number;
   customerName: string;
   email: string;
   phone: string;
-  pickupDate: string;
-  returnDate: string;
+  startDate: string;
+  endDate: string;
   message: string;
   consentAccepted: boolean;
 };
 
 const initialForm: FormData = {
-  carIndex: 0,
+  experienceIndex: 0,
   customerName: '',
   email: '',
   phone: '',
-  pickupDate: '',
-  returnDate: '',
+  startDate: '',
+  endDate: '',
   message: '',
   consentAccepted: false,
 };
@@ -33,10 +33,10 @@ export function ReservationForm() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [dateError, setDateError] = useState('');
-  const [carDropdownOpen, setCarDropdownOpen] = useState(false);
+  const [experienceDropdownOpen, setExperienceDropdownOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
-  const selectedCar = cars[form.carIndex];
+  const selectedExperience = bookableExperiences[form.experienceIndex] ?? bookableExperiences[0];
 
   useEffect(() => {
     if (!success) return;
@@ -53,7 +53,7 @@ export function ReservationForm() {
 
   const update = (field: keyof FormData, value: string | number | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    if (field === 'pickupDate' || field === 'returnDate') {
+    if (field === 'startDate' || field === 'endDate') {
       setDateError('');
     }
   };
@@ -63,12 +63,17 @@ export function ReservationForm() {
     setError('');
     setDateError('');
 
+    if (!selectedExperience) {
+      setError('Please select an experience');
+      return;
+    }
+
     // ─── Client-side date validation before network round-trip ───────
-    if (form.pickupDate && form.returnDate) {
-      const pickup = new Date(form.pickupDate);
-      const ret = new Date(form.returnDate);
-      if (ret <= pickup) {
-        setDateError('Return date must be after pickup date');
+    if (form.startDate && form.endDate) {
+      const start = new Date(form.startDate);
+      const end = new Date(form.endDate);
+      if (end < start) {
+        setDateError('End date must be on or after the start date');
         return;
       }
     }
@@ -83,15 +88,15 @@ export function ReservationForm() {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          carName: selectedCar.name,
-          carVariant: selectedCar.variant,
-          customerName: form.customerName,
+          experience_name: selectedExperience.name,
+          experience_category: selectedExperience.category,
+          customer_name: form.customerName,
           email: form.email,
           phone: form.phone,
-          pickupDate: form.pickupDate,
-          returnDate: form.returnDate,
+          pickup_date: form.startDate,
+          return_date: form.endDate,
           message: form.message || undefined,
-          consentAccepted: form.consentAccepted,
+          consent_accepted: form.consentAccepted,
         }),
       });
 
@@ -125,33 +130,43 @@ export function ReservationForm() {
   return (
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Car selector */}
+        {/* Experience selector */}
         <div className="relative">
-          <label className={labelClass}>SELECT VEHICLE</label>
+          <label className={labelClass}>SELECT EXPERIENCE</label>
           <button
             type="button"
-            onClick={() => setCarDropdownOpen(!carDropdownOpen)}
+            onClick={() => setExperienceDropdownOpen(!experienceDropdownOpen)}
             className={`${inputClass} flex items-center justify-between`}
+            aria-haspopup="listbox"
+            aria-expanded={experienceDropdownOpen}
           >
-            <span className="flex items-center gap-3">
-              <Car size={14} className="text-[#c9a96e]" />
-              <span>{selectedCar.name} — <span className="text-[#888]">{selectedCar.variant}</span></span>
+            <span className="flex items-center gap-3 min-w-0">
+              <Sparkles size={14} className="text-[#c9a96e] shrink-0" />
+              <span className="truncate text-left">
+                {selectedExperience.name}
+                <span className="text-[#888]"> — {selectedExperience.category}</span>
+              </span>
             </span>
-            <ChevronDown size={14} className={`text-[#c9a96e] transition-transform duration-300 ${carDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown size={14} className={`text-[#c9a96e] shrink-0 transition-transform duration-300 ${experienceDropdownOpen ? 'rotate-180' : ''}`} />
           </button>
-          {carDropdownOpen && (
-            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111] border border-[#333] shadow-2xl">
-              {cars.map((car, i) => (
+          {experienceDropdownOpen && (
+            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111] border border-[#333] shadow-2xl max-h-72 overflow-y-auto" role="listbox">
+              {bookableExperiences.map((experience, i) => (
                 <button
-                  key={car.variant}
+                  key={experience.id}
                   type="button"
-                  onClick={() => { update('carIndex', i); setCarDropdownOpen(false); }}
+                  role="option"
+                  aria-selected={i === form.experienceIndex}
+                  onClick={() => { update('experienceIndex', i); setExperienceDropdownOpen(false); }}
                   className={`w-full text-left px-4 py-3 text-sm font-body transition-colors duration-200 ${
-                    i === form.carIndex ? 'bg-[#c9a96e]/10 text-[#c9a96e]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
+                    i === form.experienceIndex ? 'bg-[#c9a96e]/10 text-[#c9a96e]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
                   }`}
                 >
-                  <span className="font-elegant font-semibold">{car.name}</span>
-                  <span className="text-[#555] font-elegant ml-2">— {car.variant}</span>
+                  <span className="font-elegant font-semibold block">{experience.name}</span>
+                  <span className="text-[#555] font-elegant text-xs">
+                    {experience.category}
+                    {experience.duration ? ` · ${experience.duration}` : ''}
+                  </span>
                 </button>
               ))}
             </div>
@@ -200,10 +215,10 @@ export function ReservationForm() {
           </div>
           <div>
             <DatePicker
-              value={form.pickupDate}
-              onChange={(v) => update('pickupDate', v)}
-              label="PICKUP DATE"
-              placeholder="Select pickup date"
+              value={form.startDate}
+              onChange={(v) => update('startDate', v)}
+              label="START DATE"
+              placeholder="Select start date"
               required
               min={new Date().toISOString().split('T')[0]}
             />
@@ -213,12 +228,12 @@ export function ReservationForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <DatePicker
-              value={form.returnDate}
-              onChange={(v) => update('returnDate', v)}
-              label="RETURN DATE"
-              placeholder="Select return date"
+              value={form.endDate}
+              onChange={(v) => update('endDate', v)}
+              label="END DATE"
+              placeholder="Select end date"
               required
-              min={form.pickupDate || new Date().toISOString().split('T')[0]}
+              min={form.startDate || new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>
@@ -229,7 +244,7 @@ export function ReservationForm() {
           <textarea
             value={form.message}
             onChange={(e) => update('message', e.target.value)}
-            placeholder="Any special requests or preferences..."
+            placeholder="Preferred vehicle, guest count, or other details..."
             rows={3}
             className={`${inputClass} resize-none`}
           />
