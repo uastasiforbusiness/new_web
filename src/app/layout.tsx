@@ -7,6 +7,7 @@ import {
   localBusinessSchema,
   websiteSchema,
 } from "@/lib/seo";
+import { SiteChrome } from "@/components/velox/site-chrome";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -142,7 +143,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${inter.variable} ${cormorant.variable} antialiased bg-[#0a0a0a] text-white overflow-x-hidden`}
       >
-        {children}
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

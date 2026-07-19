@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { Navigation } from '@/components/velox/sections/navigation';
-import { Footer } from '@/components/velox/sections/footer';
 import { UsTravelersSection } from '@/components/velox/sections/us-travelers-section';
 
 export type ExperienceFaq = { question: string; answer: string };
@@ -35,9 +33,6 @@ export function ExperienceLanding({
 }: ExperienceLandingProps) {
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
-      <div className="h-20" />
-
       <section className="relative py-16 sm:py-24 border-b border-[#1a1a1a]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[10px] font-heading font-semibold tracking-[0.45em] text-[#c9a96e] mb-5">
@@ -115,7 +110,6 @@ export function ExperienceLanding({
       </section>
 
       {showUsBlock ? <UsTravelersSection compact /> : null}
-      <Footer />
     </main>
   );
 }

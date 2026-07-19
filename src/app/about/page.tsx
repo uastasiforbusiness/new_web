@@ -2,7 +2,6 @@ import { buildPageMeta, breadcrumbSchema } from '@/lib/seo';
 import Link from 'next/link';
 import { JsonLd } from '@/components/velox/ui/json-ld';
 import { Shield, Heart, MapPin, Award } from 'lucide-react';
-import { Navigation } from '@/components/velox/sections/navigation';
 
 export const metadata = buildPageMeta({
   title: 'About B LEADER — Luxury Experience Curator in Salento, Puglia',
@@ -56,10 +55,6 @@ export default function AboutPage() {
         ])}
       />
       <main className="min-h-screen bg-[#0a0a0a]">
-        <Navigation />
-        {/* Nav spacer */}
-        <div className="h-20" />
-
         {/* Hero */}
         <section className="relative py-20 sm:py-28 border-b border-[#222]">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
