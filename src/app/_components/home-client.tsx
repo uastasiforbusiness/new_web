@@ -29,12 +29,7 @@ if (typeof window !== 'undefined') {
 }
 
 export function HomeClient() {
-  const [loaded, setLoaded] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('bl-loaded') === 'true';
-    }
-    return false;
-  });
+  const [loaded, setLoaded] = useState(false);
 
   useLenis();
 
@@ -45,7 +40,6 @@ export function HomeClient() {
 
   const handleLoadComplete = useCallback(() => {
     setLoaded(true);
-    try { sessionStorage.setItem('bl-loaded', 'true'); } catch {}
   }, []);
 
   useEffect(() => {
