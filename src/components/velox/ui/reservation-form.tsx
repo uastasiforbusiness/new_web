@@ -206,7 +206,7 @@ export function ReservationForm() {
               type="tel"
               value={form.phone}
               onChange={(e) => update('phone', e.target.value)}
-              placeholder="+39 333 123 4567"
+              placeholder="+1 or +39 …"
               pattern="[+]?[\d\s().-]{5,23}"
               title="Enter a valid phone number (digits, spaces, +, -, parentheses)"
               required

@@ -31,6 +31,7 @@ export function Footer() {
             ))}
             <div className="w-[1px] h-4 bg-[#333] hidden sm:block" />
             <Link href={isHome ? '#reserve' : '/#reserve'} className="text-[10px] font-elegant tracking-wider text-[#c9a96e]/60 hover:text-[#c9a96e] transition-colors duration-300 hidden sm:block italic">Book Now</Link>
+            <Link href="/experiences/salento-from-usa" className="text-[10px] font-heading tracking-[0.15em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300 hidden md:block">US GUESTS</Link>
           </div>
           <div className="flex items-center gap-4">
             {[Instagram, Facebook, Twitter].map((Icon, i) => (

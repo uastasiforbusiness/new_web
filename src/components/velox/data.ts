@@ -372,6 +372,7 @@ export const navLinks: NavLink[] = [
   { label: 'FLEET', href: '#fleet', pageHref: '/fleet' },
   { label: 'YACHT', href: '#yacht', pageHref: '/yacht' },
   { label: 'SERVICES', href: '#services', pageHref: '/services' },
+  { label: 'EXPERIENCES', pageHref: '/experiences' },
   { label: 'ABOUT', pageHref: '/about' },
   { label: 'RESERVE', href: '#reserve' },
   { label: 'CONTACT', href: '#contact' },

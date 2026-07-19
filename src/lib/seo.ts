@@ -402,3 +402,47 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
     })),
   };
 }
+
+/** FAQPage schema — rich results for US-intent landing FAQs */
+export function faqSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+/** TouristTrip / Service schema for experience landing pages */
+export function experienceSchema(opts: {
+  name: string;
+  description: string;
+  path: string;
+  image?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    name: opts.name,
+    description: opts.description,
+    url: `${SITE.url}${opts.path}`,
+    image: opts.image ? `${SITE.url}${opts.image}` : `${SITE.url}/opengraph-image`,
+    touristType: "Luxury travelers, couples, US and international guests",
+    itinerary: {
+      "@type": "Place",
+      name: "Salento, Puglia, Italy",
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Puglia",
+        addressCountry: "IT",
+      },
+    },
+    provider: { "@id": `${SITE.url}/#organization` },
+  };
+}

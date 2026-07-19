@@ -22,6 +22,7 @@ import { WhatsAppButton } from '@/components/velox/chat/whatsapp-button';
 import { ScrollProgress } from '@/components/velox/ui/scroll-progress';
 import { BackToTop } from '@/components/velox/ui/back-to-top';
 import { BackgroundAurora } from '@/components/velox/ui/background-aurora';
+import { UsTravelersSection } from '@/components/velox/sections/us-travelers-section';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -86,6 +87,7 @@ export function HomeClient() {
         <YachtExperienceSection />
         <ServiceLinesSection />
         <CoverageSection />
+        <UsTravelersSection />
         <MarqueeText />
         <ReserveSection />
         <Footer />
