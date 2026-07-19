@@ -65,33 +65,31 @@ export function HomeClient() {
       <FilmGrain />
       <ScrollProgress />
 
+      <div>
+        <HeroScaleDown />
+        <MarqueeText />
+
+        <div className="relative py-10 sm:py-14">
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+          <div className="relative flex justify-center">
+            <span className="text-[#c9a96e]/40 text-[8px] bg-[#0a0a0a] px-4">◆</span>
+          </div>
+        </div>
+
+        <FleetShowcase />
+        <MarqueeText />
+        <YachtExperienceSection />
+        <ServiceLinesSection />
+        <CoverageSection />
+        <UsTravelersSection />
+        <MarqueeText />
+        <ReserveSection />
+        <BackToTop />
+      </div>
+
       <AnimatePresence>
         {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
       </AnimatePresence>
-
-      {loaded && (
-        <div>
-          <HeroScaleDown />
-          <MarqueeText />
-
-          <div className="relative py-10 sm:py-14">
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
-            <div className="relative flex justify-center">
-              <span className="text-[#c9a96e]/40 text-[8px] bg-[#0a0a0a] px-4">◆</span>
-            </div>
-          </div>
-
-          <FleetShowcase />
-          <MarqueeText />
-          <YachtExperienceSection />
-          <ServiceLinesSection />
-          <CoverageSection />
-          <UsTravelersSection />
-          <MarqueeText />
-          <ReserveSection />
-          <BackToTop />
-        </div>
-      )}
     </main>
   );
 }
