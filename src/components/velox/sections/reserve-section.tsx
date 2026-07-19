@@ -3,10 +3,9 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Phone, Mail, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
+import { Mail, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
 import { ReservationForm } from '../ui/reservation-form';
 
-const PHONE = (process.env.NEXT_PUBLIC_PHONE || '').trim();
 const EMAIL = process.env.NEXT_PUBLIC_EMAIL || 'info@bleaderitaly.com';
 
 const PARTICLE_COUNT = 35;
@@ -191,11 +190,6 @@ export function ReserveSection() {
         <ReservationForm />
 
         <div id="contact" className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 mt-14 sm:mt-16 pt-10 border-t border-[#222]">
-          {PHONE ? (
-            <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-pointer">
-              <Phone size={14} /> <span className="text-sm font-body">{PHONE}</span>
-            </a>
-          ) : null}
           <a href={`mailto:${EMAIL}`} className="flex items-center gap-2 text-[#888] hover:text-[#c9a96e] transition-colors duration-300 cursor-pointer">
             <Mail size={14} /> <span className="text-sm font-body">{EMAIL}</span>
           </a>

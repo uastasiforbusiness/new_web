@@ -4,12 +4,12 @@ import { JsonLd } from '@/components/velox/ui/json-ld';
 import { Navigation } from '@/components/velox/sections/navigation';
 import { Footer } from '@/components/velox/sections/footer';
 import { UsTravelersSection } from '@/components/velox/sections/us-travelers-section';
-import { Car, Ship, Plane } from 'lucide-react';
+import { Car, Ship, Compass } from 'lucide-react';
 
 export const metadata = buildPageMeta({
   title: 'Luxury Experiences in Salento for US Travelers',
   description:
-    'Ferrari driving, private yacht charters, and concierge-led Salento itineraries designed for American and international luxury travelers. English-speaking service near Brindisi and Bari airports.',
+    'Ferrari driving, private yacht charters, and concierge-led Salento itineraries designed for American and international luxury travelers. English-speaking service in Puglia, Italy.',
   path: '/experiences',
   keywords: [
     'Salento luxury experiences US travelers',
@@ -34,9 +34,9 @@ const cards = [
   },
   {
     href: '/experiences/salento-from-usa',
-    icon: Plane,
+    icon: Compass,
     title: 'Salento from the USA',
-    body: 'Airports, timing, licenses, and a sample 3-day luxury rhythm for first-time visitors.',
+    body: 'How US travelers plan the trip: pacing, licenses, and a sample 3-day luxury rhythm.',
   },
 ];
 
@@ -64,8 +64,8 @@ export default function ExperiencesHubPage() {
               <span className="not-italic shimmer-text">for those who fly in</span>
             </h1>
             <p className="text-[#888] font-body font-light text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              High-intent journeys for US and international guests: supercars, yachts, and logistics
-              that respect your time and your standards.
+              High-intent journeys for US and international guests: supercars, yachts, and a concierge
+              that respects your time and your standards.
             </p>
           </div>
         </section>

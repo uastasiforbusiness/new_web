@@ -11,9 +11,9 @@ const path = '/experiences/salento-from-usa';
 
 const faqs = [
   {
-    question: 'Which airport should US travelers use for Salento?',
+    question: 'How do US travelers usually reach Salento?',
     answer:
-      'Brindisi (BDS) is usually the closest gateway to Salento. Bari (BRI) also works with a longer transfer and more long-haul connection options. We help sequence your experience days around wheels-down time.',
+      'Most international guests fly into Puglia and continue to Salento by their own transfer or hotel arrangement. Plan buffer time after a long-haul flight before a supercar or yacht day.',
   },
   {
     question: 'How many days do I need for Ferrari + yacht?',
@@ -28,21 +28,21 @@ const faqs = [
   {
     question: 'What should I book before leaving the United States?',
     answer:
-      'Lock experience dates early in peak season (late spring–early fall), confirm license documents for driving days, and share flight arrivals so handovers are timed. Villas and hotels can be coordinated around the same calendar.',
+      'Lock experience dates early in peak season (late spring–early fall) and confirm license documents for driving days. Villas and hotels can sit on the same calendar as your B LEADER experiences.',
   },
 ];
 
 export const metadata = buildPageMeta({
   title: 'Salento from the USA — Luxury Trip Guide & Experiences',
   description:
-    'Planning Salento from the United States: Brindisi & Bari airports, sample 3-day luxury rhythm, Ferrari and yacht days, licenses, and English-speaking concierge with B LEADER.',
+    'Planning Salento from the United States: sample 3-day luxury rhythm, Ferrari and yacht days, licenses, and English-speaking concierge with B LEADER in Puglia, Italy.',
   path,
   keywords: [
     'Salento from USA',
     'Puglia luxury trip Americans',
-    'Brindisi airport luxury transfer experiences',
     '3 day Salento itinerary luxury',
     'Italy supercar vacation from US',
+    'Salento yacht and Ferrari trip',
   ],
 });
 
@@ -69,16 +69,16 @@ export default function SalentoFromUsaPage() {
         eyebrow="US TRAVELERS · SALENTO PLAYBOOK"
         title="Fly in."
         titleAccent="Drive. Sail. Remember."
-        lead="A practical luxury framework for Americans discovering Salento — airports, pacing, and the experiences that make the long-haul worth it."
+        lead="A practical luxury framework for Americans discovering Salento — pacing, documents, and the experiences that make the long-haul worth it."
         paragraphs={[
-          'US search interest in Puglia and Salento keeps rising: travelers want Italy with more space, stronger food culture, and coasts that still feel cinematic. The friction is logistics. That is where B LEADER sits — between your itinerary and the keys or the gangway.',
+          'US search interest in Puglia and Salento keeps rising: travelers want Italy with more space, stronger food culture, and coasts that still feel cinematic. The friction is knowing what to book first. That is where B LEADER sits — Ferrari days and private yacht charters with English concierge.',
           'Think in chapters, not checklists. Day zero is arrival and light. Day one is the road: Ferrari, wind, villages. Day two is the water: private charter, swim, sunset. Everything else — Lecce stone, Gallipoli evenings, Otranto gold — fills the spaces between without stealing recovery time.',
-          'You can plan most of this from the United States on WhatsApp or email. We confirm documents, deposits, and timing before you board the transatlantic leg so your first morning in Italy is not spent translating rental desks.',
+          'You can plan most of this from the United States on WhatsApp or email. We confirm documents, deposits, and experience timing before you travel so your first full day in Italy is not spent decoding the fine print.',
         ]}
         highlights={[
           {
-            label: 'AIRPORTS',
-            detail: 'BDS (Brindisi) for proximity; BRI (Bari) for broader connections. Share your flight — we reverse-engineer handovers.',
+            label: 'FOCUS',
+            detail: 'We curate driving and yacht experiences — not airport transfers. Arrange your own arrival; we handle the unforgettable days.',
           },
           {
             label: '3-DAY RHYTHM',
@@ -86,7 +86,7 @@ export default function SalentoFromUsaPage() {
           },
           {
             label: 'DOCUMENTS',
-            detail: 'Valid license (+ IDP when applicable), passport, and card for deposit. We spell requirements before you fly.',
+            detail: 'Valid license (+ IDP when applicable), passport, and card for deposit. We spell driving-day requirements before you fly.',
           },
           {
             label: 'WHEN TO COME',

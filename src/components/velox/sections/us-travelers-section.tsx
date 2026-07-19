@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import {
-  Plane,
   Languages,
   CreditCard,
   ShieldCheck,
   MapPinned,
   Clock,
+  Sparkles,
 } from 'lucide-react';
 
 const points = [
@@ -15,9 +15,9 @@ const points = [
     body: 'Briefings, contracts, and day-of support in clear English — built for guests flying in from the US and beyond.',
   },
   {
-    icon: Plane,
-    title: 'Brindisi & Bari pickups',
-    body: 'Arrival coordination from BDS and BRI. We time handovers around your flight, not a rigid desk schedule.',
+    icon: Sparkles,
+    title: 'Experiences, not desk rental',
+    body: 'Ferrari days and private yacht charters curated end to end — route, timing, and presentation at a private-client standard.',
   },
   {
     icon: CreditCard,
@@ -37,19 +37,18 @@ const points = [
   {
     icon: Clock,
     title: 'US-friendly response window',
-    body: 'WhatsApp and email concierge with fast replies across time zones — plan from New York, land ready in Puglia.',
+    body: 'WhatsApp and email concierge with fast replies across time zones — plan from New York, arrive ready for the coast.',
   },
 ];
 
 type Props = {
-  /** Compact mode for landing footers */
   compact?: boolean;
   id?: string;
 };
 
 /**
  * Trust block for US / international luxury travelers.
- * Server component — no client JS.
+ * Server component — no client JS. No phone. No airport pickup claims.
  */
 export function UsTravelersSection({ compact = false, id = 'for-us-travelers' }: Props) {
   return (
@@ -67,7 +66,7 @@ export function UsTravelersSection({ compact = false, id = 'for-us-travelers' }:
             <span className="not-italic shimmer-text"> who fly in</span>
           </h2>
           <p className="text-[#888] font-body font-light leading-relaxed text-base sm:text-lg">
-            Salento is having a moment with American luxury travelers. B LEADER makes the logistics
+            Salento is having a moment with American luxury travelers. B LEADER makes the experience
             effortless — so the memory is the coast, the engine note, and the sunset, not the paperwork.
           </p>
         </div>
@@ -90,7 +89,7 @@ export function UsTravelersSection({ compact = false, id = 'for-us-travelers' }:
             href="/experiences/salento-from-usa"
             className="text-[11px] font-heading font-semibold tracking-[0.25em] text-[#c9a96e] hover:text-[#d4af37] transition-colors"
           >
-            US ARRIVAL GUIDE →
+            US TRAVEL GUIDE →
           </Link>
           <span className="hidden sm:inline text-[#333]">|</span>
           <Link

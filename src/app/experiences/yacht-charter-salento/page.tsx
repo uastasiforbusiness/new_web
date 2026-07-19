@@ -89,8 +89,8 @@ export default function YachtCharterSalentoPage() {
             detail: 'Photographer, champagne service, and multi-day villa + sea sequences on request.',
           },
           {
-            label: 'LOGISTICS',
-            detail: 'Hotel or villa coordination; easy to plan from the US before you land in BDS or BRI.',
+            label: 'PLANNING',
+            detail: 'Easy to arrange from the US by WhatsApp or email before you travel — hotel or villa timing coordinated with your charter day.',
           },
         ]}
         faqs={faqs}

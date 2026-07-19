@@ -13,12 +13,12 @@ const faqs = [
   {
     question: 'Can US tourists drive a Ferrari in Italy?',
     answer:
-      'Yes. Guests typically need a valid full driving license held for the required period, and many US visitors carry an International Driving Permit alongside their state license. We confirm requirements before your date so arrival day is seamless.',
+      'Yes. Guests typically need a valid full driving license held for the required period, and many US visitors carry an International Driving Permit alongside their state license. We confirm requirements before your date so the day is seamless.',
   },
   {
-    question: 'Where does the Ferrari experience start in Salento?',
+    question: 'Where does the Ferrari experience take place?',
     answer:
-      'Hand-over is arranged in the Salento area with English-speaking support. Pickup timing can align with arrivals via Brindisi (BDS) or Bari (BRI) and your hotel or villa.',
+      'Hand-over and routes are in the Salento area of Puglia, with English-speaking support. Exact meeting point is confirmed when you reserve.',
   },
   {
     question: 'Is this a track day or a coastal road experience?',
@@ -35,7 +35,7 @@ const faqs = [
 export const metadata = buildPageMeta({
   title: 'Ferrari Driving Experience in Salento, Italy | For US Travelers',
   description:
-    'Drive a Ferrari along the Adriatic and Ionian coasts of Salento. English-speaking luxury self-drive experiences for American travelers — near Brindisi and Bari airports, concierge included.',
+    'Drive a Ferrari along the Adriatic and Ionian coasts of Salento. English-speaking luxury self-drive experiences for American travelers — concierge included.',
   path,
   keywords: [
     'Ferrari driving experience Salento',
@@ -74,7 +74,7 @@ export default function FerrariDrivingSalentoPage() {
         paragraphs={[
           'Salento sits where the Adriatic meets the Ionian. The light is different here. The roads braid through olive groves, baroque towns, and cliff edges that make a Ferrari California feel like it was designed for this exact geometry.',
           'B LEADER is not a desk-rental agency. We prepare the car, brief you in English, and shape a route that matches your pace — golden-hour coastal runs, village pauses, and the kind of photos that survive the group chat back home.',
-          'Whether you are landing from New York, Miami, or Los Angeles for a long weekend or a honeymoon chapter, the experience is built around arrival logistics, clear insurance language, and a vehicle that looks as serious as the memory you came for.',
+          'Whether you are visiting from New York, Miami, or Los Angeles for a long weekend or a honeymoon chapter, the experience is built around clear insurance language and a vehicle that looks as serious as the memory you came for.',
         ]}
         highlights={[
           {
@@ -87,7 +87,7 @@ export default function FerrariDrivingSalentoPage() {
           },
           {
             label: 'FOR US GUESTS',
-            detail: 'License guidance, airport-aware timing (BDS/BRI), and English concierge from first WhatsApp to keys-in-hand.',
+            detail: 'License guidance and English concierge from first message to keys-in-hand.',
           },
           {
             label: 'OCCASIONS',

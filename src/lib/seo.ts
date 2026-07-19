@@ -34,7 +34,6 @@ export const SITE = {
     // US traveler intent
     "luxury vacation Puglia for Americans",
     "drive Ferrari Italy vacation",
-    "yacht charter near Brindisi airport",
     "exotic car experience Italy from USA",
     "Salento luxury travel for US tourists",
     "honeymoon yacht charter Puglia",
@@ -228,16 +227,6 @@ export function localBusinessSchema() {
       { "@type": "City", name: "Brindisi" },
       { "@type": "City", name: "Bari" },
       { "@type": "City", name: "Santa Maria di Leuca" },
-      {
-        "@type": "Airport",
-        name: "Brindisi Airport",
-        iataCode: "BDS",
-      },
-      {
-        "@type": "Airport",
-        name: "Bari Karol Wojtyła Airport",
-        iataCode: "BRI",
-      },
     ],
     openingHoursSpecification: [
       {
