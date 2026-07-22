@@ -23,25 +23,25 @@ const values = [
     icon: Shield,
     title: 'Excellence',
     description:
-      'Every vehicle receives meticulous care and every itinerary is designed down to the smallest detail. We accept nothing less than perfection, because our clients deserve only the best.',
+      'Every vehicle is meticulously maintained, every itinerary carefully planned. We accept nothing less than perfection.',
   },
   {
     icon: Heart,
     title: 'Passion',
     description:
-      'Born from a passion for Italian automotive heritage and the breathtaking landscapes of Puglia, we share with our guests the emotion of roads and seas that leave their mark.',
+      'Born from a love for Italian automotive heritage and the breathtaking landscapes of Puglia. We share what moves us.',
   },
   {
     icon: MapPin,
-    title: 'Exclusive Knowledge',
+    title: 'Local Mastery',
     description:
-      'Our deep roots in Salento allow us to reveal hidden coves, scenic cliffside roads, and historic vineyards — places no travel guide tells you about.',
+      'Deep roots in Salento mean we know the hidden coves, the scenic roads, and the best vineyards that tourists never find.',
   },
   {
     icon: Award,
     title: 'Discretion',
     description:
-      'Impeccable service, from booking to return. Your privacy and your comfort are and will always remain our absolute priority.',
+      'White-glove service from booking to drop-off. Your privacy and comfort are our highest priority.',
   },
 ];
 
@@ -55,6 +55,9 @@ export default function AboutPage() {
         ])}
       />
       <main className="min-h-screen bg-[#0a0a0a]">
+        {/* Nav spacer */}
+        <div className="h-20" />
+
         {/* Hero */}
         <section className="relative py-20 sm:py-28 border-b border-[#222]">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -71,7 +74,9 @@ export default function AboutPage() {
               <span className="shimmer-text not-italic">Story</span>
             </h1>
             <p className="text-base sm:text-lg font-body font-light text-[#999] max-w-2xl mx-auto leading-relaxed">
-              Born in the heart of Salento, Puglia, B LEADER brings the world&apos;s most discerning travelers to discover what few have the privilege to experience: the Ionian and Adriatic coasts of Salento — among the most spectacular and iconic in the Mediterranean — through automotive and nautical experiences of absolute excellence.
+              Founded in the heart of Salento, Puglia, B LEADER was born from a
+              vision to offer the world&apos;s most discerning travelers access
+              to Italy&apos;s finest automotive and nautical experiences.
             </p>
           </div>
         </section>

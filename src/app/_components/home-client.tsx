@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { useLenis } from '@/components/velox/use-lenis';
 import { FilmGrain, SvgFilters } from '@/components/velox/ui/film-grain';
 import { LoadingScreen } from '@/components/velox/ui/loading-screen';
+import { Navigation } from '@/components/velox/sections/navigation';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 import { MarqueeText } from '@/components/velox/ui/marquee-text';
 
@@ -15,10 +17,16 @@ import { YachtExperienceSection } from '@/components/velox/sections/yacht-experi
 import { ServiceLinesSection } from '@/components/velox/sections/service-lines-section';
 import { CoverageSection } from '@/components/velox/sections/coverage-section';
 import { ReserveSection } from '@/components/velox/sections/reserve-section';
+import { Footer } from '@/components/velox/sections/footer';
+import { WhatsAppButton } from '@/components/velox/chat/whatsapp-button';
 import { ScrollProgress } from '@/components/velox/ui/scroll-progress';
 import { BackToTop } from '@/components/velox/ui/back-to-top';
 import { BackgroundAurora } from '@/components/velox/ui/background-aurora';
-import { UsTravelersSection } from '@/components/velox/sections/us-travelers-section';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
+}
 
 export function HomeClient() {
   const [loaded, setLoaded] = useState(false);
@@ -33,16 +41,6 @@ export function HomeClient() {
   const handleLoadComplete = useCallback(() => {
     setLoaded(true);
   }, []);
-
-  // Lock scroll while the cinematic loader covers the page (incl. global chrome)
-  useEffect(() => {
-    if (loaded) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [loaded]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -65,9 +63,16 @@ export function HomeClient() {
       <FilmGrain />
       <ScrollProgress />
 
-      <div>
+      <AnimatePresence>
+        {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
+      </AnimatePresence>
+
+      {loaded && (
+        <div>
+        <Navigation />
         <HeroScaleDown />
         <MarqueeText />
+
 
         <div className="relative py-10 sm:py-14">
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
@@ -81,15 +86,13 @@ export function HomeClient() {
         <YachtExperienceSection />
         <ServiceLinesSection />
         <CoverageSection />
-        <UsTravelersSection />
         <MarqueeText />
         <ReserveSection />
+        <Footer />
+        <WhatsAppButton />
         <BackToTop />
       </div>
-
-      <AnimatePresence>
-        {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
-      </AnimatePresence>
+      )}
     </main>
   );
 }

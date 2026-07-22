@@ -242,7 +242,7 @@ export function YachtExperienceSection() {
           {/* ── CTA ── */}
           <div className="text-center">
             <a
-              href="/#reserve"
+              href="#reserve"
               className="inline-flex items-center gap-2 bg-[#c9a96e] text-[#0a0a0a] font-heading font-semibold text-[11px] tracking-[0.2em] px-8 py-3.5 hover:bg-[#d4b77e] transition-colors duration-300"
             >
               BOOK YOUR EXPERIENCE

@@ -2,111 +2,56 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/seo";
 
 /**
- * Dynamic robots.txt — single source of truth (do not keep public/robots.txt).
- *
- * Strategy for US luxury discovery:
- * - Allow major search engines + social preview bots
- * - Allow AI answer engines used by US travelers (ChatGPT, Perplexity, Claude search)
- * - Block bulk training scrapers (CCBytes / CCBot)
- * - Never expose /api/*
+ * Dynamic robots.txt — sirve instructores para crawlers y AI bots.
+ * Define qué rastrear, qué ignorar, y dónde está el sitemap.
  */
 export default function robots(): MetadataRoute.Robots {
-  const disallowApi = ["/api/"];
-
   return {
     rules: [
-      // ─── Search engines ───────────────────────────────────────────────
+      // ─── Googlebot ─────────────────────────────────────────────────────
       {
         userAgent: "Googlebot",
         allow: "/",
-        disallow: disallowApi,
+        disallow: ["/api/"],
       },
+      // ─── Bingbot ───────────────────────────────────────────────────────
       {
         userAgent: "Bingbot",
         allow: "/",
-        disallow: disallowApi,
+        disallow: ["/api/"],
       },
-      {
-        userAgent: "DuckDuckBot",
-        allow: "/",
-        disallow: disallowApi,
-      },
-
-      // ─── Social preview crawlers (Open Graph / cards) ─────────────────
-      {
-        userAgent: "Twitterbot",
-        allow: "/",
-      },
-      {
-        userAgent: "facebookexternalhit",
-        allow: "/",
-      },
-      {
-        userAgent: "LinkedInBot",
-        allow: "/",
-      },
-
-      // ─── AI answer / discovery engines (US travel queries) ────────────
+      // ─── AI / LLM Crawlers — bloquear todos ────────────────────────────
       {
         userAgent: "GPTBot",
-        allow: "/",
-        disallow: disallowApi,
+        disallow: "/",
       },
-      {
-        userAgent: "OAI-SearchBot",
-        allow: "/",
-        disallow: disallowApi,
-      },
-      {
-        userAgent: "ChatGPT-User",
-        allow: "/",
-        disallow: disallowApi,
-      },
-      {
-        userAgent: "PerplexityBot",
-        allow: "/",
-        disallow: disallowApi,
-      },
-      {
-        userAgent: "ClaudeBot",
-        allow: "/",
-        disallow: disallowApi,
-      },
-      {
-        userAgent: "anthropic-ai",
-        allow: "/",
-        disallow: disallowApi,
-      },
-      {
-        userAgent: "Claude-Web",
-        allow: "/",
-        disallow: disallowApi,
-      },
-      // Gemini app grounding (not classic Google Search ranking)
-      {
-        userAgent: "Google-Extended",
-        allow: "/",
-        disallow: disallowApi,
-      },
-
-      // ─── Bulk corpus scrapers — no SEO value ──────────────────────────
       {
         userAgent: "CCBot",
         disallow: "/",
       },
       {
-        userAgent: "Bytespider",
+        userAgent: "Claude-Web",
         disallow: "/",
       },
-
-      // ─── Default ──────────────────────────────────────────────────────
+      {
+        userAgent: "anthropic-ai",
+        disallow: "/",
+      },
+      {
+        userAgent: "PerplexityBot",
+        disallow: "/",
+      },
+      {
+        userAgent: "Google-Extended",
+        disallow: "/",
+      },
+      // ─── Default — allow crawl, block API ──────────────────────────────
       {
         userAgent: "*",
         allow: "/",
-        disallow: disallowApi,
+        disallow: ["/api/"],
       },
     ],
     sitemap: `${SITE.url}/sitemap.xml`,
-    host: SITE.url,
   };
 }

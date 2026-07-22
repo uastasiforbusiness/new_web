@@ -37,15 +37,13 @@ const DEMO_MODE = process.env.RESEND_DEMO_MODE !== 'false';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export interface ReservationEmailData {
-  /** Selected bookable experience (e.g. "Full Day Charter") */
-  experienceName: string;
-  /** Experience category (e.g. "Yacht Charter") */
-  experienceCategory: string;
+  carName: string;
+  carVariant: string;
   customerName: string;
   email: string;
   phone: string;
-  pickupDate: string;   // ISO string — experience start
-  returnDate: string;   // ISO string — experience end
+  pickupDate: string;   // ISO string
+  returnDate: string;   // ISO string
   message?: string | null;
   reservationId: string;
 }
@@ -76,15 +74,15 @@ function customerHtml(d: ReservationEmailData): string {
       <td style="padding:32px 40px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #222;padding-top:24px;">
           <tr>
-            <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">EXPERIENCE</td>
-            <td style="padding:8px 0;text-align:right;font-size:14px;">${d.experienceName} <span style="color:#888;">— ${d.experienceCategory}</span></td>
+            <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">VEHICLE</td>
+            <td style="padding:8px 0;text-align:right;font-size:14px;">${d.carName} <span style="color:#888;">— ${d.carVariant}</span></td>
           </tr>
           <tr>
-            <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">START</td>
+            <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">PICKUP</td>
             <td style="padding:8px 0;text-align:right;font-size:14px;">${fmt(d.pickupDate)}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">END</td>
+            <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">RETURN</td>
             <td style="padding:8px 0;text-align:right;font-size:14px;">${fmt(d.returnDate)}</td>
           </tr>
           <tr>
@@ -134,15 +132,15 @@ function adminHtml(d: ReservationEmailData): string {
             <td style="padding:6px 0;text-align:right;"><a href="tel:${d.phone}" style="color:#c9a96e;">${d.phone}</a></td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#888;font-size:12px;">Experience</td>
-            <td style="padding:6px 0;text-align:right;">${d.experienceName} — ${d.experienceCategory}</td>
+            <td style="padding:6px 0;color:#888;font-size:12px;">Vehicle</td>
+            <td style="padding:6px 0;text-align:right;">${d.carName} — ${d.carVariant}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#888;font-size:12px;">Start</td>
+            <td style="padding:6px 0;color:#888;font-size:12px;">Pickup</td>
             <td style="padding:6px 0;text-align:right;">${fmt(d.pickupDate)}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#888;font-size:12px;">End</td>
+            <td style="padding:6px 0;color:#888;font-size:12px;">Return</td>
             <td style="padding:6px 0;text-align:right;">${fmt(d.returnDate)}</td>
           </tr>
           <tr>
@@ -180,7 +178,7 @@ export async function sendReservationEmails(data: ReservationEmailData): Promise
     const admin = await resend.emails.send({
       from: FROM_FORMATTED,
       to: [ADMIN_TO],
-      subject: `New Reservation: ${data.customerName} — ${data.experienceName}`,
+      subject: `New Reservation: ${data.customerName} — ${data.carName}`,
       html: adminHtml(data),
     });
 

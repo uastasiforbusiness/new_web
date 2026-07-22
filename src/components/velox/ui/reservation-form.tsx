@@ -1,29 +1,28 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { ChevronDown, Check, Loader2, Sparkles, User, Phone, Mail, MessageSquare } from 'lucide-react';
+import { ChevronDown, Check, Loader2, Car, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { DatePicker } from './date-picker';
-import { bookableExperiences } from '@/lib/experiences';
+import { cars } from '../data';
 
 type FormData = {
-  experienceIndex: number;
+  carIndex: number;
   customerName: string;
   email: string;
   phone: string;
-  startDate: string;
-  endDate: string;
+  pickupDate: string;
+  returnDate: string;
   message: string;
   consentAccepted: boolean;
 };
 
 const initialForm: FormData = {
-  experienceIndex: 0,
+  carIndex: 0,
   customerName: '',
   email: '',
   phone: '',
-  startDate: '',
-  endDate: '',
+  pickupDate: '',
+  returnDate: '',
   message: '',
   consentAccepted: false,
 };
@@ -34,10 +33,10 @@ export function ReservationForm() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [dateError, setDateError] = useState('');
-  const [experienceDropdownOpen, setExperienceDropdownOpen] = useState(false);
+  const [carDropdownOpen, setCarDropdownOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
-  const selectedExperience = bookableExperiences[form.experienceIndex] ?? bookableExperiences[0];
+  const selectedCar = cars[form.carIndex];
 
   useEffect(() => {
     if (!success) return;
@@ -54,7 +53,7 @@ export function ReservationForm() {
 
   const update = (field: keyof FormData, value: string | number | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    if (field === 'startDate' || field === 'endDate') {
+    if (field === 'pickupDate' || field === 'returnDate') {
       setDateError('');
     }
   };
@@ -64,17 +63,12 @@ export function ReservationForm() {
     setError('');
     setDateError('');
 
-    if (!selectedExperience) {
-      setError('Please select an experience');
-      return;
-    }
-
     // ─── Client-side date validation before network round-trip ───────
-    if (form.startDate && form.endDate) {
-      const start = new Date(form.startDate);
-      const end = new Date(form.endDate);
-      if (end < start) {
-        setDateError('End date must be on or after the start date');
+    if (form.pickupDate && form.returnDate) {
+      const pickup = new Date(form.pickupDate);
+      const ret = new Date(form.returnDate);
+      if (ret <= pickup) {
+        setDateError('Return date must be after pickup date');
         return;
       }
     }
@@ -89,15 +83,15 @@ export function ReservationForm() {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          experience_name: selectedExperience.name,
-          experience_category: selectedExperience.category,
-          customer_name: form.customerName,
+          carName: selectedCar.name,
+          carVariant: selectedCar.variant,
+          customerName: form.customerName,
           email: form.email,
           phone: form.phone,
-          pickup_date: form.startDate,
-          return_date: form.endDate,
+          pickupDate: form.pickupDate,
+          returnDate: form.returnDate,
           message: form.message || undefined,
-          consent_accepted: form.consentAccepted,
+          consentAccepted: form.consentAccepted,
         }),
       });
 
@@ -131,43 +125,33 @@ export function ReservationForm() {
   return (
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Experience selector */}
+        {/* Car selector */}
         <div className="relative">
-          <label className={labelClass}>SELECT EXPERIENCE</label>
+          <label className={labelClass}>SELECT VEHICLE</label>
           <button
             type="button"
-            onClick={() => setExperienceDropdownOpen(!experienceDropdownOpen)}
+            onClick={() => setCarDropdownOpen(!carDropdownOpen)}
             className={`${inputClass} flex items-center justify-between`}
-            aria-haspopup="listbox"
-            aria-expanded={experienceDropdownOpen}
           >
-            <span className="flex items-center gap-3 min-w-0">
-              <Sparkles size={14} className="text-[#c9a96e] shrink-0" />
-              <span className="truncate text-left">
-                {selectedExperience.name}
-                <span className="text-[#888]"> — {selectedExperience.category}</span>
-              </span>
+            <span className="flex items-center gap-3">
+              <Car size={14} className="text-[#c9a96e]" />
+              <span>{selectedCar.name} — <span className="text-[#888]">{selectedCar.variant}</span></span>
             </span>
-            <ChevronDown size={14} className={`text-[#c9a96e] shrink-0 transition-transform duration-300 ${experienceDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown size={14} className={`text-[#c9a96e] transition-transform duration-300 ${carDropdownOpen ? 'rotate-180' : ''}`} />
           </button>
-          {experienceDropdownOpen && (
-            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111] border border-[#333] shadow-2xl max-h-72 overflow-y-auto" role="listbox">
-              {bookableExperiences.map((experience, i) => (
+          {carDropdownOpen && (
+            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111] border border-[#333] shadow-2xl">
+              {cars.map((car, i) => (
                 <button
-                  key={experience.id}
+                  key={car.variant}
                   type="button"
-                  role="option"
-                  aria-selected={i === form.experienceIndex}
-                  onClick={() => { update('experienceIndex', i); setExperienceDropdownOpen(false); }}
+                  onClick={() => { update('carIndex', i); setCarDropdownOpen(false); }}
                   className={`w-full text-left px-4 py-3 text-sm font-body transition-colors duration-200 ${
-                    i === form.experienceIndex ? 'bg-[#c9a96e]/10 text-[#c9a96e]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
+                    i === form.carIndex ? 'bg-[#c9a96e]/10 text-[#c9a96e]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
                   }`}
                 >
-                  <span className="font-elegant font-semibold block">{experience.name}</span>
-                  <span className="text-[#555] font-elegant text-xs">
-                    {experience.category}
-                    {experience.duration ? ` · ${experience.duration}` : ''}
-                  </span>
+                  <span className="font-elegant font-semibold">{car.name}</span>
+                  <span className="text-[#555] font-elegant ml-2">— {car.variant}</span>
                 </button>
               ))}
             </div>
@@ -207,7 +191,7 @@ export function ReservationForm() {
               type="tel"
               value={form.phone}
               onChange={(e) => update('phone', e.target.value)}
-              placeholder="+1 or +39 …"
+              placeholder="+39 333 123 4567"
               pattern="[+]?[\d\s().-]{5,23}"
               title="Enter a valid phone number (digits, spaces, +, -, parentheses)"
               required
@@ -216,10 +200,10 @@ export function ReservationForm() {
           </div>
           <div>
             <DatePicker
-              value={form.startDate}
-              onChange={(v) => update('startDate', v)}
-              label="START DATE"
-              placeholder="Select start date"
+              value={form.pickupDate}
+              onChange={(v) => update('pickupDate', v)}
+              label="PICKUP DATE"
+              placeholder="Select pickup date"
               required
               min={new Date().toISOString().split('T')[0]}
             />
@@ -229,12 +213,12 @@ export function ReservationForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <DatePicker
-              value={form.endDate}
-              onChange={(v) => update('endDate', v)}
-              label="END DATE"
-              placeholder="Select end date"
+              value={form.returnDate}
+              onChange={(v) => update('returnDate', v)}
+              label="RETURN DATE"
+              placeholder="Select return date"
               required
-              min={form.startDate || new Date().toISOString().split('T')[0]}
+              min={form.pickupDate || new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>
@@ -245,7 +229,7 @@ export function ReservationForm() {
           <textarea
             value={form.message}
             onChange={(e) => update('message', e.target.value)}
-            placeholder="Preferred vehicle, guest count, or other details..."
+            placeholder="Any special requests or preferences..."
             rows={3}
             className={`${inputClass} resize-none`}
           />
@@ -263,11 +247,6 @@ export function ReservationForm() {
             />
             <span>
               I agree to B LEADER processing my data to manage this reservation request.
-              Read our{' '}
-              <Link href="/privacy" className="text-[#c9a96e] hover:underline" target="_blank">Privacy Policy</Link>
-              {' '}and{' '}
-              <Link href="/terms" className="text-[#c9a96e] hover:underline" target="_blank">Terms &amp; Conditions</Link>
-              .
             </span>
           </label>
         </div>

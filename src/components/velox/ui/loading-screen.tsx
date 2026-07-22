@@ -98,7 +98,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   }, []);
 
   return (
-    <section className="fixed inset-0 z-[100] h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
       {/* Canvas con la animación fluida */}
       <canvas
         ref={canvasRef}

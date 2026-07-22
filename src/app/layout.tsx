@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import {
-  SITE,
-  CONTACT,
-  localBusinessSchema,
-  websiteSchema,
-} from "@/lib/seo";
-import { SiteChrome } from "@/components/velox/site-chrome";
+import { localBusinessSchema, CONTACT } from "@/lib/seo";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -30,52 +24,61 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const verificationOther: Record<string, string> = {};
-if (process.env.NEXT_PUBLIC_BING_VERIFICATION) {
-  verificationOther["msvalidate.01"] = process.env.NEXT_PUBLIC_BING_VERIFICATION;
-}
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : "https://bleaderitaly.com";
 
 export const metadata: Metadata = {
-  // Titles are fully composed in buildPageMeta() per route (avoids double "| B LEADER")
-  title: SITE.defaultTitle,
-  description: SITE.defaultDescription,
-  keywords: [...SITE.defaultKeywords],
-  metadataBase: new URL(SITE.url),
+  title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
+  description:
+    "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, professional photographer, champagne included.",
+  keywords: [
+    "Ferrari driving experience Salento Italy",
+    "luxury yacht experience Puglia",
+    "Ferrari tour Puglia US tourists",
+    "luxury vacation experiences Salento",
+    "drive Ferrari Salento coast Italy",
+    "sunset yacht tour Salento",
+    "exotic car experience Italy",
+    "B LEADER luxury experiences",
+    "Puglia supercar experience",
+    "yacht dinner experience Adriatic",
+    "Salento luxury travel curator",
+    "Ferrari California tour Italy",
+  ],
+  metadataBase: new URL(BASE_URL),
   alternates: {
     canonical: "/",
     languages: {
       "en-US": "/",
-      "x-default": "/",
     },
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
-    title: SITE.defaultTitle,
-    description: SITE.defaultDescription,
-    url: SITE.url,
-    siteName: SITE.name,
+    title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
+    description:
+      "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht. Curated luxury experiences in Salento — concierge, professional photographer, champagne included.",
+    url: BASE_URL,
+    siteName: "B LEADER",
     type: "website",
-    locale: SITE.locale,
+    locale: "en_US",
     images: [
       {
-        url: SITE.ogImage,
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${SITE.name} — ${SITE.tagline}`,
+        alt: "B LEADER — Luxury Driving & Yacht Experiences in Salento",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — Luxury Driving & Yacht Experiences`,
+    title: "B LEADER — Luxury Driving & Yacht Experiences",
     description:
       "Live the Italian dream: drive a Ferrari along the Adriatic coast or sail into a Puglian sunset on a private yacht.",
-    images: [SITE.ogImage],
-    ...(SITE.twitterHandle
-      ? { creator: SITE.twitterHandle, site: SITE.twitterHandle }
-      : {}),
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
@@ -88,24 +91,18 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  category: "travel",
-  other: {
-    "geo.region": "IT-75",
-    "geo.placename": "Salento, Puglia",
-  },
+  category: "Automotive",
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
-    ...(Object.keys(verificationOther).length > 0
-      ? { other: verificationOther }
-      : {}),
   },
 };
 
 /**
- * JSON-LD — Organization/LocalBusiness + WebSite on every page.
- * Product / Breadcrumb schemas inject from each route page.tsx.
+ * JSON-LD Structured Data — ONLY LocalBusiness en root layout.
+ * Los schemas de Product y Breadcrumb contextuales se inyectan
+ * desde cada page.tsx (fleet, yacht, services, about).
  */
-const jsonLdSchemas = [localBusinessSchema(), websiteSchema()];
+const jsonLdSchemas = [localBusinessSchema()];
 
 export default function RootLayout({
   children,
@@ -113,8 +110,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang={SITE.htmlLang} className="dark" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {/* JSON-LD Structured Data — LocalBusiness */}
         {jsonLdSchemas.map((schema, i) => (
           <script
             key={i}
@@ -122,17 +120,17 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
           />
         ))}
+        {/* Theme color para PWA / status bar en mobile */}
         <meta name="theme-color" content="#0a0a0a" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-capable"
+          content="yes"
+        />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
-        {/* Prefer tel: links; avoid auto-link hijacking on iOS when no public phone */}
-        <meta
-          name="format-detection"
-          content={CONTACT.phone ? "telephone=yes" : "telephone=no"}
-        />
+        <meta name="format-detection" content="telephone=no" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -143,7 +141,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${inter.variable} ${cormorant.variable} antialiased bg-[#0a0a0a] text-white overflow-x-hidden`}
       >
-        <SiteChrome>{children}</SiteChrome>
+        {children}
       </body>
     </html>
   );

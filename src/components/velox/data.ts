@@ -320,39 +320,31 @@ export const serviceLines = [
     icon: Ship,
     title: 'YACHT CHARTER',
     subtitle: 'Nautical Experiences',
-    description: 'Sail the crystal-clear waters of the Salento coast aboard our luxury yachts. Exclusive departures from Porto Gaio, Gallipoli, with routes to the wonders of Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and the evocative shores of Greece. Choose your experience: half-day cruise, full day, sunset, or overnight on board — always with a professional skipper at your service.',
+    description: 'Luxury yacht rentals along the Salento coast. Depart from Porto Gaio, Gallipoli, and explore Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and Greece. Half-day, full-day, sunset cruises, and overnight options with professional skipper.',
     stat: 'PREMIUM',
   },
   {
     icon: Car,
     title: 'WEDDING CAR RENTAL',
-    subtitle: 'Weddings & Ceremonies',
-    description: 'Make the most beautiful day of your life unforgettable. Luxury vehicles with professional chauffeur, personalized wedding decorations, and direct coordination with your wedding planner. Every detail curated for you, so nothing is left to chance.',
+    subtitle: 'Weddings',
+    description: 'Bridal vehicle (arrival/departure), uniformed professional chauffeur, wedding decoration included, coordination with your wedding planner.',
     stat: 'AWARDS 2023',
   },
   {
     icon: Briefcase,
     title: 'LUXURY CAR',
-    subtitle: 'Corporate / Commercial',
-    description: 'Prestige and style for companies, executives, and conferences. High-end vehicles with bilingual professional chauffeurs, for an impeccable corporate image at every appointment. Luxury that makes a difference, even in business.',
+    subtitle: 'Corporate / Business',
+    description: 'Executive rentals for companies, executives, and congresses. Premium corporate image. English-speaking professional chauffeurs.',
     stat: 'B2B',
   },
   {
     icon: Sparkles,
     title: 'PARTY SERVICE',
-    subtitle: 'Events & Celebrations',
-    description: 'Every special occasion deserves a car that matches the moment. We provide luxury vehicles for birthdays, baptisms, communions, confirmations, and private parties — with a dedicated chauffeur and fully customized packages. Because every important moment in life deserves style.',
+    subtitle: 'Social Events',
+    description: 'Luxury cars for non-wedding celebrations. Birthdays, baptisms, communions, private parties. Custom packages available.',
     stat: 'SOCIAL',
   },
 ];
-
-// Bookable experiences catalog lives in @/lib/experiences (form + API).
-// Re-export for UI convenience.
-export {
-  bookableExperiences,
-  BOOKABLE_EXPERIENCE_NAMES,
-  type BookableExperience,
-} from '@/lib/experiences';
 
 export const coverageRegions = [
   { name: 'Puglia', role: 'Headquarters', detail: 'Lecce / Carmiano', primary: true },
@@ -372,7 +364,6 @@ export const navLinks: NavLink[] = [
   { label: 'FLEET', href: '#fleet', pageHref: '/fleet' },
   { label: 'YACHT', href: '#yacht', pageHref: '/yacht' },
   { label: 'SERVICES', href: '#services', pageHref: '/services' },
-  { label: 'EXPERIENCES', pageHref: '/experiences' },
   { label: 'ABOUT', pageHref: '/about' },
   { label: 'RESERVE', href: '#reserve' },
   { label: 'CONTACT', href: '#contact' },
