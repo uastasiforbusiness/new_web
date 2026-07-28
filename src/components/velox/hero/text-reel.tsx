@@ -75,7 +75,6 @@ export function TextReel({
     }, containerRef);
 
     return () => ctx.revert();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headline, subtitle, description, reducedMotion]);
 
   const splitChars = (text: string) =>

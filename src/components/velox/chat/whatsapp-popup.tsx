@@ -78,6 +78,9 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
   const phoneInputRef = useRef<HTMLInputElement>(null);
 
   // ─── Restore session from localStorage on open ─────────────────────────
+  // Syncing from external storage (localStorage) on open is intentional:
+  // this is a side-effectful restore, not derived render state.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!open) return;
     try {
@@ -96,12 +99,14 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
     setPhase('greeting');
     setDisplayedGreeting('');
   }, [open]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // ─── Greeting typing effect ─────────────────────────────────────────────
   useEffect(() => {
     if (phase !== 'greeting') return;
-    let i = 0;
-    setDisplayedGreeting('');
+    // Start at -1 so the first tick (async) resets to '' — avoids a
+    // synchronous setState in the effect body.
+    let i = -1;
     const interval = setInterval(() => {
       i++;
       setDisplayedGreeting(GREETING.slice(0, i));
@@ -469,7 +474,7 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
             {(phase === 'awaiting-phone' || phase === 'phone-error') && (
               <div className="mb-3">
                 <p className="text-[#888] text-[11px] mb-2 font-body leading-relaxed">
-                  What's your WhatsApp number? (so our concierge can reply)
+                  What&apos;s your WhatsApp number? (so our concierge can reply)
                 </p>
                 <div className="flex gap-2">
                   <div className="relative flex-1">

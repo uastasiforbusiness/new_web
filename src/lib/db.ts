@@ -43,12 +43,11 @@ async function shouldUseMemory(): Promise<boolean> {
   return useMemory;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function d1Query(sql: string, params?: (string | number | null)[]): Promise<any[]> {
+async function d1Query(sql: string, params?: (string | number | null)[]): Promise<unknown[]> {
   const db = await getD1();
   const result = await db.prepare(sql).bind(...(params ?? [])).all();
   if (!result.success) throw new Error(result.error ?? 'D1 query failed');
-  return result.results as any[];
+  return (result.results ?? []) as unknown[];
 }
 
 async function d1Exec(sql: string, params?: (string | number | null)[]): Promise<unknown> {
