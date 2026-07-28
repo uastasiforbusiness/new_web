@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { normalizePhone, sendFirstContact, sendTextMessage } from '@/lib/whatsapp';
+import { checkOrigin } from '@/lib/csrf';
+import { limitChat } from '@/lib/rate-limit';
+import { getClientIp } from '@/lib/client-ip';
 
 // Node runtime required for crypto HMAC + stable WhatsApp Graph fetch
 export const runtime = 'nodejs';
@@ -19,6 +22,26 @@ const sendSchema = z.object({
 
 export async function POST(request: Request) {
   console.log('[whatsapp send] POST request received');
+
+  // ─── CSRF protection: only same-origin browser requests allowed ────────
+  // Without this, any anonymous client could trigger outbound WhatsApp
+  // messages from the business number and write unbounded rows to D1.
+  const originCheck = checkOrigin(request);
+  if (!originCheck.ok) {
+    return NextResponse.json({ error: originCheck.error }, { status: 403 });
+  }
+
+  // ─── Rate limiting (bounded chat traffic per IP) ───────────────────────
+  const ip = getClientIp(request);
+  const { success } = await limitChat(ip);
+  if (!success) {
+    console.warn(`[whatsapp send] IP ${ip} exceeded rate limit`);
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429 }
+    );
+  }
+
   try {
     let raw: unknown;
     try {

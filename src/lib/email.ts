@@ -29,6 +29,26 @@ function formatFrom(raw: string): string {
 
 const FROM_FORMATTED = formatFrom(FROM);
 
+/**
+ * Escape a string for safe interpolation into HTML.
+ * Every user-supplied field (names, vehicle, message, contact data) MUST pass
+ * through this before being placed into the email templates — otherwise a
+ * reservation payload could inject markup into customer/admin emails.
+ */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Strip CR/LF from subject inputs to prevent email header injection. */
+function sanitizeSubject(value: string): string {
+  return value.replace(/[\r\n]+/g, ' ').trim();
+}
+
 // ─── DEMO MODE ──────────────────────────────────────────────────────────────
 // When true, ALL emails go to ADMIN_TO regardless of the customer's address.
 // Required because onboarding@resend.dev can only send to the account owner.
@@ -57,6 +77,10 @@ function fmt(iso: string): string {
 
 // ─── HTML templates ─────────────────────────────────────────────────────────
 function customerHtml(d: ReservationEmailData): string {
+  const carName = escapeHtml(d.carName);
+  const carVariant = escapeHtml(d.carVariant);
+  const reservationId = escapeHtml(d.reservationId);
+  const message = d.message ? escapeHtml(d.message) : null;
   return `
 <!DOCTYPE html>
 <html>
@@ -75,7 +99,7 @@ function customerHtml(d: ReservationEmailData): string {
         <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #222;padding-top:24px;">
           <tr>
             <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">VEHICLE</td>
-            <td style="padding:8px 0;text-align:right;font-size:14px;">${d.carName} <span style="color:#888;">— ${d.carVariant}</span></td>
+            <td style="padding:8px 0;text-align:right;font-size:14px;">${carName} <span style="color:#888;">— ${carVariant}</span></td>
           </tr>
           <tr>
             <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">PICKUP</td>
@@ -87,10 +111,10 @@ function customerHtml(d: ReservationEmailData): string {
           </tr>
           <tr>
             <td style="padding:8px 0;color:#888;font-size:12px;letter-spacing:0.1em;">REFERENCE</td>
-            <td style="padding:8px 0;text-align:right;font-size:14px;color:#c9a96e;">#${d.reservationId.slice(-8)}</td>
+            <td style="padding:8px 0;text-align:right;font-size:14px;color:#c9a96e;">#${reservationId.slice(-8)}</td>
           </tr>
         </table>
-        ${d.message ? `<p style="color:#888;font-size:13px;margin-top:20px;padding:12px;background:#0a0a0a;border-left:2px solid #c9a96e;">"${d.message.replace(/"/g, '&quot;')}"</p>` : ''}
+        ${message ? `<p style="color:#888;font-size:13px;margin-top:20px;padding:12px;background:#0a0a0a;border-left:2px solid #c9a96e;">&ldquo;${message}&rdquo;</p>` : ''}
       </td>
     </tr>
     <tr>
@@ -104,6 +128,13 @@ function customerHtml(d: ReservationEmailData): string {
 }
 
 function adminHtml(d: ReservationEmailData): string {
+  const customerName = escapeHtml(d.customerName);
+  const email = escapeHtml(d.email);
+  const phone = escapeHtml(d.phone);
+  const carName = escapeHtml(d.carName);
+  const carVariant = escapeHtml(d.carVariant);
+  const reservationId = escapeHtml(d.reservationId);
+  const message = d.message ? escapeHtml(d.message) : null;
   return `
 <!DOCTYPE html>
 <html>
@@ -121,19 +152,19 @@ function adminHtml(d: ReservationEmailData): string {
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="padding:6px 0;color:#888;font-size:12px;">Name</td>
-            <td style="padding:6px 0;text-align:right;">${d.customerName}</td>
+            <td style="padding:6px 0;text-align:right;">${customerName}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#888;font-size:12px;">Email</td>
-            <td style="padding:6px 0;text-align:right;"><a href="mailto:${d.email}" style="color:#c9a96e;">${d.email}</a></td>
+            <td style="padding:6px 0;text-align:right;"><a href="mailto:${email}" style="color:#c9a96e;">${email}</a></td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#888;font-size:12px;">Phone</td>
-            <td style="padding:6px 0;text-align:right;"><a href="tel:${d.phone}" style="color:#c9a96e;">${d.phone}</a></td>
+            <td style="padding:6px 0;text-align:right;"><a href="tel:${phone}" style="color:#c9a96e;">${phone}</a></td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#888;font-size:12px;">Vehicle</td>
-            <td style="padding:6px 0;text-align:right;">${d.carName} — ${d.carVariant}</td>
+            <td style="padding:6px 0;text-align:right;">${carName} — ${carVariant}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#888;font-size:12px;">Pickup</td>
@@ -145,10 +176,10 @@ function adminHtml(d: ReservationEmailData): string {
           </tr>
           <tr>
             <td style="padding:6px 0;color:#888;font-size:12px;">ID</td>
-            <td style="padding:6px 0;text-align:right;color:#c9a96e;">${d.reservationId}</td>
+            <td style="padding:6px 0;text-align:right;color:#c9a96e;">${reservationId}</td>
           </tr>
         </table>
-        ${d.message ? `<p style="color:#bbb;font-size:13px;margin-top:16px;padding:12px;background:#0a0a0a;border-left:2px solid #c9a96e;">"${d.message.replace(/"/g, '&quot;')}"</p>` : ''}
+        ${message ? `<p style="color:#bbb;font-size:13px;margin-top:16px;padding:12px;background:#0a0a0a;border-left:2px solid #c9a96e;">&ldquo;${message}&rdquo;</p>` : ''}
       </td>
     </tr>
   </table>
@@ -178,7 +209,7 @@ export async function sendReservationEmails(data: ReservationEmailData): Promise
     const admin = await resend.emails.send({
       from: FROM_FORMATTED,
       to: [ADMIN_TO],
-      subject: `New Reservation: ${data.customerName} — ${data.carName}`,
+      subject: sanitizeSubject(`New Reservation: ${data.customerName} — ${data.carName}`),
       html: adminHtml(data),
     });
 

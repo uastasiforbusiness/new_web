@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { limit } from "@/lib/rate-limit";
 import { sendReservationEmails } from "@/lib/email";
 import { checkOrigin } from "@/lib/csrf";
+import { getClientIp } from "@/lib/client-ip";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const MAX_LENGTH = 500;
@@ -49,14 +50,6 @@ const reservationSchema = z
     },
     { message: "Pickup date cannot be in the past", path: ["pickup_date"] }
   );
-
-function getClientIp(request: Request): string {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
-}
 
 export async function POST(request: Request) {
   try {

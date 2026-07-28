@@ -9,6 +9,10 @@ out/
 prisma/dev.db
 prisma/dev.db-journal
 
+# Local SQLite (legacy) — never commit database files (may contain PII)
+dev.db
+dev.db-journal
+
 # Environment
 .env
 .env.local
@@ -49,7 +53,6 @@ scripts/
 whatsapp_config.md
 
 # Agent / documentation artifacts
-AGENTS.md
 _zscripts/
 _workspace/
 download/
