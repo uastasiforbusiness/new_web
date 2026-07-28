@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Anchor, MapPin, Clock, Compass, ChevronDown, ChevronUp } from 'lucide-react';
 import { yachtData, yachtExperiences } from '../data';
 
@@ -134,9 +135,16 @@ export function YachtExperienceSection() {
                       </div>
                     </div>
 
-                    {/* Expanded content */}
-                    {isOpen && (
-                      <div className="border-t border-[#1a1a1a] p-6 space-y-5">
+                    {/* Expanded content — animated reveal */}
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                        >
+                          <div className="border-t border-[#1a1a1a] p-6 space-y-5">
                         {/* Route */}
                         <div>
                           <p className="text-[9px] font-heading tracking-[0.15em] text-[#c9a96e]/50 mb-1">ROUTE</p>
@@ -183,7 +191,9 @@ export function YachtExperienceSection() {
                           </div>
                         )}
                       </div>
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 );
               })}
