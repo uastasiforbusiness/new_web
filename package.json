@@ -2,6 +2,7 @@
   "name": "nextjs_tailwind_shadcn_ts",
   "version": "0.2.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev -p 3001 --webpack",
     "build": "npm run cf:typegen && next build",
@@ -52,14 +53,5 @@
     "tw-animate-css": "^1.3.5",
     "typescript": "^5",
     "wrangler": "^4"
-  },
-  "eslintConfig": {
-    "extends": [
-      "next/core-web-vitals"
-    ],
-    "plugins": [
-      "@typescript-eslint",
-      "react-hooks"
-    ]
   }
 }
