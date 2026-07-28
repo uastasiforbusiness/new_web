@@ -7,6 +7,10 @@ import { Gauge, Cpu, Zap } from 'lucide-react';
 import Image from 'next/image';
 import { cars } from '../data';
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 // ─── Helper: extract brand name for watermark ───
 function getBrand(name: string): string {
   if (name.toLowerCase().startsWith('ferrari')) return 'FERRARI';
