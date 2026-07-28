@@ -53,6 +53,7 @@ scripts/
 whatsapp_config.md
 
 # Agent / documentation artifacts
+AGENTS.md
 _zscripts/
 _workspace/
 download/

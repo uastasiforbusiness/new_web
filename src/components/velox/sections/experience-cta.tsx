@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { type Experience } from '@/data/experiences';
@@ -148,12 +147,12 @@ export function ExperienceCTA({ experience }: Props) {
               →
             </span>
           </a>
-          <Link
+          <a
             href="/#reserve"
             className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-white/15 hover:border-[#c9a96e]/40 text-white text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300"
           >
             Request Details
-          </Link>
+          </a>
         </div>
 
         {/* Trust signal */}

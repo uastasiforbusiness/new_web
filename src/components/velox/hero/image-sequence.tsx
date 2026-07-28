@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   HERO_SLIDES,
   getRandomTransition,
@@ -15,18 +15,17 @@ export function ImageSequence() {
   const [nextIndex, setNextIndex] = useState<number | null>(null);
   const [transitionType, setTransitionType] = useState<TransitionType>('circle-reveal');
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Detect reduced motion via useSyncExternalStore (no setState-in-effect).
-  const reducedMotion = useSyncExternalStore(
-    (onChange) => {
-      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-      mq.addEventListener('change', onChange);
-      return () => mq.removeEventListener('change', onChange);
-    },
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    () => false // server snapshot
-  );
+  // Detect reduced motion
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const startTimer = useCallback(() => {
     const slide = HERO_SLIDES[currentIndex];

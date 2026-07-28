@@ -1,11 +1,16 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import next from "eslint-config-next/core-web-vitals";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-// eslint-config-next >= 16 ships native flat config — no FlatCompat needed.
-export default defineConfig([
-  {
-    extends: [next],
-  },
-  // Generated files: wrangler typegen output and OpenNext build artifacts.
-  globalIgnores(["cloudflare-env.d.ts", ".open-next"]),
-]);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+];
+
+export default eslintConfig;

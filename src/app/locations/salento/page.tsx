@@ -80,7 +80,7 @@ export default function SalentoLocationPage() {
                 <div>
                   <h3 className="text-xl font-elegant text-white mb-2">🏛️ Cultural & Historical Highlights</h3>
                   <p className="text-[#888] leading-relaxed mb-2">
-                    <strong>Baroque Architecture & Heritage Sites:</strong> <em>Lecce</em> (known as &ldquo;Florence of the South&rdquo;) features stunning Baroque architecture, while <em>Gallipoli</em> offers medieval charm and coastal fortifications.
+                    <strong>Baroque Architecture & Heritage Sites:</strong> <em>Lecce</em> (known as "Florence of the South") features stunning Baroque architecture, while <em>Gallipoli</em> offers medieval charm and coastal fortifications.
                   </p>
                   <p className="text-[#888] leading-relaxed">
                     <strong>Lost Landmarks to Explore:</strong> Various archaeological sites and hidden gems throughout the region waiting to be discovered.
