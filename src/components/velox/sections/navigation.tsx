@@ -7,7 +7,8 @@ import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MagneticButton } from '../ui/magnetic-button';
-import { navLinks, type NavLink } from '../data';
+import { navLinks } from '../data';
+import { getNavHref } from '@/lib/navigation';
 
 /**
  * Navigation — Navbar premium con glass effect y context-aware.
@@ -16,11 +17,6 @@ import { navLinks, type NavLink } from '../data';
  * - En páginas individuales usa pageHref cuando existe (ej: /fleet, /yacht).
  * - Los items sin pageHref (RESERVE, CONTACT) siempre enlazan a /#seccion.
  */
-function getHref(link: NavLink, isHome: boolean): string {
-  if (!link.href) return link.pageHref!;
-  if (isHome) return link.href;
-  return link.pageHref ?? `/${link.href}`;
-}
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -57,7 +53,7 @@ export function Navigation() {
 
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => {
-              const href = getHref(link, isHome);
+              const href = getNavHref(link, isHome);
               return (
                 <Link
                   key={link.label}
@@ -100,7 +96,7 @@ export function Navigation() {
           >
             <div className="px-6 pt-8 pb-10">
               {navLinks.map((link, i) => {
-                const href = getHref(link, isHome);
+                const href = getNavHref(link, isHome);
                 return (
                   <motion.div
                     key={link.label}

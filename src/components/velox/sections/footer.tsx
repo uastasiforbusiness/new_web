@@ -4,13 +4,8 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Instagram, Facebook, Twitter } from 'lucide-react';
-import { navLinks, type NavLink } from '../data';
-
-function getHref(link: NavLink, isHome: boolean): string {
-  if (!link.href) return link.pageHref!;
-  if (isHome) return link.href;
-  return link.pageHref ?? `/${link.href}`;
-}
+import { navLinks } from '../data';
+import { getNavHref } from '@/lib/navigation';
 
 export function Footer() {
   const pathname = usePathname();
@@ -25,7 +20,7 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-6 sm:gap-8">
             {navLinks.map((link) => (
-              <Link key={link.label} href={getHref(link, isHome)} className="cursor-pointer text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
+              <Link key={link.label} href={getNavHref(link, isHome)} className="cursor-pointer text-[10px] font-heading font-semibold tracking-[0.2em] text-[#555] hover:text-[#c9a96e] transition-colors duration-300">
                 {link.label}
               </Link>
             ))}
@@ -33,6 +28,7 @@ export function Footer() {
             <Link href={isHome ? '#reserve' : '/#reserve'} className="text-[10px] font-elegant tracking-wider text-[#c9a96e]/60 hover:text-[#c9a96e] transition-colors duration-300 hidden sm:block italic">Book Now</Link>
           </div>
           <div className="flex items-center gap-4">
+            {/* TODO: add real social media URLs */}
             {[Instagram, Facebook, Twitter].map((Icon, i) => (
               <a key={i} href="#" className="cursor-pointer w-9 h-9 flex items-center justify-center border border-[#222] rounded-full text-[#555] hover:text-[#c9a96e] hover:border-[#c9a96e]/30 transition-all duration-300" aria-label={['Instagram', 'Facebook', 'Twitter'][i]} target="_blank" rel="noopener noreferrer">
                 <Icon size={15} />

@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     qualities: [25, 50, 75, 100],  // Next.js 16 requiere allowlist explícita
   },
-  serverExternalPackages: ["@prisma/client", ".prisma/client", "@neondatabase/serverless", "@prisma/adapter-neon"],
+  serverExternalPackages: ["@prisma/client", ".prisma/client"],
 };
 
 export default nextConfig;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -34,15 +34,6 @@ export function HomeClient() {
   useLenis();
 
   useEffect(() => {
-    const criticalImages = ['/images/hero-bg.webp', '/images/logo-white.webp'];
-    criticalImages.forEach((src) => { const img = new Image(); img.src = src; });
-  }, []);
-
-  const handleLoadComplete = useCallback(() => {
-    setLoaded(true);
-  }, []);
-
-  useEffect(() => {
     if (!loaded) return;
 
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
@@ -64,7 +55,7 @@ export function HomeClient() {
       <ScrollProgress />
 
       <AnimatePresence>
-        {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
+        {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
       </AnimatePresence>
 
       {loaded && (

@@ -11,7 +11,7 @@ export const metadata = buildPageMeta({
     'Puglia itinerary',
     'Southern Italy travel',
     'Salento attractions',
-    ' Puglia vacation',
+    'Puglia vacation',
     'travel planning Puglia',
   ],
 });
@@ -68,7 +68,7 @@ export default function SalentoLocationPage() {
                     <strong>Drive Ferrari along the Adriatic Coast:</strong> Experience the thrill of driving a Ferrari along Italy's most scenic coastal routes, with professional driver or license-included options.
                   </p>
                   <p className="text-[#888] leading-relaxed">
-                    <strong>Itinerary Options:</strong> From Gallipoli to Otranto, covering spectacular cliff-side roads and historic towns along the Apulian coast.
+                    <strong>Itinerary Options:</strong> From Gallipoli to Otranto along the spectacular Adriatic coastal road, with stops at historic towns and hidden viewpoints along the Apulian coast.
                   </p>
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function SalentoLocationPage() {
                 <div>
                   <h3 className="text-xl font-elegant text-white mb-2">🏛️ Cultural & Historical Highlights</h3>
                   <p className="text-[#888] leading-relaxed mb-2">
-                    <strong>Baroque Architecture & Heritage Sites:</strong> <em>Lecce</em> (known as "Florence of the South") features stunning Baroque architecture, while <em>Galipoli</em> offers medieval charm and coastal fortifications.
+                    <strong>Baroque Architecture & Heritage Sites:</strong> <em>Lecce</em> (known as "Florence of the South") features stunning Baroque architecture, while <em>Gallipoli</em> offers medieval charm and coastal fortifications.
                   </p>
                   <p className="text-[#888] leading-relaxed">
                     <strong>Lost Landmarks to Explore:</strong> Various archaeological sites and hidden gems throughout the region waiting to be discovered.
