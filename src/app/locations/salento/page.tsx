@@ -50,7 +50,7 @@ export default function SalentoLocationPage() {
                 <div>
                   <h3 className="text-xl font-elegant text-white mb-2">🏖️ Luxury Beach & Coastal Experiences</h3>
                   <p className="text-[#888] leading-relaxed mb-2">
-                    <strong>Crystal Waters & Pristine Beaches:</strong> Salento boasts some of Italy's most beautiful coastline, including <em>Fiordimare beach near Tricase</em>, the <em>white sand beaches of Gallipoli</em>, and the <em>crystalline waters of Porto Cesareo.</em>
+                    <strong>Crystal Waters & Pristine Beaches:</strong> Salento boasts some of Italy&apos;s most beautiful coastline, including <em>Fiordimare beach near Tricase</em>, the <em>white sand beaches of Gallipoli</em>, and the <em>crystalline waters of Porto Cesareo.</em>
                   </p>
                   <p className="text-[#888] leading-relaxed">
                     <strong>Luxury Yacht Charters Available:</strong> Book a private sailing experience or enjoy sunset cocktails on board our luxury Cranchi yacht fleet departing from Gallipoli and Porto Cesareo.
@@ -65,7 +65,7 @@ export default function SalentoLocationPage() {
                 <div>
                   <h3 className="text-xl font-elegant text-white mb-2">🚗 Premium Ferrari Driving Tours</h3>
                   <p className="text-[#888] leading-relaxed mb-2">
-                    <strong>Drive Ferrari along the Adriatic Coast:</strong> Experience the thrill of driving a Ferrari along Italy's most scenic coastal routes, with professional driver or license-included options.
+                    <strong>Drive Ferrari along the Adriatic Coast:</strong> Experience the thrill of driving a Ferrari along Italy&apos;s most scenic coastal routes, with professional driver or license-included options.
                   </p>
                   <p className="text-[#888] leading-relaxed">
                     <strong>Itinerary Options:</strong> From Gallipoli to Otranto along the spectacular Adriatic coastal road, with stops at historic towns and hidden viewpoints along the Apulian coast.
