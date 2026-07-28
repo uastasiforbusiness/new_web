@@ -361,6 +361,7 @@ export interface NavLink {
 }
 
 export const navLinks: NavLink[] = [
+  { label: 'EXPERIENCES', href: '#fleet', pageHref: '/experiences' },
   { label: 'FLEET', href: '#fleet', pageHref: '/fleet' },
   { label: 'YACHT', href: '#yacht', pageHref: '/yacht' },
   { label: 'SERVICES', href: '#services', pageHref: '/services' },
