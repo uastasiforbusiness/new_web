@@ -1,5 +1,5 @@
 import {
-  ConciergeBell, Shield, Truck, Briefcase,
+  Briefcase,
   Car, Sparkles, Ship,
 } from 'lucide-react';
 
@@ -22,6 +22,7 @@ export const cars = [
     tagline: 'THE BEAST',
     color: '#8b0000',
     seats: 2, engine: 'V8 3.9 Biturbo', torque: '755 Nm',
+    consumption: '10.5 L/100km', trunk: '340 L',
     dimensions: '4.57 x 1.91 x 1.32 m',
     keyFeatures: 'Retractable hardtop, carbon-ceramic brakes, dual-zone climate, heated seats, 7-speed DCT RWD',
   },
@@ -41,6 +42,7 @@ export const cars = [
     tagline: 'THE CLASSIC',
     color: '#f5f5f0',
     seats: 2, engine: 'V8 4.3 Atmosferico', torque: '485-505 Nm',
+    consumption: '13.1 L/100km', trunk: '340 L',
     dimensions: '4.56 x 1.91 x 1.32 m',
     keyFeatures: 'Classic naturally-aspirated V8 sound, retractable hardtop, carbon-ceramic brakes',
   },
@@ -61,6 +63,7 @@ export const cars = [
     tagline: 'THE SEDAN',
     color: '#1a1a2e',
     seats: 5, engine: 'V6 3.0 Turbodiesel', torque: '600 Nm',
+    consumption: '6.0 L/100km', trunk: '500 L',
     dimensions: '4.97 x 1.95 x 1.46 m',
     keyFeatures: 'Maserati V6 sound, Matrix LED headlights, Soft Close doors, Harman Kardon audio, 500 L trunk',
   },
@@ -81,6 +84,7 @@ export const cars = [
     tagline: 'REFINED LUXURY',
     color: '#0d0d0d',
     seats: 4, engine: '2.0L Turbodiesel', torque: '400 Nm',
+    consumption: '5.7 L/100km', trunk: '310-385 L',
     dimensions: '4.84 x 1.86 x 1.43 m',
     keyFeatures: 'AIRSCARF neck-level heating, AIRCAP wind deflector, acoustic soft top, 9G-TRONIC, ~1,150 km range',
   },
@@ -95,6 +99,7 @@ export const cars = [
     tagline: 'NAUTICAL LUXURY',
     color: '#C9A96E',
     seats: 10, engine: '2x Volvo Penta D9-575 1,150 HP', torque: 'N/A',
+    consumption: '~180 L/h', trunk: '6 beds, 2 bathrooms',
     dimensions: '15.60 m',
     keyFeatures: 'Full flybridge, teak decking, hydraulic passerelle, bow thruster, AC, SUP/tender/jet ski, 6 beds / 2 bathrooms',
   },

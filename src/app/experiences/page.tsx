@@ -35,16 +35,10 @@ export default function ExperiencesPage() {
                           {exp.tagline}
                         </span>
                       </div>
-                      <h2
-                        className="text-2xl sm:text-3xl font-bold text-white group-hover:text-[#c9a96e] transition-colors duration-300 mb-2"
-                        style={{ fontFamily: 'var(--font-outfit), Outfit, sans-serif' }}
-                      >
+                      <h2 className="text-2xl sm:text-3xl font-bold text-white group-hover:text-[#c9a96e] transition-colors duration-300 mb-2 font-heading">
                         {exp.title}
                       </h2>
-                      <p
-                        className="text-gray-400 text-base italic"
-                        style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                      >
+                      <p className="text-gray-400 text-base italic font-elegant">
                         {exp.subtitle}
                       </p>
                       <p className="text-gray-500 text-sm mt-3 max-w-lg leading-relaxed">

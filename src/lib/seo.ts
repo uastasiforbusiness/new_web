@@ -125,7 +125,7 @@ export function localBusinessSchema() {
     url: SITE.url,
     logo: `${SITE.url}/images/logo-white.webp`,
     description: SITE.defaultDescription,
-    image: `${SITE.url}/images/hero-bg.webp`,
+    image: `${SITE.url}/images/hero-bg-new.webp`,
     priceRange: "$$$$",
     telephone: CONTACT.phone,
     email: CONTACT.email,

@@ -47,3 +47,18 @@ scripts/
 
 # Local secrets / docs with credentials
 whatsapp_config.md
+
+# Agent / documentation artifacts
+AGENTS.md
+_zscripts/
+_workspace/
+download/
+*.stitch_*
+*.stitch_*.ps1
+
+# Design docs
+DESIGN.md
+DEEP_INV_TEC.md
+STACK_EVALUATION.md
+STITCH_MCP_HANDOFF.md
+investigacion-entornos-colaborativos-visuales-IA.md
