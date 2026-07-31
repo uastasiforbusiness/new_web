@@ -23,6 +23,8 @@ function getBrand(name: string): string {
 export function FleetShowcase() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const countRef = useRef<HTMLSpanElement>(null);
 
   // ─── Horizontal scroll gallery ───
   useEffect(() => {
@@ -37,6 +39,13 @@ export function FleetShowcase() {
           const container = containerRef.current;
           if (!container) return () => {};
 
+          let introTween: gsap.core.Tween | null = null;
+          let introPlayed = false;
+
+          const setScaleX = progressRef.current
+            ? gsap.quickSetter(progressRef.current, 'scaleX')
+            : null;
+
           const st = gsap.to(slides, {
             xPercent: -100 * (slides.length - 1),
             ease: 'none',
@@ -47,17 +56,105 @@ export function FleetShowcase() {
               end: () => `+=${container.scrollWidth - window.innerWidth}`,
               invalidateOnRefresh: true,
               anticipatePin: 1,
+              onUpdate: (self) => {
+                if (setScaleX) setScaleX(self.progress);
+                if (countRef.current) {
+                  const idx = Math.round(self.progress * (slides.length - 1));
+                  const label = String(idx + 1).padStart(2, '0');
+                  if (countRef.current.textContent !== label) {
+                    countRef.current.textContent = label;
+                  }
+                }
+                // Reveal the intro once, when the pinned section becomes active
+                // (fires for both the standalone /fleet page and scroll-into-view).
+                if (!introPlayed && introTween) {
+                  introPlayed = true;
+                  introTween.play();
+                }
+              },
             },
           });
+
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+          const parallaxTweens: gsap.core.Tween[] = [];
+          if (!reduceMotion) {
+            gsap.utils.toArray<HTMLElement>('.fleet-watermark').forEach((wm) => {
+              const tween = gsap.to(wm, {
+                xPercent: 6,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: wm.closest('.fleet-slide'),
+                  containerAnimation: st,
+                  start: 'left right',
+                  end: 'right left',
+                  scrub: true,
+                },
+              });
+              parallaxTweens.push(tween);
+            });
+          }
+
+          if (!reduceMotion) {
+            const introTargets = gsap.utils.toArray<HTMLElement>(
+              '.fleet-intro-eyebrow, .fleet-intro-title, .fleet-intro-bottom',
+            );
+            if (introTargets.length > 0) {
+              introTween = gsap.fromTo(
+                introTargets,
+                { opacity: 0, y: 40 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.8,
+                  stagger: 0.12,
+                  ease: 'power3.out',
+                  paused: true,
+                },
+              );
+            }
+          }
 
           return () => {
             st.scrollTrigger?.kill();
             st.kill();
+            introTween?.scrollTrigger?.kill();
+            introTween?.kill();
+            parallaxTweens.forEach((t) => {
+              t.scrollTrigger?.kill();
+              t.kill();
+            });
           };
         },
 
         '(max-width: 1023px)': () => {
-          return () => {};
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (reduceMotion) return () => {};
+
+          const tweens: gsap.core.Tween[] = [];
+          gsap.utils.toArray<HTMLElement>('.fleet-slide').forEach((slide) => {
+            const revealEls = slide.querySelectorAll<HTMLElement>('.fleet-mobile-reveal');
+            if (revealEls.length === 0) return;
+            const tween = gsap.from(revealEls, {
+              opacity: 0,
+              y: 40,
+              duration: 0.8,
+              stagger: 0.08,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: slide,
+                start: 'top 85%',
+              },
+            });
+            tweens.push(tween);
+          });
+
+          return () => {
+            tweens.forEach((t) => {
+              t.scrollTrigger?.kill();
+              t.kill();
+            });
+          };
         },
       });
     }, galleryRef);
@@ -93,26 +190,26 @@ export function FleetShowcase() {
             </div>
 
             <div className="max-w-2xl relative z-10 w-full">
-              <div className="flex items-center gap-4 mb-5 lg:mb-6">
+              <div className="fleet-intro-eyebrow flex items-center gap-4 mb-5 lg:mb-6">
                 <div className="w-8 h-[1px] bg-[#c9a96e]/60" />
                 <span className="font-heading text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-[#c9a96e]">
                   ✦&nbsp; Our Fleet
                 </span>
               </div>
 
-              <h2 className="font-elegant text-4xl sm:text-5xl lg:text-7xl xl:text-[80px] font-light leading-[1.1] tracking-wide text-white">
+              <h2 className="fleet-intro-title font-elegant text-4xl sm:text-5xl lg:text-7xl xl:text-[80px] font-light leading-[1.1] tracking-wide text-white">
                 The Idol&apos;s{' '}
                 <br className="hidden sm:block" />
                 <span className="shimmer-text">Gallery</span>
               </h2>
 
-              <p className="font-body text-sm sm:text-base text-[#888] mt-6 lg:mt-8 max-w-md leading-relaxed">
+              <p className="fleet-intro-bottom font-body text-sm sm:text-base text-[#888] mt-6 lg:mt-8 max-w-md leading-relaxed">
                 Each vehicle is treated as a masterpiece, preserved and
                 presented with the reverence it deserves. Experience the
                 pinnacle of Italian engineering and design.
               </p>
 
-              <div className="hidden lg:flex items-center gap-4 mt-12">
+              <div className="fleet-intro-bottom hidden lg:flex items-center gap-4 mt-12">
                 <div className="w-12 h-[1px] bg-gradient-to-r from-[#c9a96e] to-transparent" />
                 <span className="font-heading text-[9px] tracking-[0.3em] uppercase text-[#555]">
                   Scroll to explore →
@@ -135,7 +232,7 @@ export function FleetShowcase() {
               >
                 {/* Desktop watermark */}
                 <div className="absolute inset-0 opacity-[0.04] pointer-events-none select-none items-center justify-center hidden lg:flex">
-                  <span className="font-elegant text-[clamp(200px,30vw,600px)] leading-none text-white tracking-wider">
+                  <span className="fleet-watermark font-elegant text-[clamp(200px,30vw,600px)] leading-none text-white tracking-wider">
                     {brand}
                   </span>
                 </div>
@@ -154,7 +251,7 @@ export function FleetShowcase() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 w-full items-center gap-6 sm:gap-8 lg:gap-12 z-10">
                   {/* Image */}
                   <div
-                    className={`${
+                    className={`fleet-mobile-reveal ${
                       isLeftSpec
                         ? 'lg:col-span-7 order-1 lg:order-2'
                         : 'lg:col-span-7 order-1 lg:order-1'
@@ -184,7 +281,7 @@ export function FleetShowcase() {
 
                   {/* Specs — Blueprint Style */}
                   <div
-                    className={`${
+                    className={`fleet-mobile-reveal ${
                       isLeftSpec
                         ? 'lg:col-span-5 order-2 lg:order-1'
                         : 'lg:col-span-5 order-2 lg:order-2'
@@ -264,20 +361,29 @@ export function FleetShowcase() {
                     </div>
                   </div>
                 </div>
-
-                {/* Slide counter */}
-                <div className="hidden lg:flex absolute bottom-8 right-8 sm:right-12 items-center gap-3">
-                  <span className="font-heading text-[10px] tracking-[0.15em] text-[#c9a96e]">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <div className="w-6 h-[1px] bg-[#c9a96e]/30" />
-                  <span className="font-heading text-[10px] tracking-[0.15em] text-[#444]">
-                    {String(cars.length).padStart(2, '0')}
-                  </span>
-                </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Global progress indicator */}
+        <div className="hidden lg:flex absolute bottom-8 right-8 sm:right-12 items-center gap-3 z-20">
+          <span
+            ref={countRef}
+            className="font-heading text-[10px] tracking-[0.15em] text-[#c9a96e]"
+          >
+            01
+          </span>
+          <div className="w-24 h-[1px] bg-white/10 overflow-hidden">
+            <div
+              ref={progressRef}
+              className="h-full w-full bg-[#c9a96e]"
+              style={{ transformOrigin: 'left' }}
+            />
+          </div>
+          <span className="font-heading text-[10px] tracking-[0.15em] text-[#444]">
+            {String(cars.length).padStart(2, '0')}
+          </span>
         </div>
       </section>
     </>
