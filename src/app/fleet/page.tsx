@@ -47,7 +47,6 @@ export default function FleetPage() {
                     : 'B LEADER',
             category: car.name.includes('Cranchi') ? 'Yacht' : 'Car',
             image: car.image,
-            pricePerDay: car.price,
             currency: 'EUR',
             description: `${car.name} ${car.variant} — ${car.hp}HP. ${car.tagline}. ${car.keyFeatures}.`,
           })}
