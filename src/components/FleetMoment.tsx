@@ -4,9 +4,37 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Reveal from "./Reveal";
 
+const FLEET_GALLERY = [
+  {
+    src: "/images/ferrari_rossa_360/rossa_front.webp",
+    alt: "Red Ferrari California from the front",
+    layout: "col-span-2 min-h-64 md:row-span-2 md:min-h-0",
+  },
+  {
+    src: "/images/ferrari_bianca_360/bianca_lat.webp",
+    alt: "White Ferrari California in profile",
+    layout: "",
+  },
+  {
+    src: "/images/maserati_ghibli_360/mase_4.webp",
+    alt: "Maserati Ghibli in the B LEADER collection",
+    layout: "",
+  },
+  {
+    src: "/images/mercedes_e220d_360/frame_009.webp",
+    alt: "Mercedes E 220d Cabrio in the B LEADER collection",
+    layout: "",
+  },
+  {
+    src: "/images/ferrari_rossa_360/rossa_profilo.webp",
+    alt: "Red Ferrari California in profile",
+    layout: "",
+  },
+] as const;
+
 /**
- * Home-page fleet moment — a single, cinematic photo as a teaser.
- * The full collection lives on /fleet, so the home never duplicates the list.
+ * Home-page fleet moment — an image-only overview of the collection.
+ * Full names, prices, and specifications remain on /fleet.
  */
 export default function FleetMoment() {
   return (
@@ -44,29 +72,23 @@ export default function FleetMoment() {
         </Reveal>
       </div>
 
-      {/* single photo — framed editorial moment */}
+      {/* Image-only collection overview — details live on the Fleet page. */}
       <Reveal y={64}>
-        <figure className="group">
-          <div className="overflow-hidden border border-line">
-            <div className="aspect-[16/10] w-full md:aspect-[21/9]">
+        <div className="grid grid-cols-2 gap-px border border-line bg-line md:h-[34rem] md:grid-cols-4 md:grid-rows-2">
+          {FLEET_GALLERY.map((image, index) => (
+            <div
+              key={image.src}
+              className={`group relative min-h-40 overflow-hidden bg-coal ${image.layout ?? ""}`}
+            >
               <img
-                src="/images/ferrari_blanca_card.webp"
-                alt="Ferrari California — the B LEADER fleet"
-                loading="lazy"
-                className="img-cine img-hover-zoom h-full w-full object-cover"
+                src={image.src}
+                alt={image.alt}
+                loading={index === 0 ? "eager" : "lazy"}
+                className="img-cine img-hover-zoom absolute inset-0 h-full w-full object-cover"
               />
             </div>
-          </div>
-          <figcaption className="mt-5 flex items-center justify-between gap-6 border-t border-line pt-5">
-            <p className="max-w-2xl text-sm leading-relaxed text-mute">
-              Every car is detailed, chauffeur-prepared and delivered to your
-              villa, masseria or airport.
-            </p>
-            <span className="hidden shrink-0 font-display text-[10px] uppercase tracking-[0.32em] text-gold-deep md:block">
-              Ferrari California · Bianco Avus
-            </span>
-          </figcaption>
-        </figure>
+          ))}
+        </div>
       </Reveal>
     </section>
   );
