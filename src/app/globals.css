@@ -26,6 +26,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-glow: glow 5s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -101,18 +102,6 @@ html.lenis, html.lenis body {
   opacity: 0;
   will-change: opacity;
   transition: none;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   EFECTO 3: DISPLACEMENT — SVG filter para distorsión
-   ═══════════════════════════════════════════════════════════ */
-.displacement-card {
-  will-change: transform, filter;
-  filter: url(#heat-distortion);
-  transition: transform 0.15s ease-out;
-}
-.displacement-card:hover {
-  filter: url(#heat-distortion-intense);
 }
 
 /* ═══════════════════════════════════════════════════════════

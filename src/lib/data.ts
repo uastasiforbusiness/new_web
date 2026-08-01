@@ -17,7 +17,7 @@ export type Car = {
 };
 
 // 4 cars. image paths point to real files under public/images/.
-// Prices/specs come from existing new_web content (src/components/velox/data.ts).
+// Prices/specs verified against existing new_web content / the reference catalogue.
 export const CARS: Car[] = [
   {
     slug: "ferrari-california-t",
