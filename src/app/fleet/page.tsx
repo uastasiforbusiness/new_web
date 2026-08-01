@@ -1,58 +1,31 @@
-import { buildPageMeta, breadcrumbSchema, productSchema } from '@/lib/seo';
-import { FleetShowcase } from '@/components/velox/sections/fleet-showcase';
-import { JsonLd } from '@/components/velox/ui/json-ld';
-import { cars } from '@/components/velox/data';
+import FleetGrid from "@/components/FleetGrid";
+import CTASection from "@/components/CTASection";
+import Reveal from "@/components/Reveal";
+import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
-  title: 'Exclusive Ferrari & Luxury Car Rental in Salento, Puglia',
-  description:
-    'Discover B LEADER\'s curated fleet: Ferrari California T (560HP), Ferrari California (460HP), Maserati Ghibli, Mercedes E220d Cabrio, and Cranchi Atlantique 50 yacht. Specs, photos, and pricing. Book your driving experience.',
-  path: '/fleet',
-  keywords: [
-    'Ferrari driving experience Salento Italy',
-    'Ferrari rental Puglia',
-    'supercar rental Italy',
-    'Maserati Ghibli Salento',
-    'luxury car rental Puglia',
-    'drive Ferrari Adriatic coast',
-    'Cranchi yacht Puglia',
-    'luxury fleet Salento',
-  ],
+  title: "The Fleet — Ferrari, Maserati & Mercedes",
+  description: "Ferrari California T, Ferrari California, Maserati Ghibli and Mercedes E 220d Cabrio — supercar hire in Salento.",
+  path: "/fleet",
 });
 
 export default function FleetPage() {
   return (
     <>
-      {/* Breadcrumb contextual */}
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Fleet', path: '/fleet' },
-        ])}
-      />
-      {/* Product schemas por vehículo */}
-      {cars.map((car) => (
-        <JsonLd
-          key={car.name}
-          data={productSchema({
-            name: `${car.name} — ${car.variant}`,
-            brand: car.name.includes('Ferrari')
-              ? 'Ferrari'
-              : car.name.includes('Maserati')
-                ? 'Maserati'
-                : car.name.includes('Mercedes')
-                  ? 'Mercedes-Benz'
-                  : car.name.includes('Cranchi')
-                    ? 'Cranchi'
-                    : 'B LEADER',
-            category: car.name.includes('Cranchi') ? 'Yacht' : 'Car',
-            image: car.image,
-            currency: 'EUR',
-            description: `${car.name} ${car.variant} — ${car.hp}HP. ${car.tagline}. ${car.keyFeatures}.`,
-          })}
-        />
-      ))}
-      <FleetShowcase />
+      <div className="mx-auto max-w-[1600px] px-5 pb-4 pt-32 md:px-10 md:pt-40">
+        <Reveal>
+          <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
+            <span className="h-px w-12 bg-gold/70" /> The fleet
+          </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h1 className="mt-5 font-serif text-5xl font-light leading-[1.02] text-ivory md:text-7xl">
+            Machines with <em className="gold-text pr-2">an accent.</em>
+          </h1>
+        </Reveal>
+      </div>
+      <FleetGrid />
+      <CTASection />
     </>
   );
 }
