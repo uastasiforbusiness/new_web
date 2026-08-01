@@ -32,7 +32,8 @@
 /* ═══════════════════════════════════════════════════════════
    SAFARI iOS FIXES
    ═══════════════════════════════════════════════════════════ */
-html, body {
+html,
+body {
   overscroll-behavior: none;
 }
 
@@ -45,14 +46,17 @@ html, body {
 /* ═══════════════════════════════════════════════════════════
    iOS INPUT FIX: font-size 16px mínimo evita zoom automático
    ═══════════════════════════════════════════════════════════ */
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: 16px;
 }
 
 /* ═══════════════════════════════════════════════════════════
    LENIS SMOOTH SCROLL — Desactivar scroll nativo
    ═══════════════════════════════════════════════════════════ */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 .lenis.lenis-smooth {
@@ -78,11 +82,11 @@ html.lenis, html.lenis body {
   background: #0a0a0a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c9a96e;
+  background: #333333;
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+  background: #444444;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -135,7 +139,7 @@ html.lenis, html.lenis body {
   position: relative;
 }
 .car-specs-blueprint::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -1px;
@@ -144,7 +148,7 @@ html.lenis, html.lenis body {
   background: #c9a96e;
 }
 .car-specs-blueprint::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: -1px;
@@ -157,12 +161,22 @@ html.lenis, html.lenis body {
    GOLD GLOW KEYFRAMES
    ═══════════════════════════════════════════════════════════ */
 @keyframes gold-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 @keyframes bounce-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
 }
 .animate-bounce-slow {
   animation: bounce-slow 2s ease-in-out infinite;
@@ -205,8 +219,12 @@ html.lenis, html.lenis body {
    MARQUEE / TEXT TICKER
    ═══════════════════════════════════════════════════════════ */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 .animate-marquee {
   animation: marquee 30s linear infinite;
@@ -216,8 +234,12 @@ html.lenis, html.lenis body {
    LOADING SCREEN
    ═══════════════════════════════════════════════════════════ */
 @keyframes loader-bar {
-  0% { width: 0%; }
-  100% { width: 100%; }
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }
 .loader-bar-anim {
   animation: loader-bar 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -236,8 +258,12 @@ html.lenis, html.lenis body {
    ELEGANT SHIMMER TEXT ANIMATION
    ═══════════════════════════════════════════════════════════ */
 @keyframes elegant-shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 .shimmer-text {
   background: linear-gradient(
@@ -261,23 +287,6 @@ html.lenis, html.lenis body {
 ::selection {
   background: rgba(201, 169, 110, 0.25);
   color: #fff;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   🆕 SCROLL PROGRESS BAR — Línea dorada superior con glow
-   ═══════════════════════════════════════════════════════════ */
-.scroll-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 0%;
-  background: linear-gradient(90deg, #c9a96e, #d4af37);
-  box-shadow: 0 0 8px rgba(201, 169, 110, 0.7), 0 0 24px rgba(201, 169, 110, 0.3);
-  z-index: 9999;
-  transition: none;
-  will-change: width;
-  border-radius: 0 2px 0 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -333,16 +342,32 @@ html.lenis, html.lenis body {
    🆕 AURORA BACKGROUND — Gradiente ambiental animado sutil
    ═══════════════════════════════════════════════════════════ */
 @keyframes aurora-drift {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-  25%  { transform: translate(2vw, -1vh) rotate(1deg) scale(1.02); }
-  50%  { transform: translate(-1vw, 2vh) rotate(-0.5deg) scale(0.98); }
-  75%  { transform: translate(-2vw, -1vh) rotate(0.5deg) scale(1.01); }
-  100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(2vw, -1vh) rotate(1deg) scale(1.02);
+  }
+  50% {
+    transform: translate(-1vw, 2vh) rotate(-0.5deg) scale(0.98);
+  }
+  75% {
+    transform: translate(-2vw, -1vh) rotate(0.5deg) scale(1.01);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
 }
 @keyframes aurora-shift {
-  0%   { opacity: 0.3; }
-  50%  { opacity: 0.5; }
-  100% { opacity: 0.3; }
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.3;
+  }
 }
 .aurora-bg {
   position: fixed;
@@ -352,7 +377,7 @@ html.lenis, html.lenis body {
   overflow: hidden;
 }
 .aurora-bg::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
@@ -401,8 +426,15 @@ html.lenis, html.lenis body {
 
 /* ── Ported from reference design system ─────────────────────── */
 @keyframes glow {
-  0%, 100% { opacity: 0.45; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.06); }
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
 }
 
 .text-outline {
@@ -414,12 +446,21 @@ html.lenis, html.lenis body {
   color: transparent;
 }
 .gold-text {
-  background: linear-gradient(115deg, #8f6f2f 0%, #c8a24e 35%, #f2e2b2 50%, #c8a24e 65%, #8f6f2f 100%);
+  background: linear-gradient(
+    115deg,
+    #8f6f2f 0%,
+    #c8a24e 35%,
+    #f2e2b2 50%,
+    #c8a24e 65%,
+    #8f6f2f 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-.hairline { border-color: var(--color-line); }
+.hairline {
+  border-color: var(--color-line);
+}
 
 .grain::before {
   content: "";
@@ -432,11 +473,21 @@ html.lenis, html.lenis body {
   animation: grain-shift 900ms steps(4) infinite;
 }
 @keyframes grain-shift {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-2%, 3%); }
-  50% { transform: translate(3%, -2%); }
-  75% { transform: translate(-3%, -3%); }
-  100% { transform: translate(2%, 2%); }
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 3%);
+  }
+  50% {
+    transform: translate(3%, -2%);
+  }
+  75% {
+    transform: translate(-3%, -3%);
+  }
+  100% {
+    transform: translate(2%, 2%);
+  }
 }
 
 .diamond {
@@ -460,10 +511,18 @@ html.lenis, html.lenis body {
   border-radius: 0;
   transition: border-color 0.35s var(--ease-out, ease);
 }
-.field::placeholder { color: var(--color-mute); }
-.field:focus { border-bottom-color: var(--color-gold); }
-select.field { appearance: none; }
-input[type="date"].field { color-scheme: dark; }
+.field::placeholder {
+  color: var(--color-mute);
+}
+.field:focus {
+  border-bottom-color: var(--color-gold);
+}
+select.field {
+  appearance: none;
+}
+input[type="date"].field {
+  color-scheme: dark;
+}
 
 .btn-sweep {
   position: relative;
@@ -479,10 +538,24 @@ input[type="date"].field { color-scheme: dark; }
   transform: translateY(101%);
   transition: transform 0.5s var(--ease-drama, cubic-bezier(0.65, 0, 0.15, 1));
 }
-.btn-sweep:hover::after { transform: translateY(0); }
+.btn-sweep:hover::after {
+  transform: translateY(0);
+}
 
-.img-cine { filter: saturate(0.82) contrast(1.06) brightness(0.94); }
-.img-hover-zoom { transition: transform 1.4s cubic-bezier(0.65, 0, 0.15, 1), filter 1.4s cubic-bezier(0.65, 0, 0.15, 1); }
-.group:hover .img-hover-zoom { transform: scale(1.055); filter: saturate(0.95) contrast(1.06) brightness(0.98); }
+.img-cine {
+  filter: saturate(0.82) contrast(1.06) brightness(0.94);
+}
+.img-hover-zoom {
+  transition:
+    transform 1.4s cubic-bezier(0.65, 0, 0.15, 1),
+    filter 1.4s cubic-bezier(0.65, 0, 0.15, 1);
+}
+.group:hover .img-hover-zoom {
+  transform: scale(1.055);
+  filter: saturate(0.95) contrast(1.06) brightness(0.98);
+}
 
-[data-reveal] { opacity: 0; transform: translateY(36px); }
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+}
