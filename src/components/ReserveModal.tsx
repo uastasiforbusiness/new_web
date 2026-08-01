@@ -5,7 +5,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
   type FormEvent,
   type ReactNode,
@@ -29,9 +28,11 @@ export const useReserve = () => useContext(ReserveContext);
 export function ReserveProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [preset, setPreset] = useState<string | undefined>(undefined);
+  const [session, setSession] = useState(0);
 
   const openReserve = useCallback((experience?: string) => {
     setPreset(experience);
+    setSession((s) => s + 1);
     setOpen(true);
   }, []);
 
@@ -53,7 +54,9 @@ export function ReserveProvider({ children }: { children: ReactNode }) {
   return (
     <ReserveContext.Provider value={{ openReserve }}>
       {children}
-      <ReserveModal open={open} preset={preset} onClose={() => setOpen(false)} />
+      {/* key={session} remounts the modal per open, so its form state (incl.
+          the preset experience) initializes fresh without an effect. */}
+      <ReserveModal key={session} open={open} preset={preset} onClose={() => setOpen(false)} />
     </ReserveContext.Provider>
   );
 }
@@ -79,7 +82,15 @@ function ReserveModal({
   onClose: () => void;
 }) {
   const [step, setStep] = useState(1);
-  const [experience, setExperience] = useState("");
+  const [experience, setExperience] = useState(() => {
+    if (preset) {
+      const hit = ALL_EXPERIENCE_OPTIONS.find(
+        (o) => o.value === preset || o.label === preset,
+      );
+      return hit ? hit.value : preset;
+    }
+    return "";
+  });
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState(2);
   const [name, setName] = useState("");
@@ -91,29 +102,6 @@ function ReserveModal({
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [reference, setReference] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
-  const presetApplied = useRef(false);
-
-  useEffect(() => {
-    if (open && !presetApplied.current) {
-      if (preset) {
-        const hit = ALL_EXPERIENCE_OPTIONS.find(
-          (o) => o.value === preset || o.label === preset,
-        );
-        setExperience(hit ? hit.value : preset);
-      }
-      presetApplied.current = true;
-    }
-    if (!open) {
-      presetApplied.current = false;
-      setTimeout(() => {
-        setStep(1);
-        setStatus("idle");
-        setErrors({});
-        setApiError(null);
-        setReference(null);
-      }, 400);
-    }
-  }, [open, preset]);
 
   const selected = ALL_EXPERIENCE_OPTIONS.find((o) => o.value === experience);
 

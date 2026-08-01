@@ -9,10 +9,18 @@ import { CONTACT, NAV_LINKS } from "@/lib/config";
 import { useReserve } from "./ReserveModal";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
   const { openReserve } = useReserve();
+
+  // Close the mobile menu when the route changes (render-time adjustment —
+  // avoids a cascading setState inside an effect).
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -20,10 +28,6 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     const lenis = window.__lenis;
