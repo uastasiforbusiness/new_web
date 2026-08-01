@@ -60,12 +60,12 @@ export default function AboutPage() {
       <div className="mx-auto max-w-[1600px] px-5 pb-4 pt-32 md:px-10 md:pt-40">
         <Reveal>
           <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
-            <span className="h-px w-12 bg-gold/70" /> Est. 2023 · Salento, Puglia
+            <span className="h-px w-12 bg-gold/70" /> EST. 2023
           </p>
         </Reveal>
         <Reveal delay={0.08}>
           <h1 className="mt-6 font-serif text-5xl font-light leading-[1.02] text-ivory md:text-7xl">
-            The B LEADER <em className="gold-text pr-2">story.</em>
+            The B LEADER <em className="gold-text pr-2">Story</em>
           </h1>
         </Reveal>
         <Reveal delay={0.14}>
