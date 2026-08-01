@@ -126,7 +126,10 @@ function ReserveModal({
     if (s === 2) {
       if (name.trim().length < 2) next.name = "Your name, please";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "A valid email is required";
-      if (phone.trim().length < 6) next.phone = "A phone / WhatsApp number is required";
+      const p = phone.trim();
+      if (p.length < 6) next.phone = "A phone / WhatsApp number is required";
+      else if (p.length > 20 || !/^[+]?[\d\s().-]+$/.test(p))
+        next.phone = "Enter a valid phone number (digits, spaces, +, (), -)";
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -140,11 +143,11 @@ function ReserveModal({
 
     try {
       // new_web's /api/reserve requires return_date > pickup_date (single-day
-      // reservation => return is the day after pickup).
+      // reservation => return is the day after pickup). Compute in UTC so DST
+      // spring-forward days (e.g. 2026-03-29 in Europe) don't collapse the date.
       const pickup = date; // "YYYY-MM-DD" from the form
-      const pickupDate = new Date(pickup);
-      const returnDate = new Date(pickupDate);
-      returnDate.setDate(returnDate.getDate() + 1);
+      const returnDate = new Date(pickup); // UTC midnight
+      returnDate.setUTCDate(returnDate.getUTCDate() + 1);
 
       const res = await fetch("/api/reserve", {
         method: "POST",
@@ -407,6 +410,7 @@ function ReserveModal({
                               type="tel"
                               autoComplete="tel"
                               placeholder="+39 …"
+                              maxLength={20}
                               value={phone}
                               onChange={(e) => setPhone(e.target.value)}
                               className="field"
@@ -421,6 +425,7 @@ function ReserveModal({
                           <textarea
                             id="rs-notes"
                             rows={2}
+                            maxLength={500}
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             className="field resize-none"
