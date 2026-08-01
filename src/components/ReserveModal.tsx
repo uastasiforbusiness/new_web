@@ -139,6 +139,13 @@ function ReserveModal({
     setApiError(null);
 
     try {
+      // new_web's /api/reserve requires return_date > pickup_date (single-day
+      // reservation => return is the day after pickup).
+      const pickup = date; // "YYYY-MM-DD" from the form
+      const pickupDate = new Date(pickup);
+      const returnDate = new Date(pickupDate);
+      returnDate.setDate(returnDate.getDate() + 1);
+
       const res = await fetch("/api/reserve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -148,8 +155,8 @@ function ReserveModal({
           customer_name: name,
           email,
           phone,
-          pickup_date: date,
-          return_date: date,
+          pickup_date: pickup,
+          return_date: returnDate.toISOString().slice(0, 10),
           consent_accepted: true,
           message: `${experience}\n\nGuests: ${guests}\n${notes}`,
         }),
