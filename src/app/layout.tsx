@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import { WhatsAppButton } from "@/components/velox/chat/whatsapp-button";
 import { ReserveProvider } from "@/components/ReserveModal";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema } from "@/lib/seo";
