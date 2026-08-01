@@ -5,23 +5,15 @@ import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import { useLenis } from '@/components/velox/use-lenis';
-import { FilmGrain, SvgFilters } from '@/components/velox/ui/film-grain';
 import { LoadingScreen } from '@/components/velox/ui/loading-screen';
-import { Navigation } from '@/components/velox/sections/navigation';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
-import { MarqueeText } from '@/components/velox/ui/marquee-text';
 
-import { FleetShowcase } from '@/components/velox/sections/fleet-showcase';
-import { YachtExperienceSection } from '@/components/velox/sections/yacht-experience-section';
-import { ServiceLinesSection } from '@/components/velox/sections/service-lines-section';
-import { CoverageSection } from '@/components/velox/sections/coverage-section';
-import { ReserveSection } from '@/components/velox/sections/reserve-section';
-import { Footer } from '@/components/velox/sections/footer';
-import { WhatsAppButton } from '@/components/velox/chat/whatsapp-button';
-import { ScrollProgress } from '@/components/velox/ui/scroll-progress';
-import { BackToTop } from '@/components/velox/ui/back-to-top';
-import { BackgroundAurora } from '@/components/velox/ui/background-aurora';
+import Marquee from '@/components/Marquee';
+import FleetShowcase from '@/components/FleetShowcase';
+import YachtSection from '@/components/YachtSection';
+import ExperiencesSection from '@/components/ExperiencesSection';
+import ServicesPreview from '@/components/ServicesPreview';
+import CTASection from '@/components/CTASection';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -30,8 +22,6 @@ if (typeof window !== 'undefined') {
 
 export function HomeClient() {
   const [loaded, setLoaded] = useState(false);
-
-  useLenis();
 
   useEffect(() => {
     if (!loaded) return;
@@ -48,42 +38,21 @@ export function HomeClient() {
   }, [loaded]);
 
   return (
-    <main className="bg-[#0a0a0a] min-h-screen">
-      <SvgFilters />
-      <BackgroundAurora />
-      <FilmGrain />
-      <ScrollProgress />
-
+    <>
       <AnimatePresence>
         {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
       </AnimatePresence>
-
       {loaded && (
-        <div>
-        <Navigation />
-        <HeroScaleDown />
-        <MarqueeText />
-
-
-        <div className="relative py-10 sm:py-14">
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
-          <div className="relative flex justify-center">
-            <span className="text-[#c9a96e]/40 text-[8px] bg-[#0a0a0a] px-4">◆</span>
-          </div>
-        </div>
-
-        <FleetShowcase />
-        <MarqueeText />
-        <YachtExperienceSection />
-        <ServiceLinesSection />
-        <CoverageSection />
-        <MarqueeText />
-        <ReserveSection />
-        <Footer />
-        <WhatsAppButton />
-        <BackToTop />
-      </div>
+        <>
+          <HeroScaleDown />
+          <Marquee />
+          <FleetShowcase />
+          <YachtSection />
+          <ExperiencesSection />
+          <ServicesPreview />
+          <CTASection />
+        </>
       )}
-    </main>
+    </>
   );
 }
