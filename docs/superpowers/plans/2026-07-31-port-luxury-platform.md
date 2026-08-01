@@ -1451,8 +1451,10 @@ git commit -m "feat(contact): add /contact page with ContactForm + concierge cha
 ### Task 21: Remove old pages and dead components
 
 **Files:**
-- Delete: `src/app/locations/`, `src/app/locations/salento/page.tsx`, `src/app/luxury-cars/`, `src/app/premium-experiences/`, `src/app/yachts/`, `src/app/blog/`, `src/app/yacht/`, and unused `src/components/velox/*` files
+- Delete: `src/app/locations/`, `src/app/locations/salento/page.tsx`, `src/app/luxury-cars/`, `src/app/premium-experiences/`, `src/app/yachts/`, `src/app/blog/`, `src/app/yacht/`, `src/data/experiences.ts`, and unused `src/components/velox/*` files
 - Keep: `src/components/velox/sections/hero-scale-down.tsx`, `src/components/velox/hero/*`, `src/components/velox/ui/loading-screen.tsx`, and any component still imported by the kept hero/intro/home.
+
+> **Carry-over from Task 17:** `src/data/experiences.ts` was NOT deleted in Task 17 because 6 tracked velox components still import it — `experience-card`, `experience-cta`, `experience-hero`, `experience-includes`, `experience-related`, `experience-timeline` (the dead detail-page sections, only consumers were the deleted `[slug]` routes). In this task, delete those 6 velox `experience-*.tsx` components FIRST, then `src/data/experiences.ts`. Re-run `grep -rn "@/data/experiences" src/` before deleting the module to confirm zero remaining importers.
 
 **Interfaces:**
 - Result: only reference components + kept hero/intro remain.
