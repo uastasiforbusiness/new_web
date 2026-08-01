@@ -56,14 +56,18 @@ src/app/api/        → keep new_web reserve + whatsapp (untouched)
 | Page | Action |
 |------|--------|
 | `/` (home) | Restructured with reference sections, but keeps **new_web's current hero + intro** |
-| `/fleet` | Port reference version (FleetGrid + CTASection) |
-| `/yacht` | Port reference version (YachtSection + YachtPackages) |
-| `/experiences` | Port reference version (ExperienceList) — **single listing page** |
+| `/fleet` | Port reference version (FleetGrid + CTASection) — the cars (products) |
+| `/experiences` | **UNIFIED hub** listing ALL experiences (car + boat) with category filters. No separate yacht page |
 | `/experiences/[slug]` | Removed (reference has no per-experience detail page) |
 | `/services` | Port reference version (ServiceBands) |
 | `/contact` | Port reference version (ContactForm) |
-| `/about`, `/locations`, `/locations/salento` | Removed (not in reference) |
+| `/yacht` | **NOT built** — yacht experiences live inside the unified `/experiences` hub |
+| `/about` | **KEPT** — "The B LEADER Story" (EST. 2023, how the business was born, values). Existing new_web page with real content; adapted to the reference's design language |
+| `/locations`, `/locations/salento` | Removed (not in reference) |
 | `/admin` | Not ported (no DB) |
+
+**Nav:** `HOME | FLEET | EXPERIENCES | SERVICES | ABOUT | CONTACT` (no Yacht entry; the
+yacht is presented through its experiences in the hub; About keeps the business story).
 
 ### 3. Data layer
 
@@ -74,12 +78,29 @@ Create `src/lib/config.ts` mirroring the reference:
 
 Create `src/lib/data.ts` — unified catalogue sourced from existing `new_web` content:
 - `CARS` (4 autos — from `velox/data.ts`)
-- `YACHT` (Cranchi Atlantique 50) + `YACHT_PACKAGES` (4 paquetes)
-- `EXPERIENCES` (4 experiencias — from `src/data/experiences.ts`)
+- `YACHT` (Cranchi Atlantique 50) — the vessel, used inside yacht-experience cards
+- `EXPERIENCES` — **unified list of ALL experiences** (car + boat, 7 total) with a
+  `category` field (`land` / `sea`) so the hub can filter. Sourced from
+  `src/data/experiences.ts` + `velox/data.ts`
 - `SERVICES` (3 servicios)
 - `HERO_VIDEO`, `HERO_POSTER`
 
 No new content is invented; existing `new_web` content is centralized.
+
+**Reparto de experiencias (owner-confirmed):**
+
+🚗 **Land (car) — 3:**
+1. Adriatic Morning (la ruta adriática)
+2. Salento Supercar Tour
+3. Sea and Road (Ferrari & Sea Combination)
+
+⛵ **Sea (boat) — 4:**
+1. Full Day — Two Seas
+2. Half Day — Ionian
+3. Dinner at Anchor
+4. Golden Hour / Sunset
+
+All 7 appear on the single `/experiences` hub, filterable by `Land` / `Sea`.
 
 ### 4. Components
 
