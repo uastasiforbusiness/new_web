@@ -414,7 +414,20 @@ In `src/app/globals.css`, inside the existing `@theme inline { ... }` block, add
   --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 ```
 
-(Keep existing `--font-sans`, `--font-body`, `--font-heading`, `--color-gold`.)
+**Change `--font-sans` to Inter** to match the reference body font (the reference uses
+`font-sans` = Inter on the body; new_web currently maps `--font-sans` to Outfit). Replace the
+existing `--font-sans: var(--font-outfit)` line with:
+
+```css
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+```
+
+> This is safe: the kept `loading-screen.tsx` overrides `.font-sans` in its own `<style jsx>`
+> block, and the hero components (`hero-scale-down`, `image-sequence`, `text-reel`) use no
+> global font classes (verified). Old components using `font-sans` expecting Outfit are deleted
+> in Task 21.
+
+(Keep existing `--font-body`, `--font-heading`, `--font-elegant`, `--color-gold`.)
 
 - [ ] **Step 2: Append the reference utility CSS at the end of the file**
 
@@ -528,13 +541,13 @@ git commit -m "style(theme): add reference design tokens and utilities to global
 
 ---
 
-### Task 4: Port shared components — Reveal, Marquee, SmoothScroll
+### Task 4: Port shared components — Reveal, Marquee, SmoothScroll, JsonLd
 
 **Files:**
-- Create: `src/components/Reveal.tsx`, `src/components/Marquee.tsx`, `src/components/SmoothScroll.tsx`
+- Create: `src/components/Reveal.tsx`, `src/components/Marquee.tsx`, `src/components/SmoothScroll.tsx`, `src/components/JsonLd.tsx`
 
 **Interfaces:**
-- Produces: `Reveal` (default export; props `children`, `className?`, `delay?`, `y?`, `duration?`, `start?`), `Marquee` (default), `SmoothScroll` (default; declares `window.__lenis`).
+- Produces: `Reveal` (default export; props `children`, `className?`, `delay?`, `y?`, `duration?`, `start?`), `Marquee` (default), `SmoothScroll` (default; declares `window.__lenis`), `JsonLd` (named export).
 - Consumes: `src/lib/data.ts`? No — Marquee is self-contained (hardcoded ITEMS). Reveal uses gsap. SmoothScroll uses lenis.
 
 - [ ] **Step 1: Copy `Reveal.tsx`, `Marquee.tsx`, `SmoothScroll.tsx` verbatim**
@@ -546,16 +559,34 @@ Copy each file exactly from:
 
 to `src/components/` in `new_web`. No changes needed (they use `@/lib`? No — they use gsap/lenis only). Verify imports resolve (`gsap`, `lenis`, `@/components` none).
 
-- [ ] **Step 2: Build to verify**
+- [ ] **Step 2: Create `src/components/JsonLd.tsx`**
+
+`new_web`'s `src/lib/seo.ts` does NOT export `JsonLd` (the existing one lives in `velox/ui/json-ld.tsx`, which Task 21 deletes). Create a flat copy so all ported pages import it from `@/components/JsonLd`:
+
+```tsx
+/**
+ * JSON-LD utility component — renders a schema.org script tag.
+ */
+export function JsonLd({ data }: { data: Record<string, unknown> }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+```
+
+- [ ] **Step 3: Build to verify**
 
 Run: `npx next build`
 Expected: builds clean.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add src/components/Reveal.tsx src/components/Marquee.tsx src/components/SmoothScroll.tsx
-git commit -m "feat(components): port Reveal, Marquee, SmoothScroll from reference"
+git add src/components/Reveal.tsx src/components/Marquee.tsx src/components/SmoothScroll.tsx src/components/JsonLd.tsx
+git commit -m "feat(components): port Reveal, Marquee, SmoothScroll + add flat JsonLd"
 ```
 
 ---
@@ -1023,7 +1054,8 @@ import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { ReserveProvider } from "@/components/ReserveModal";
-import { JsonLd, localBusinessSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { localBusinessSchema } from "@/lib/seo";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -1071,33 +1103,75 @@ git commit -m "feat(layout): swap app shell to reference chrome (Navbar/Footer/S
 
 - [ ] **Step 1: Inspect current home-client.tsx**
 
-Read `src/app/_components/home-client.tsx` fully. Identify where `LoadingScreen` and `HeroScaleDown` are rendered and how the intro/hide logic works. **Do not alter** those two blocks or their state logic.
+Read `src/app/_components/home-client.tsx` fully. Identify where `LoadingScreen` and `HeroScaleDown` are rendered and how the intro/hide logic works. **Do not alter** those two blocks or their state logic (`loaded`, `onComplete`).
 
-- [ ] **Step 2: Replace the sections below the hero**
+- [ ] **Step 2: Replace the sections below the hero — full import cleanup**
 
-Keep `LoadingScreen` (intro) + `HeroScaleDown` (hero) exactly as-is. Replace every section after the hero (`FleetShowcase`, `MarqueeText`, `YachtExperienceSection`, `ServiceLinesSection`, `CoverageSection`, `ReserveSection`, `ScrollProgress`, `BackToTop`, `BackgroundAurora`, `FilmGrain`, `ScrollProgress`) with the reference sections. New section order:
+Keep `LoadingScreen` (intro) + `HeroScaleDown` (hero) and their state logic exactly as-is. Replace every section after the hero with the reference sections. New section order — **and remove the outer `<main>` wrapper** (the root layout now provides `<main>`, matching the reference):
 
 ```tsx
       <>
-        <LoadingScreen />
-        <HeroScaleDown />
-        <Marquee />
-        <FleetShowcase />
-        <YachtSection />
-        <ExperiencesSection />
-        <ServicesPreview />
-        <CTASection />
+        <LoadingScreen onComplete={() => setLoaded(true)} />
+        {loaded && (
+          <>
+            <HeroScaleDown />
+            <Marquee />
+            <FleetShowcase />
+            <YachtSection />
+            <ExperiencesSection />
+            <ServicesPreview />
+            <CTASection />
+          </>
+        )}
       </>
 ```
 
-Remove the imports of the old velox sections that are no longer used (`YachtExperienceSection`, `ServiceLinesSection`, `CoverageSection`, `ReserveSection`, `MarqueeText`, `ScrollProgress`, `BackToTop`, `BackgroundAurora`). Add imports for the new `@/components` ones. Keep `useLenis`, `FilmGrain/SvgFilters`, `Navigation`, `Footer`, `WhatsAppButton` imports if still needed — verify each old import is used or remove it (TypeScript errors on unused? no — but lint does; remove cleanly).
+> The current home-client wraps everything in `<main className="bg-[#0a0a0a] min-h-screen">`.
+> Remove that wrapper — the reference renders pages as fragments and the layout's `<main>`
+> wraps children. The `bg-ink` background comes from the layout body class (Task 14).
 
-> The current home-client likely renders `Navigation`, `Footer`, `WhatsAppButton` itself. Since the root layout now provides Navbar/Footer/WhatsAppButton/SmoothScroll, **remove** those from home-client to avoid duplication. The hero's `ImageSequence`/`LoadingScreen` stay.
+**Remove ALL of these imports** (their components are now provided by the root layout or deleted in Task 21):
+
+```tsx
+// REMOVE (from velox)
+import { useLenis } from '@/components/velox/use-lenis';            // layout provides SmoothScroll
+import { FilmGrain, SvgFilters } from '@/components/velox/ui/film-grain';
+import { Navigation } from '@/components/velox/sections/navigation'; // layout provides Navbar
+import { Footer } from '@/components/velox/sections/footer';          // layout provides Footer
+import { WhatsAppButton } from '@/components/velox/chat/whatsapp-button'; // layout provides it
+import { ScrollProgress } from '@/components/velox/ui/scroll-progress';
+import { BackToTop } from '@/components/velox/ui/back-to-top';
+import { BackgroundAurora } from '@/components/velox/ui/background-aurora';
+import { MarqueeText } from '@/components/velox/ui/marquee-text';
+import { YachtExperienceSection } from '@/components/velox/sections/yacht-experience-section';
+import { ServiceLinesSection } from '@/components/velox/sections/service-lines-section';
+import { CoverageSection } from '@/components/velox/sections/coverage-section';
+import { ReserveSection } from '@/components/velox/sections/reserve-section';
+import { FleetShowcase } from '@/components/velox/sections/fleet-showcase'; // old velox one
+```
+
+**Add these imports** (from the new flat components):
+
+```tsx
+import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down'; // KEPT (velox)
+import { LoadingScreen } from '@/components/velox/ui/loading-screen';       // KEPT (velox)
+import Marquee from '@/components/Marquee';
+import FleetShowcase from '@/components/FleetShowcase';
+import YachtSection from '@/components/YachtSection';
+import ExperiencesSection from '@/components/ExperiencesSection';
+import ServicesPreview from '@/components/ServicesPreview';
+import CTASection from '@/components/CTASection';
+```
+
+> Keep `useState`/`useEffect`/`AnimatePresence`/`gsap`/`ScrollTrigger` imports only if still used
+> by the kept intro logic (the `loaded` gating uses `useState`/`useEffect`; `AnimatePresence`
+> wraps the LoadingScreen). If after cleanup a React/GSAP import is unused, remove it — lint fails
+> on unused vars.
 
 - [ ] **Step 3: Build to verify**
 
 Run: `npx next build`
-Expected: home renders hero + intro + reference sections. Watch for class-name collisions (old sections removed).
+Expected: home renders hero + intro + reference sections; no missing imports.
 
 - [ ] **Step 4: Manual smoke check**
 
@@ -1128,8 +1202,7 @@ Copy the structure from `C:\Users\gabri\Desktop\b-leader-luxury-platform (2)\src
 import FleetGrid from "@/components/FleetGrid";
 import CTASection from "@/components/CTASection";
 import Reveal from "@/components/Reveal";
-import { buildPageMeta, breadcrumbSchema, JsonLd, productSchema } from "@/lib/seo";
-import { CARS } from "@/lib/data";
+import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
   title: "The Fleet — Ferrari, Maserati & Mercedes",
@@ -1139,7 +1212,7 @@ export const metadata = buildPageMeta({
 
 export default function FleetPage() {
   return (
-    <main className="bg-ink">
+    <>
       <div className="mx-auto max-w-[1600px] px-5 pb-4 pt-32 md:px-10 md:pt-40">
         <Reveal>
           <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
@@ -1154,7 +1227,7 @@ export default function FleetPage() {
       </div>
       <FleetGrid />
       <CTASection />
-    </main>
+    </>
   );
 }
 ```
@@ -1190,7 +1263,7 @@ Delete the old grid (which used `experiences` from `@/data/experiences`). New bo
 import ExperienceList from "@/components/ExperienceList";
 import CTASection from "@/components/CTASection";
 import Reveal from "@/components/Reveal";
-import { buildPageMeta, breadcrumbSchema, JsonLd } from "@/lib/seo";
+import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
   title: "Experiences — Editorial Days in Salento",
@@ -1200,7 +1273,7 @@ export const metadata = buildPageMeta({
 
 export default function ExperiencesPage() {
   return (
-    <main className="bg-ink">
+    <>
       <div className="mx-auto max-w-[1600px] px-5 pb-4 pt-32 md:px-10 md:pt-40">
         <Reveal>
           <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
@@ -1215,12 +1288,15 @@ export default function ExperiencesPage() {
       </div>
       <ExperienceList />
       <CTASection />
-    </main>
+    </>
   );
 }
 ```
 
-Also **delete** `src/app/experiences/[slug]/page.tsx`, `src/app/experiences/[slug]/layout.tsx`, and `src/app/experiences/layout.tsx` (no detail pages — reference is a single hub). Verify no other file imports `@/data/experiences` before removing.
+Also **delete** `src/app/experiences/[slug]/page.tsx`, `src/app/experiences/[slug]/layout.tsx`,
+`src/app/experiences/layout.tsx`, and the untracked WIP dirs `src/app/experiences/combo`,
+`src/app/experiences/ferrari`, `src/app/experiences/jet` (no detail pages — reference is a
+single hub). Verify no other file imports `@/data/experiences` before removing.
 
 - [ ] **Step 2: Verify build + grep for stale references**
 
@@ -1230,9 +1306,16 @@ Expected: no references to `src/data/experiences.ts` remain, build clean.
 
 - [ ] **Step 3: Commit**
 
+The `[slug]` dir and `experiences/layout.tsx` are tracked; `combo|ferrari|jet` are untracked
+WIP. Delete both kinds with `rm -rf`, then stage tracked deletions with `git add -u` (NOT
+`git add -A`, which would also sweep in the dev-WIP files):
+
 ```bash
-git add -A src/app/experiences/
+rm -rf src/app/experiences/combo src/app/experiences/ferrari src/app/experiences/jet
+git rm -r src/app/experiences/[slug] 2>/dev/null || true
+git rm src/app/experiences/layout.tsx 2>/dev/null || true
 git rm -r src/data/experiences.ts 2>/dev/null || true
+git add -u
 git commit -m "feat(experiences): rewrite /experiences as unified land/sea hub; drop detail pages"
 ```
 
@@ -1254,7 +1337,7 @@ Delete the old `ServiceLinesSection`/`CoverageSection` usage. New body:
 import ServiceBands from "@/components/ServiceBands";
 import CTASection from "@/components/CTASection";
 import Reveal from "@/components/Reveal";
-import { buildPageMeta, breadcrumbSchema, JsonLd } from "@/lib/seo";
+import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
   title: "Chauffeured Services — Weddings, Corporate & Events",
@@ -1264,7 +1347,7 @@ export const metadata = buildPageMeta({
 
 export default function ServicesPage() {
   return (
-    <main className="bg-ink">
+    <>
       <div className="mx-auto max-w-[1600px] px-5 pb-4 pt-32 md:px-10 md:pt-40">
         <Reveal>
           <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
@@ -1279,7 +1362,7 @@ export default function ServicesPage() {
       </div>
       <ServiceBands />
       <CTASection />
-    </main>
+    </>
   );
 }
 ```
@@ -1303,7 +1386,7 @@ git commit -m "feat(services): rewrite /services with ServiceBands + CTA"
 - Modify: `src/app/about/page.tsx`
 
 **Interfaces:**
-- Consumes: `Reveal`, `CTASection` from `@/components`; `buildPageMeta`/`JsonLd` from `@/lib/seo`.
+- Consumes: `Reveal`, `CTASection`, `JsonLd` from `@/components`; `buildPageMeta`, `breadcrumbSchema` from `@/lib/seo`.
 - Preserves: the EST. 2023 story content and values.
 
 - [ ] **Step 1: Adapt the existing about page to the reference design language**
@@ -1339,7 +1422,8 @@ Copy the structure from `C:\Users\gabri\Desktop\b-leader-luxury-platform (2)\src
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
-import { buildPageMeta, breadcrumbSchema, JsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { buildPageMeta, breadcrumbSchema } from "@/lib/seo";
 import { CONTACT, whatsappUrl } from "@/lib/config";
 
 export const metadata = buildPageMeta({
@@ -1380,8 +1464,13 @@ Expected: only `home-client.tsx` (or files it imports). List those files; they a
 
 - [ ] **Step 2: Delete pages for removed routes**
 
+Some of these are git-tracked (committed), others are untracked dev WIP (blog, luxury-cars,
+premium-experiences, yachts, experiences/combo|ferrari|jet). `git rm` fails on untracked
+files — use plain `rm -rf` for everything, then `git add -A` stages the tracked deletions:
+
 ```bash
-git rm -r src/app/locations src/app/luxury-cars src/app/premium-experiences src/app/yachts src/app/blog src/app/yacht 2>/dev/null
+rm -rf src/app/locations src/app/luxury-cars src/app/premium-experiences src/app/yachts src/app/blog src/app/yacht src/app/experiences/combo src/app/experiences/ferrari src/app/experiences/jet
+git add -A src/app/locations src/app/luxury-cars src/app/premium-experiences src/app/yachts src/app/blog src/app/yacht 2>/dev/null
 ```
 
 (Keep `src/app/fleet`, `experiences`, `services`, `about`, `contact`, `page.tsx`, `layout.tsx`, `api/`.)
@@ -1408,10 +1497,18 @@ Expected: only intended deletions; the untracked WIP files from the earlier clea
 
 - [ ] **Step 6: Commit**
 
+Stage ONLY the tracked deletions and kept-file changes — never `git add -A` (that would sweep
+in the untracked dev-WIP files, violating the Global Constraint). Use `git add -u` (stages
+modifications+deletions of tracked files only) plus explicit `git add` for any new kept files:
+
 ```bash
-git add -A
+git add -u
+git add src/components/Reveal.tsx src/components/JsonLd.tsx 2>/dev/null || true
 git commit -m "refactor: remove old velox components and removed routes"
 ```
+
+After commit, run `git status` and confirm the untracked dev-WIP files (blog/, yachts/,
+luxury-cars/, new_items/, videos/, etc.) remain **untracked** — they must NOT be in the commit.
 
 ---
 
