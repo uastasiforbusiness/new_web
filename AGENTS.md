@@ -22,6 +22,12 @@ npm run cf:deploy         # OpenNext build and deploy to Cloudflare Workers
 
 Production data uses the `DB` D1 binding. Do not introduce a Node-only database runtime or depend on local SQLite for Worker behavior. Run `npx wrangler d1 execute bleader-db --remote --file=prisma/d1/init.sql` only when intentionally applying the idempotent remote schema.
 
+For local development, apply the same idempotent schema to the local D1 database once (a fresh local DB has no tables, and API routes then fail with `D1_ERROR: no such table`):
+
+```bash
+npx wrangler d1 execute bleader-db --local --file=prisma/d1/init.sql
+```
+
 **Official domains:** `bleaderitaly.com` (primary / canonical) and `bleaderitaly.it`. Set `NEXT_PUBLIC_SITE_URL=https://bleaderitaly.com` for production SEO. Attach both domains (and `www`) as Custom Domains on the `bleader-italy` Worker in Cloudflare.
 
 ## Coding and content conventions

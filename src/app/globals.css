@@ -4,18 +4,29 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-outfit);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-outfit);
   --font-body: var(--font-inter);
-  --color-gold: #c9a96e;
-  --color-gold-light: #d4af37;
-  --color-gold-dark: #b8943e;
   --font-elegant: var(--font-cormorant);
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #0a0908;
+  --color-coal: #131110;
+  --color-carbon: #1a1715;
+  --color-gold: #c9a96e;
+  --color-gold-light: #e6cf95;
+  --color-gold-deep: #8f6f2f;
+  --color-gold-dark: #b8943e;
+  --color-ivory: #f3eee3;
+  --color-sand: #a79e8e;
+  --color-mute: #6f6859;
+  --color-line: rgba(243, 238, 228, 0.09);
   --radius: 0.625rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-glow: glow 5s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -91,18 +102,6 @@ html.lenis, html.lenis body {
   opacity: 0;
   will-change: opacity;
   transition: none;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   EFECTO 3: DISPLACEMENT — SVG filter para distorsión
-   ═══════════════════════════════════════════════════════════ */
-.displacement-card {
-  will-change: transform, filter;
-  filter: url(#heat-distortion);
-  transition: transform 0.15s ease-out;
-}
-.displacement-card:hover {
-  filter: url(#heat-distortion-intense);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -399,3 +398,91 @@ html.lenis, html.lenis body {
 .img-auto {
   image-rendering: auto;
 }
+
+/* ── Ported from reference design system ─────────────────────── */
+@keyframes glow {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
+
+.text-outline {
+  -webkit-text-stroke: 1px rgba(243, 238, 228, 0.16);
+  color: transparent;
+}
+.text-outline-gold {
+  -webkit-text-stroke: 1px rgba(200, 162, 78, 0.4);
+  color: transparent;
+}
+.gold-text {
+  background: linear-gradient(115deg, #8f6f2f 0%, #c8a24e 35%, #f2e2b2 50%, #c8a24e 65%, #8f6f2f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hairline { border-color: var(--color-line); }
+
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 900ms steps(4) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 3%); }
+  50% { transform: translate(3%, -2%); }
+  75% { transform: translate(-3%, -3%); }
+  100% { transform: translate(2%, 2%); }
+}
+
+.diamond {
+  display: inline-block;
+  width: 0.45em;
+  height: 0.45em;
+  background: currentColor;
+  transform: rotate(45deg);
+  flex: none;
+}
+
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(243, 238, 228, 0.18);
+  padding: 0.85rem 0;
+  font-size: 0.95rem;
+  color: var(--color-ivory);
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.35s var(--ease-out, ease);
+}
+.field::placeholder { color: var(--color-mute); }
+.field:focus { border-bottom-color: var(--color-gold); }
+select.field { appearance: none; }
+input[type="date"].field { color-scheme: dark; }
+
+.btn-sweep {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.btn-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-gold);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease-drama, cubic-bezier(0.65, 0, 0.15, 1));
+}
+.btn-sweep:hover::after { transform: translateY(0); }
+
+.img-cine { filter: saturate(0.82) contrast(1.06) brightness(0.94); }
+.img-hover-zoom { transition: transform 1.4s cubic-bezier(0.65, 0, 0.15, 1), filter 1.4s cubic-bezier(0.65, 0, 0.15, 1); }
+.group:hover .img-hover-zoom { transform: scale(1.055); filter: saturate(0.95) contrast(1.06) brightness(0.98); }
+
+[data-reveal] { opacity: 0; transform: translateY(36px); }

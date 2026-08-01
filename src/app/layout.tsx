@@ -1,7 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import { localBusinessSchema, CONTACT } from "@/lib/seo";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import SmoothScroll from "@/components/SmoothScroll";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import { ReserveProvider } from "@/components/ReserveModal";
+import { JsonLd } from "@/components/JsonLd";
+import { localBusinessSchema } from "@/lib/seo";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -56,6 +62,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: { telephone: false },
   openGraph: {
     title: "B LEADER — Luxury Driving & Yacht Experiences in Salento, Italy",
     description:
@@ -98,11 +109,12 @@ export const metadata: Metadata = {
 };
 
 /**
- * JSON-LD Structured Data — ONLY LocalBusiness en root layout.
- * Los schemas de Product y Breadcrumb contextuales se inyectan
- * desde cada page.tsx (fleet, yacht, services, about).
+ * Viewport / PWA — theme-color meta preserved from the previous manual <head>.
+ * appleWebApp + formatDetection live in `metadata` (Next 16 splits these).
  */
-const jsonLdSchemas = [localBusinessSchema()];
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+};
 
 export default function RootLayout({
   children,
@@ -110,38 +122,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        {/* JSON-LD Structured Data — LocalBusiness */}
-        {jsonLdSchemas.map((schema, i) => (
-          <script
-            key={i}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
-        ))}
-        {/* Theme color para PWA / status bar en mobile */}
-        <meta name="theme-color" content="#0a0a0a" />
-        <meta
-          name="apple-mobile-web-app-capable"
-          content="yes"
-        />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
-        <meta name="format-detection" content="telephone=no" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body
-        className={`${outfit.variable} ${inter.variable} ${cormorant.variable} antialiased bg-[#0a0a0a] text-white overflow-x-hidden`}
-      >
-        {children}
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${outfit.variable} ${inter.variable}`}
+    >
+      <body className="grain bg-ink font-sans text-ivory antialiased">
+        <JsonLd data={localBusinessSchema()} />
+        <ReserveProvider>
+          <SmoothScroll>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </SmoothScroll>
+        </ReserveProvider>
+        <WhatsAppButton />
       </body>
     </html>
   );
