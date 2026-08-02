@@ -66,3 +66,8 @@ DEEP_INV_TEC.md
 STACK_EVALUATION.md
 STITCH_MCP_HANDOFF.md
 investigacion-entornos-colaborativos-visuales-IA.md
+
+# Playwright / visual verification
+playwright-report/
+test-results/
+screenshots/
