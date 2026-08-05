@@ -50,6 +50,10 @@ export default function TravelCarousel() {
   const [cards] = useState<CardData[]>(CAROUSEL_ITEMS);
   const [currentIndex, setCurrentIndex] = useState(2); // La tarjeta central empieza activa
 
+  /** Geometría de la rueda: paso angular entre tarjetas y radio del cilindro (px). */
+  const ANGLE_STEP = 58;
+  const RADIUS = 280;
+
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % cards.length);
   };
@@ -76,15 +80,12 @@ export default function TravelCarousel() {
           // Ocultar tarjetas que estén muy lejos si decides meter más de 5
           if (Math.abs(offset) > 2) return null;
 
-          // Configuración de transformaciones 3D según su posición
-          let rotateY = 0;
-          const translateX = offset * 160; // Separación horizontal
-          const translateZ = isActive ? 100 : -150; // Profundidad
+          // Movimiento de rueda: cada tarjeta cuelga en un cilindro 3D —
+          // ángulo según su posición en el anillo y todas a la misma profundidad (radio).
+          const rotateY = offset * ANGLE_STEP;
+          const translateZ = RADIUS;
           const zIndex = 10 - Math.abs(offset);
           const opacity = isActive ? 1 : 0.35;
-
-          if (offset < 0) rotateY = 25; // Rotación hacia adentro (izquierda)
-          if (offset > 0) rotateY = -25; // Rotación hacia adentro (derecha)
 
           return (
             <motion.div
@@ -95,7 +96,7 @@ export default function TravelCarousel() {
                   : "border border-white/10 blur-[1px]"
               }`}
               animate={{
-                x: translateX,
+                x: 0,
                 z: translateZ,
                 rotateY: rotateY,
                 zIndex: zIndex,
