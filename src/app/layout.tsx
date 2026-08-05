@@ -124,6 +124,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${cormorant.variable} ${outfit.variable} ${inter.variable}`}
     >
       <body className="grain bg-ink font-sans text-ivory antialiased">
