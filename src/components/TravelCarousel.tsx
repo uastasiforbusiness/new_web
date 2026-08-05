@@ -50,9 +50,11 @@ export default function TravelCarousel() {
   const [cards] = useState<CardData[]>(CAROUSEL_ITEMS);
   const [currentIndex, setCurrentIndex] = useState(2); // La tarjeta central empieza activa
 
-  /** Geometría de la rueda: paso angular entre tarjetas y radio del cilindro (px). */
-  const ANGLE_STEP = 58;
-  const RADIUS = 280;
+  /** Abanico radial 3D: rotación, profundidad y escala por paso de distancia al centro. */
+  const ROTATE_STEP = 30; // ° de giro hacia dentro por paso
+  const X_STEP = 150; // px de apertura horizontal por paso
+  const DEPTH_STEP = 130; // px que se aleja en profundidad (negativa) por paso
+  const SCALE_STEP = 0.12; // reducción de escala por paso
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % cards.length);
@@ -80,10 +82,13 @@ export default function TravelCarousel() {
           // Ocultar tarjetas que estén muy lejos si decides meter más de 5
           if (Math.abs(offset) > 2) return null;
 
-          // Movimiento de rueda: cada tarjeta cuelga en un cilindro 3D —
-          // ángulo según su posición en el anillo y todas a la misma profundidad (radio).
-          const rotateY = offset * ANGLE_STEP;
-          const translateZ = RADIUS;
+          // Movimiento: abanico radial 3D — la central recta de frente;
+          // las laterales giran hacia dentro, se alejan en profundidad y
+          // se encogen, todo proporcional a su distancia al centro.
+          const rotateY = -offset * ROTATE_STEP; // giro hacia el centro
+          const translateX = offset * X_STEP; // apertura del abanico
+          const translateZ = -Math.abs(offset) * DEPTH_STEP; // profundidad (negativa)
+          const scale = 1 - Math.abs(offset) * SCALE_STEP; // más lejos, más pequeña
           const zIndex = 10 - Math.abs(offset);
           const opacity = isActive ? 1 : 0.35;
 
@@ -96,12 +101,14 @@ export default function TravelCarousel() {
                   : "border border-white/10 blur-[1px]"
               }`}
               animate={{
-                x: 0,
+                x: translateX,
                 z: translateZ,
                 rotateY: rotateY,
+                scale: scale,
                 zIndex: zIndex,
                 opacity: opacity,
               }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 transformStyle: "preserve-3d",
                 background:
