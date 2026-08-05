@@ -65,9 +65,17 @@ export default function TravelCarousel() {
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#12161a] px-4">
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden px-4">
+      {/* Fondo de la rueda: imagen personalizada + overlay oscuro para que las tarjetas destaquen */}
+      <img
+        src="/back_cards_whells.jpeg"
+        alt=""
+        draggable={false}
+        className="absolute inset-0 z-0 h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 z-0 bg-[#0d0c0a]/45" />
       {/* 1. Fondo difuminado (Misty background effect) */}
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(30,41,59,0.5)_0%,rgba(15,23,42,1)_100%)] opacity-70 blur-3xl" />
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(30,41,59,0.3)_0%,rgba(15,23,42,0.8)_100%)] opacity-80 blur-3xl" />
 
       {/* 2. Contenedor Principal del Carrusel con Perspectiva 3D */}
       <div
@@ -115,18 +123,10 @@ export default function TravelCarousel() {
                   "linear-gradient(180deg, rgba(26,26,26,0.92) 0%, rgba(10,10,10,0.96) 100%)",
               }}
             >
-              {/* Marco de la tarjeta: fondo imagen + overlay de legibilidad + hairline dorado */}
+              {/* Marco de la tarjeta: hairline dorado superior + brillo interior sutil */}
               <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[20px]">
-                <img
-                  src="/back_cards_whells.jpeg"
-                  alt=""
-                  draggable={false}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                {/* Overlay oscuro ascendente para que el texto editorial se lea bien */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/45 to-[#0a0a0a]/20" />
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-500/60 to-transparent" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,169,110,0.10),transparent_60%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,169,110,0.08),transparent_60%)]" />
               </div>
 
               {/* Contenido: bloque inferior-izquierdo con ritmo editorial (como la referencia) */}
