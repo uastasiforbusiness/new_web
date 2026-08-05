@@ -27,6 +27,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     label: "Step 02",
     title: "Curate the journey",
     description: "Private flybridge charters and chauffeured service, arranged end to end.",
+    image: "/images/card2_collage.webp",
   },
   {
     id: 3,
