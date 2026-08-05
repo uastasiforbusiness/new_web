@@ -9,21 +9,6 @@ export default function ExperiencesSection() {
   return (
     <section id="experiences" className="relative border-t border-line bg-coal/40">
       <div className="mx-auto max-w-[1600px] px-5 py-24 md:px-10 md:py-36">
-        <div className="mb-14 max-w-3xl md:mb-20">
-          <Reveal>
-            <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
-              <span className="h-px w-12 bg-gold/70" /> 03 — Curated days
-            </p>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="mt-5 font-serif text-5xl font-light leading-[1.02] text-ivory md:text-7xl">
-              Experiences,
-              <br />
-              <em className="text-gold-light">written like editorials.</em>
-            </h2>
-          </Reveal>
-        </div>
-
         <div className="grid gap-px border border-line bg-line sm:grid-cols-2">
           {EXPERIENCES.map((exp, i) => (
             <Reveal key={exp.slug} y={40} className={i > 1 ? "sm:col-span-1" : ""}>
