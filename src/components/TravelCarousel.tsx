@@ -10,6 +10,7 @@ interface CardData {
   label: string;       // small-caps gold — rol de "PERU" en la referencia
   title: string;       // Cormorant grande — rol de "MACHU PICCHU"
   description: string; // línea apagada — rol de "Adventure is never far away"
+  image?: string;      // fondo propio de la tarjeta (opcional)
 }
 
 // Placeholders on-brand; reemplázalos por tu contenido real.
@@ -19,6 +20,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     label: "Step 01",
     title: "Select the fleet",
     description: "Ferrari, Maserati, and luxury supercars curated across Salento.",
+    image: "/images/card1_collage.webp",
   },
   {
     id: 2,
@@ -123,8 +125,20 @@ export default function TravelCarousel() {
                   "linear-gradient(180deg, rgba(26,26,26,0.92) 0%, rgba(10,10,10,0.96) 100%)",
               }}
             >
-              {/* Marco de la tarjeta: hairline dorado superior + brillo interior sutil */}
+              {/* Marco de la tarjeta: fondo propio (opcional) + hairline dorado + brillo */}
               <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[20px]">
+                {card.image && (
+                  <>
+                    <img
+                      src={card.image}
+                      alt=""
+                      draggable={false}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    {/* Overlay oscuro ascendente para legibilidad del texto */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/45 to-[#0a0a0a]/20" />
+                  </>
+                )}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-500/60 to-transparent" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,169,110,0.08),transparent_60%)]" />
               </div>
