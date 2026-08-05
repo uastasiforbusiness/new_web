@@ -50,13 +50,12 @@ export default function Navbar() {
         }`}
       >
         <div className={`mx-auto flex max-w-[1600px] items-center justify-between px-5 transition-all duration-500 md:px-10 ${scrolled ? "h-16" : "h-20"}`}>
-          <Link href="/" className="group flex items-baseline gap-2" aria-label="B LEADER home">
-            <span className="font-display text-xl font-semibold tracking-[0.32em] text-gold transition-colors group-hover:text-gold-light">
-              B
-            </span>
-            <span className="font-display text-xl font-light tracking-[0.32em] text-ivory">
-              LEADER
-            </span>
+          <Link href="/" className="group flex items-center" aria-label="B LEADER home">
+            <img
+              src="/images/logo_oro.png"
+              alt="B LEADER"
+              className="h-15 w-auto object-contain transition-opacity duration-300 group-hover:opacity-85"
+            />
           </Link>
 
           <nav className="hidden items-center gap-9 lg:flex" aria-label="Primary">
