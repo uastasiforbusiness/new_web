@@ -35,8 +35,8 @@ const CAROUSEL_ITEMS: CarouselItem[] = [
 ];
 
 /** Cylinder geometry: spacing between cards and wheel radius in CSS px. */
-const ANGLE_STEP = 45;
-const RADIUS = 280;
+const ANGLE_STEP = 72;
+const RADIUS = 340;
 const DRAG_SENSITIVITY = 0.15;
 const SNAP_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
@@ -100,8 +100,8 @@ export default function LuxuryWheelCarousel() {
       <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-center px-5 select-none md:px-10">
         {/* 3D stage */}
         <div
-          className="relative flex h-[500px] w-full max-w-[1000px] touch-pan-y cursor-grab items-center justify-center active:cursor-grabbing"
-          style={{ perspective: '1200px' }}
+          className="relative flex h-[560px] w-full max-w-[1300px] touch-pan-y cursor-grab items-center justify-center active:cursor-grabbing"
+          style={{ perspective: '1400px' }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -110,7 +110,7 @@ export default function LuxuryWheelCarousel() {
           {/* Cylinder */}
           <div
             className={clsx(
-              'relative h-[420px] w-[300px] will-change-transform',
+              'relative h-[460px] w-[320px] will-change-transform',
               !dragging &&
                 !reducedMotion.current &&
                 'transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
@@ -138,7 +138,7 @@ export default function LuxuryWheelCarousel() {
                     }
                   }}
                   className={clsx(
-                    'absolute inset-0 h-full w-full rounded-3xl p-[3px] backface-hidden transition-all duration-500',
+                    'absolute inset-0 h-full w-full rounded-3xl p-[4px] backface-hidden transition-all duration-500',
                     isActive
                       ? 'cursor-default brightness-100 blur-0 shadow-[0_15px_50px_rgba(212,175,55,0.25)]'
                       : 'cursor-pointer brightness-[0.35] blur-[1.5px]',
@@ -150,7 +150,7 @@ export default function LuxuryWheelCarousel() {
                     transformStyle: 'preserve-3d',
                   }}
                 >
-                  <div className="flex h-full w-full flex-col items-center justify-center rounded-[21px] bg-coal-900 p-8 text-center">
+                  <div className="flex h-full w-full flex-col items-center justify-center rounded-[21px] bg-coal-900 p-10 text-center md:p-12">
                     <span className="mb-6 block font-serif text-sm tracking-[4px] text-gold-500">
                       {item.step}
                     </span>
