@@ -32,11 +32,18 @@ const CAROUSEL_ITEMS: CarouselItem[] = [
     description:
       'Your dedicated personal concierge arranges every detail, 24/7, to ensure true excellence.',
   },
+  {
+    id: '4',
+    step: '04',
+    title: 'Set sail',
+    description:
+      'Step aboard the Cranchi Atlantique 50 — flybridge cruises, Ionian swims and dinners at anchor.',
+  },
 ];
 
 /** Cylinder geometry: spacing between cards and wheel radius in CSS px. */
-const ANGLE_STEP = 72;
-const RADIUS = 340;
+const ANGLE_STEP = 36;
+const RADIUS = 300;
 const DRAG_SENSITIVITY = 0.15;
 const SNAP_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
@@ -100,7 +107,7 @@ export default function LuxuryWheelCarousel() {
       <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-center px-5 select-none md:px-10">
         {/* 3D stage */}
         <div
-          className="relative flex h-[560px] w-full max-w-[1300px] touch-pan-y cursor-grab items-center justify-center active:cursor-grabbing"
+          className="relative flex h-[600px] w-full max-w-[1300px] touch-pan-y cursor-grab items-center justify-center active:cursor-grabbing"
           style={{ perspective: '1400px' }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -110,7 +117,7 @@ export default function LuxuryWheelCarousel() {
           {/* Cylinder */}
           <div
             className={clsx(
-              'relative h-[460px] w-[320px] will-change-transform',
+              'relative h-[520px] w-[260px] will-change-transform',
               !dragging &&
                 !reducedMotion.current &&
                 'transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
