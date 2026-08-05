@@ -11,7 +11,6 @@ import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 import Marquee from '@/components/Marquee';
 import TravelCarousel from '@/components/TravelCarousel';
 import YachtSection from '@/components/YachtSection';
-import ExperiencesSection from '@/components/ExperiencesSection';
 import ServicesPreview from '@/components/ServicesPreview';
 import CTASection from '@/components/CTASection';
 
@@ -48,7 +47,6 @@ export function HomeClient() {
           <Marquee />
           <TravelCarousel />
           <YachtSection />
-          <ExperiencesSection />
           <ServicesPreview />
           <CTASection />
         </>
