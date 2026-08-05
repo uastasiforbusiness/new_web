@@ -48,6 +48,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     label: "Step 05",
     title: "Begin",
     description: "Your private itinerary, one conversation away on WhatsApp.",
+    image: "/images/card5_collage.webp",
   },
 ];
 
