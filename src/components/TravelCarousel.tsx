@@ -34,6 +34,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     label: "Step 03",
     title: "Impeccable motion",
     description: "A dedicated concierge orchestrates every detail, 24/7.",
+    image: "/images/card3_collage.webp",
   },
   {
     id: 4,
