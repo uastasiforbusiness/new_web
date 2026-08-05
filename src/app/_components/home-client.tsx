@@ -9,7 +9,6 @@ import { LoadingScreen } from '@/components/velox/ui/loading-screen';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 
 import Marquee from '@/components/Marquee';
-import FleetMoment from '@/components/FleetMoment';
 import YachtSection from '@/components/YachtSection';
 import ExperiencesSection from '@/components/ExperiencesSection';
 import ServicesPreview from '@/components/ServicesPreview';
@@ -46,7 +45,6 @@ export function HomeClient() {
         <>
           <HeroScaleDown />
           <Marquee />
-          <FleetMoment />
           <YachtSection />
           <ExperiencesSection />
           <ServicesPreview />
