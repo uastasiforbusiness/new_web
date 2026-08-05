@@ -74,13 +74,13 @@ export default function TravelCarousel() {
         className="relative z-10 flex h-[500px] w-full max-w-5xl items-center justify-center"
         style={{ perspective: "1200px" }} // Requerido para el efecto 3D
       >
-        {cards.map((card, index) => {
-          // Posición relativa de cada tarjeta respecto a la activa
-          const offset = index - currentIndex;
+        {[...Array(5)].map((_, slot) => {
+          // Posición relativa de cada ranura respecto a la activa (-2..+2):
+          // siempre 1 central + 2 por lado, con wrap circular para un loop infinito.
+          const offset = slot - 2;
+          const wrap = (i: number) => ((i % cards.length) + cards.length) % cards.length;
+          const card = cards[wrap(currentIndex + offset)];
           const isActive = offset === 0;
-
-          // Ocultar tarjetas que estén muy lejos si decides meter más de 5
-          if (Math.abs(offset) > 2) return null;
 
           // Movimiento: abanico radial 3D — la central recta de frente;
           // las laterales giran hacia dentro, se alejan en profundidad y
