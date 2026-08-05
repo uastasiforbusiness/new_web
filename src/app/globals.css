@@ -21,6 +21,15 @@
   --color-sand: #a79e8e;
   --color-mute: #6f6859;
   --color-line: rgba(243, 238, 228, 0.09);
+  /* LuxuryWheelCarousel scale */
+  --color-coal-950: #0a0a0a;
+  --color-coal-900: #121212;
+  --color-coal-800: #1a1a1a;
+  --color-gold-500: #d4af37;
+  --color-gold-400: #f3e5ab;
+  --color-gold-600: #aa7c11;
+  --color-ivory-100: #fffdd0;
+  --color-ivory-400: #b3b3b3;
   --radius: 0.625rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
