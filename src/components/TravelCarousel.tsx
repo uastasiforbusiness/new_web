@@ -41,6 +41,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     label: "Step 04",
     title: "Set sail",
     description: "Aboard the Cranchi Atlantique 50 — Ionian swims and dinners at anchor.",
+    image: "/images/card4_collage.webp",
   },
   {
     id: 5,
