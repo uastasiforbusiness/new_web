@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, MessageCircle, Phone, type LucideIcon } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, type LucideIcon } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
@@ -7,14 +7,13 @@ import { CONTACT, whatsappUrl } from "@/lib/config";
 
 export const metadata = buildPageMeta({
   title: "Contact — Talk to the Concierge",
-  description: "Speak with the B LEADER concierge in English or Italian. Phone, WhatsApp and email — replies within two hours.",
+  description: "Speak with the B LEADER concierge in English or Italian. WhatsApp and email — replies within two hours.",
   path: "/contact",
 });
 
 type ContactRow = { Icon: LucideIcon; label: string; value: string; href?: string };
 
 const ROWS: ContactRow[] = [
-  { Icon: Phone, label: "Phone", value: CONTACT.phoneDisplay, href: CONTACT.phoneHref },
   { Icon: Mail, label: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}` },
   { Icon: MapPin, label: "Studio", value: CONTACT.address },
   { Icon: Clock, label: "Hours", value: CONTACT.hours },

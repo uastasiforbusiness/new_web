@@ -44,7 +44,6 @@ export const SITE = {
  * Actualizar en producción con datos reales.
  */
 export const CONTACT = {
-  phone: process.env.NEXT_PUBLIC_PHONE || "+39-XXX-XXXXXXX",
   email: process.env.NEXT_PUBLIC_EMAIL || "info@bleaderitaly.com",
 };
 
@@ -127,7 +126,6 @@ export function localBusinessSchema() {
     description: SITE.defaultDescription,
     image: `${SITE.url}/images/hero-bg-new.webp`,
     priceRange: "$$$$",
-    telephone: CONTACT.phone,
     email: CONTACT.email,
     address: {
       "@type": "PostalAddress",

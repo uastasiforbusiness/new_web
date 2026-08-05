@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Menu, Phone, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { CONTACT, NAV_LINKS } from "@/lib/config";
 import { useReserve } from "./ReserveModal";
 
@@ -76,13 +76,6 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-5">
-            <a
-              href={CONTACT.phoneHref}
-              className="hidden items-center gap-2 text-[11px] tracking-[0.2em] text-sand transition-colors hover:text-ivory xl:flex"
-            >
-              <Phone size={12} className="text-gold" strokeWidth={1.5} />
-              {CONTACT.phoneDisplay}
-            </a>
             <button
               onClick={() => openReserve()}
               className="btn-sweep group hidden items-center gap-2 border border-gold/50 px-5 py-2.5 text-[11px] font-medium uppercase tracking-[0.28em] text-gold transition-colors duration-500 hover:text-ink sm:flex"
@@ -161,7 +154,7 @@ export default function Navbar() {
               className="border-t border-line px-8 py-6 text-xs tracking-[0.18em] text-mute md:px-16"
             >
               <p>{CONTACT.address}</p>
-              <p className="mt-1 text-sand">{CONTACT.phoneDisplay} · {CONTACT.email}</p>
+              <p className="mt-1 text-sand">{CONTACT.email}</p>
             </motion.div>
           </motion.div>
         )}

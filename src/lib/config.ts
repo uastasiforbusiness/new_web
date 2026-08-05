@@ -9,8 +9,6 @@ export const TAGLINE = "Luxury in motion — Salento, Italy";
 export const CONTACT = {
   address: "Piazza Castello 1, 73057 Taviano (LE), Salento · Italy",
   email: "bookings@bleaderitaly.com",
-  phoneDisplay: "+39 351 666 7788",
-  phoneHref: "tel:+393516667788",
   hours: "Every day · 08:00 — 22:00 CET",
 } as const;
 
