@@ -52,6 +52,14 @@ scripts/
 # Local secrets / docs with credentials
 whatsapp_config.md
 
+# Local AI/open-code config (may contain plaintext API keys) — never commit
+opencode.json
+.claude/opencode.jsonc
+
+# Build logs
+build.log
+.build.log
+
 # Agent / documentation artifacts
 AGENTS.md
 _zscripts/
