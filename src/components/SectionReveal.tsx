@@ -14,7 +14,6 @@ type SectionRevealProps = {
   delay?: number;
   duration?: number;
   start?: string;
-  as?: "section" | "div";
   accentLine?: boolean;
 };
 
@@ -25,7 +24,6 @@ export default function SectionReveal({
   delay = 0,
   duration = 0.9,
   start = "top 90%",
-  as = "section",
   accentLine = false,
 }: SectionRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -68,18 +66,14 @@ export default function SectionReveal({
     };
   }, [delay, duration, start]);
 
-  const accent = accentLine ? (
-    <span
-      data-section-accent
-      className="block h-px w-12 origin-left bg-gold/80"
-    />
-  ) : null;
-
-  const content = accent ? <>{accent}</> : null;
-
   return (
     <div ref={ref} className={className} style={{ opacity: 0 }}>
-      {content}
+      {accentLine && (
+        <span
+          data-section-accent
+          className="block h-px w-12 origin-left bg-gold/80"
+        />
+      )}
       {children}
     </div>
   );

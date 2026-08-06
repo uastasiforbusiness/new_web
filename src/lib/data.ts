@@ -311,6 +311,3 @@ export const ALL_EXPERIENCE_OPTIONS = [
   ...EXPERIENCES.map((e) => ({ type: "tour" as const, value: e.name, label: e.name })),
   ...SERVICES.map((s) => ({ type: "event" as const, value: s.name, label: `Service · ${s.name}` })),
 ];
-
-export const HERO_VIDEO = "https://videos.pexels.com/video-files/8443860/8443860-uhd_3840_2160_30fps.mp4";
-export const HERO_POSTER = "/images/rossa_card.webp";
