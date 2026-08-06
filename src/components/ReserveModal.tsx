@@ -208,7 +208,7 @@ function ReserveModal({
                 <div className="py-6 text-center">
                   <BadgeCheck size={44} strokeWidth={1.2} className="mx-auto text-gold" />
                   <h3 className="mt-6 font-serif text-4xl font-light text-ivory">
-                    Consider it <em className="text-gold-light">noted</em>.
+                    Consider it <em className="text-gold-light">done</em>.
                   </h3>
                   <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-sand">
                     Our concierge replies personally within two hours, 08:00–22:00 CET.

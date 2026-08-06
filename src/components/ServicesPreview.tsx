@@ -25,7 +25,7 @@ export default function ServicesPreview() {
               <h2 className="mt-5 font-serif text-5xl font-light leading-[1.02] text-ivory md:text-7xl">
                 Weddings, boardrooms,
                 <br />
-                <em className="text-gold-light">everything sequinned.</em>
+                <em className="text-gold-light">everything in between.</em>
               </h2>
             </Reveal>
           </div>

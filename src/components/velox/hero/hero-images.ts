@@ -14,7 +14,7 @@ export const HERO_SLIDES: HeroImageSlide[] = [
     headline: 'ELEVATE',
     subtitle: 'YOUR JOURNEY.',
     description:
-      'B LEADER defines the new standard of Mediterranean luxury. Precision-engineered rentals for those who demand the extraordinary.',
+      'B LEADER redefines Mediterranean luxury. Precision-engineered rentals for those who demand the extraordinary.',
     duration: 0,
   },
 ];

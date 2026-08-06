@@ -31,7 +31,7 @@ export default function CTASection() {
         </Reveal>
         <Reveal delay={0.16}>
           <p className="mx-auto mt-6 max-w-md text-[15px] leading-8 text-sand">
-            No deposits taken online, no call centre. Describe the day —
+            No deposits taken online, no call center. Describe the day —
             a person answers, in English or Italian, within two hours.
           </p>
         </Reveal>

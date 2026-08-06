@@ -28,7 +28,7 @@ export default function ExperienceList() {
           <button
             key={f.key}
             onClick={() => setFilter(f.key)}
-            className={`border px-5 py-2 text-[11px] uppercase tracking-[0.25em] transition-colors duration-300 ${
+            className={`border px-5 py-2 text-[11px] uppercase tracking-[0.25em] transition-colors duration-300 transition-transform duration-160 ease-out active:scale-[0.97] ${
               filter === f.key
                 ? "border-gold text-gold"
                 : "border-ivory/15 text-sand hover:border-gold/50 hover:text-gold"

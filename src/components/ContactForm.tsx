@@ -61,7 +61,7 @@ export default function ContactForm() {
       <div className="flex h-full min-h-[320px] flex-col items-center justify-center border border-line bg-ink p-10 text-center">
         <BadgeCheck size={40} strokeWidth={1.2} className="text-gold" />
         <h3 className="mt-5 font-serif text-3xl font-light text-ivory">
-          Received, <em className="text-gold-light">grazie.</em>
+          Grazie — <em className="text-gold-light">message received.</em>
         </h3>
         <p className="mt-3 max-w-xs text-sm leading-7 text-sand">
           A concierge will write back within two hours, 08:00–22:00 CET.
