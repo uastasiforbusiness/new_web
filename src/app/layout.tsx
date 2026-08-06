@@ -8,6 +8,7 @@ import { WhatsAppButton } from "@/components/velox/chat/whatsapp-button";
 import { ReserveProvider } from "@/components/ReserveModal";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema } from "@/lib/seo";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -134,6 +135,7 @@ export default function RootLayout({
             <Navbar />
             <main>{children}</main>
             <Footer />
+            <ScrollToTop />
           </SmoothScroll>
         </ReserveProvider>
         <WhatsAppButton />

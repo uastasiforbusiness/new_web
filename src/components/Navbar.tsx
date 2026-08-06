@@ -51,10 +51,12 @@ export default function Navbar() {
       >
         <div className={`mx-auto flex max-w-[1600px] items-center justify-between px-5 transition-all duration-500 md:px-10 ${scrolled ? "h-16" : "h-20"}`}>
           <Link href="/" className="group flex items-center" aria-label="B LEADER home">
-            <img
+            <motion.img
               src="/images/logo_oro.png"
               alt="B LEADER"
-              className="h-15 w-auto object-contain transition-opacity duration-300 group-hover:opacity-85"
+              animate={{ scale: scrolled ? 0.9 : 1, opacity: scrolled ? 0.9 : 1 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="h-16 w-auto object-contain transition-opacity duration-300 group-hover:opacity-85"
             />
           </Link>
 

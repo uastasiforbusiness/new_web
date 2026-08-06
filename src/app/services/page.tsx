@@ -1,6 +1,7 @@
 import ServiceBands from '@/components/ServiceBands';
 import CTASection from '@/components/CTASection';
 import Reveal from '@/components/Reveal';
+import SectionReveal from '@/components/SectionReveal';
 import { buildPageMeta } from '@/lib/seo';
 
 export const metadata = buildPageMeta({
@@ -21,12 +22,16 @@ export default function ServicesPage() {
         </Reveal>
         <Reveal delay={0.08}>
           <h1 className="mt-5 font-serif text-5xl font-light leading-[1.02] text-ivory md:text-7xl">
-            Weddings, boardrooms, <em className="text-gold-light">everything sequinned.</em>
+            Weddings, boardrooms, <em className="text-gold-light">everything in between.</em>
           </h1>
         </Reveal>
       </div>
-      <ServiceBands />
-      <CTASection />
+      <SectionReveal accentLine>
+        <ServiceBands />
+      </SectionReveal>
+      <SectionReveal>
+        <CTASection />
+      </SectionReveal>
     </>
   );
 }

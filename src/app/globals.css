@@ -240,6 +240,21 @@ html.lenis body {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   YACHT WAVE DRIFT
+   ═══════════════════════════════════════════════════════════ */
+@keyframes wave-drift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-60px);
+  }
+}
+.wave-path {
+  animation: wave-drift 18s ease-in-out infinite alternate;
+}
+
+/* ═══════════════════════════════════════════════════════════
    LOADING SCREEN
    ═══════════════════════════════════════════════════════════ */
 @keyframes loader-bar {

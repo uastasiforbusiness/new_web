@@ -1,6 +1,7 @@
 import FleetGrid from "@/components/FleetGrid";
 import CTASection from "@/components/CTASection";
 import Reveal from "@/components/Reveal";
+import SectionReveal from "@/components/SectionReveal";
 import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
@@ -24,8 +25,12 @@ export default function FleetPage() {
           </h1>
         </Reveal>
       </div>
-      <FleetGrid />
-      <CTASection />
+      <SectionReveal accentLine>
+        <FleetGrid />
+      </SectionReveal>
+      <SectionReveal>
+        <CTASection />
+      </SectionReveal>
     </>
   );
 }

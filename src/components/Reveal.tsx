@@ -38,22 +38,50 @@ export default function Reveal({
       return;
     }
 
-    const tween = gsap.fromTo(
-      el,
-      { opacity: 0, y },
-      {
-        opacity: 1,
-        y: 0,
-        duration,
-        delay,
-        ease: "power3.out",
-        scrollTrigger: { trigger: el, start, once: true },
-      },
-    );
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const start = isMobile ? "top 92%" : "top 88%";
+
+    let tween: gsap.core.Tween | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let observer: IntersectionObserver | undefined;
+
+    const register = () => {
+      tween = gsap.fromTo(
+        el,
+        { opacity: 0, y },
+        {
+          opacity: 1,
+          y: 0,
+          duration,
+          delay,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start, once: true },
+        },
+      );
+    };
+
+    if (typeof window !== "undefined" && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              timeoutId = setTimeout(() => register(), 0);
+              observer?.disconnect();
+            }
+          });
+        },
+        { rootMargin: "0px 0px 20% 0px" },
+      );
+      observer.observe(el);
+    } else {
+      timeoutId = setTimeout(() => register(), 0);
+    }
 
     return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
+      observer?.disconnect();
+      clearTimeout(timeoutId);
+      tween?.scrollTrigger?.kill();
+      tween?.kill();
     };
   }, [delay, y, duration, start]);
 

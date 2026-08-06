@@ -17,9 +17,11 @@ export default function YachtSection() {
   const { openReserve } = useReserve();
   const imgWrapRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const waveRef = useRef<SVGPathElement | null>(null);
 
   useEffect(() => {
     if (!imgWrapRef.current || !imgRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         imgRef.current,
@@ -35,12 +37,41 @@ export default function YachtSection() {
           },
         },
       );
+
+      if (waveRef.current) {
+        gsap.to(waveRef.current, {
+          x: isMobile ? -20 : -40,
+          ease: "none",
+          scrollTrigger: {
+            trigger: imgWrapRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: isMobile ? 0.5 : 1,
+          },
+        });
+      }
     }, imgWrapRef);
     return () => ctx.revert();
   }, []);
 
   return (
     <section id="yacht" className="relative border-t border-line bg-ink">
+      {/* Wave parallax */}
+      <div className="pointer-events-none absolute -top-px inset-x-0 overflow-hidden leading-none" aria-hidden>
+        <svg
+          viewBox="0 0 1440 120"
+          className="block w-[120%] -ml-[10%]"
+          preserveAspectRatio="none"
+        >
+          <path
+            ref={waveRef}
+            className="wave-path"
+            d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z"
+            fill="#080706"
+          />
+        </svg>
+      </div>
+
       <div className="mx-auto grid max-w-[1600px] gap-0 lg:grid-cols-2">
         {/* sticky imagery */}
         <div className="relative min-h-[60vh] overflow-hidden lg:min-h-screen">

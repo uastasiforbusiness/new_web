@@ -56,7 +56,6 @@ export default function TravelCarousel() {
   const [cards] = useState<CardData[]>(CAROUSEL_ITEMS);
   const [currentIndex, setCurrentIndex] = useState(2); // La tarjeta central empieza activa
 
-  /** Abanico radial 3D: rotación, profundidad y escala por paso de distancia al centro. */
   const ROTATE_STEP = 30; // ° de giro hacia dentro por paso
   const X_STEP = 150; // px de apertura horizontal por paso
   const DEPTH_STEP = 130; // px que se aleja en profundidad (negativa) por paso
@@ -114,6 +113,7 @@ export default function TravelCarousel() {
                   ? "border border-gold-500/30 shadow-[0_24px_80px_rgba(201,169,110,0.18)]"
                   : "border border-white/10 blur-[1px]"
               }`}
+              initial={{ opacity: 0, scale: 0.8, rotateY: offset * 45 }}
               animate={{
                 x: translateX,
                 z: translateZ,
@@ -122,7 +122,11 @@ export default function TravelCarousel() {
                 zIndex: zIndex,
                 opacity: opacity,
               }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.65,
+                ease: [0.22, 1, 0.36, 1],
+                delay: Math.abs(offset) * 0.08,
+              }}
               style={{
                 transformStyle: "preserve-3d",
                 background:

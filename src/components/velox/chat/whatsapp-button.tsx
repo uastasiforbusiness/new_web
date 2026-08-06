@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { WhatsAppPopup } from './whatsapp-popup';
 
@@ -81,7 +82,9 @@ export function WhatsAppButton() {
       </a>
 
       {/* Chat popup */}
-      <WhatsAppPopup open={open} onClose={() => setOpen(false)} />
+      <AnimatePresence>
+        {open && <WhatsAppPopup open={open} onClose={() => setOpen(false)} />}
+      </AnimatePresence>
     </>
   );
 }

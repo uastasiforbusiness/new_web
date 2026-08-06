@@ -1,16 +1,45 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { CARS } from "@/lib/data";
 import { CONTACT, NAV_LINKS } from "@/lib/config";
 import { useReserve } from "./ReserveModal";
 
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function Footer() {
   const { openReserve } = useReserve();
+  const footerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!footerRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        footerRef.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top bottom",
+            end: "top 70%",
+            scrub: 1,
+          },
+        },
+      );
+    }, footerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-[#080706]">
+    <footer ref={footerRef} className="relative overflow-hidden border-t border-line bg-[#080706]">
       {/* Oversized wordmark */}
       <div className="pointer-events-none select-none px-5 pt-16 md:px-10" aria-hidden>
         <p className="text-outline whitespace-nowrap font-display text-[16vw] font-semibold leading-[0.85] tracking-[0.08em] opacity-60">

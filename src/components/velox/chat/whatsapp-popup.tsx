@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { X, Send, MessageSquare, Phone } from 'lucide-react';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'bleader_chat_session';
 const POLL_INTERVAL = 2500;
-const GREETING = 'Good day. I am your B Leader concierge. How may I assist?';
+const GREETING = 'Good day. I am your B LEADER concierge. How may I assist?';
 
 interface ChatMsg {
   id: string;
@@ -379,17 +380,24 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
 
   if (!open) return null;
 
+  const reducedMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   return (
     <>
       {/* Invisible backdrop */}
       <div className="fixed inset-0 z-[59]" onClick={onClose} aria-hidden="true" />
 
       {/* Popup */}
-      <div
+      <motion.div
         ref={popupRef}
         className="fixed bottom-24 right-6 z-[60] w-[330px] rounded-2xl overflow-hidden"
+        initial={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20, scale: 0.96 }}
+        animate={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0, scale: 1 }}
+        exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.96 }}
+        transition={reducedMotion ? { duration: 0 } : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          opacity: 0,
           background: 'rgba(17, 17, 17, 0.92)',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
@@ -568,7 +576,7 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
