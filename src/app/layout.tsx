@@ -114,6 +114,8 @@ export const metadata: Metadata = {
  * appleWebApp + formatDetection live in `metadata` (Next 16 splits these).
  */
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
   themeColor: "#0a0a0a",
 };
 

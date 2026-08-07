@@ -63,7 +63,7 @@ export function HeroScaleDown() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full overflow-hidden border-b border-[#222] bg-[#0a0a0a]"
+      className="relative h-[100svh] min-h-[560px] w-full overflow-hidden border-b border-[#222] bg-[#0a0a0a] md:h-screen"
     >
       {/* Content that scales down on scroll */}
       <div

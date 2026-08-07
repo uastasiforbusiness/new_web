@@ -12,15 +12,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [prevPathname, setPrevPathname] = useState(pathname);
   const { openReserve } = useReserve();
-
-  // Close the mobile menu when the route changes (render-time adjustment —
-  // avoids a cascading setState inside an effect).
-  if (prevPathname !== pathname) {
-    setPrevPathname(pathname);
-    setOpen(false);
-  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -49,14 +41,14 @@ export default function Navbar() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className={`mx-auto flex max-w-[1600px] items-center justify-between px-5 transition-all duration-500 md:px-10 ${scrolled ? "h-16" : "h-20"}`}>
+        <div className={`mx-auto flex max-w-[1600px] items-center justify-between px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] transition-all duration-500 md:px-10 ${scrolled ? "h-16" : "h-20"}`}>
           <Link href="/" className="group flex items-center" aria-label="B LEADER home">
             <motion.img
               src="/images/logo_oro.png"
               alt="B LEADER"
               animate={{ scale: scrolled ? 0.9 : 1, opacity: scrolled ? 0.9 : 1 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="h-16 w-auto object-contain transition-opacity duration-300 group-hover:opacity-85"
+              className="h-12 w-auto object-contain transition-opacity duration-300 group-hover:opacity-85 sm:h-16"
             />
           </Link>
 
@@ -87,8 +79,9 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => setOpen(true)}
-              className="text-ivory lg:hidden"
+              className="flex min-h-11 min-w-11 items-center justify-center text-ivory lg:hidden"
               aria-label="Open menu"
+              aria-expanded={open}
             >
               <Menu size={22} strokeWidth={1.5} />
             </button>
@@ -103,13 +96,13 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[80] flex flex-col bg-ink"
+            className="fixed inset-0 z-[80] flex max-h-[100svh] flex-col overflow-y-auto overscroll-contain bg-ink pb-[env(safe-area-inset-bottom)]"
           >
-            <div className="flex h-20 items-center justify-between px-5 md:px-10">
+            <div className="flex min-h-20 items-center justify-between px-5 pt-[env(safe-area-inset-top)] md:px-10">
               <span className="font-display text-xl font-light tracking-[0.32em] text-ivory">
                 <span className="font-semibold text-gold">B</span> LEADER
               </span>
-              <button onClick={() => setOpen(false)} className="text-ivory" aria-label="Close menu">
+              <button onClick={() => setOpen(false)} className="flex min-h-11 min-w-11 items-center justify-center text-ivory" aria-label="Close menu">
                 <X size={24} strokeWidth={1.5} />
               </button>
             </div>
@@ -126,7 +119,7 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`block font-serif text-5xl font-light leading-[1.15] transition-colors duration-300 md:text-6xl ${
+                    className={`block py-2 font-serif text-[clamp(2.75rem,12vw,4rem)] font-light leading-[1.05] transition-colors duration-300 md:text-6xl ${
                       pathname === link.href ? "italic text-gold" : "text-ivory hover:italic hover:text-gold-light"
                     }`}
                   >

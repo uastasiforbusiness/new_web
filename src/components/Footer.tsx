@@ -54,7 +54,7 @@ export default function Footer() {
             <br />
             <em className="text-gold-light">on land &amp; at sea.</em>
           </p>
-          <p className="mt-6 max-w-xs text-sm leading-relaxed text-mute">
+          <p className="mt-6 max-w-xs text-sm leading-relaxed text-sand">
             Supercars, a flybridge yacht and chauffeured services across Salento.
             One concierge, one standard: impeccable.
           </p>
@@ -77,7 +77,7 @@ export default function Footer() {
         </div>
 
         <div className="md:col-span-2">
-          <p className="text-[10px] uppercase tracking-[0.32em] text-mute">Explore</p>
+          <p className="text-[10px] uppercase tracking-[0.32em] text-sand">Explore</p>
           <ul className="mt-5 space-y-3">
             {NAV_LINKS.map((l) => (
               <li key={l.href}>
@@ -93,7 +93,7 @@ export default function Footer() {
         </div>
 
         <div className="md:col-span-3">
-          <p className="text-[10px] uppercase tracking-[0.32em] text-mute">The fleet</p>
+          <p className="text-[10px] uppercase tracking-[0.32em] text-sand">The fleet</p>
           <ul className="mt-5 space-y-3">
             {CARS.map((c) => (
               <li key={c.slug}>
@@ -113,7 +113,7 @@ export default function Footer() {
         </div>
 
         <div className="md:col-span-3">
-          <p className="text-[10px] uppercase tracking-[0.32em] text-mute">Concierge</p>
+          <p className="text-[10px] uppercase tracking-[0.32em] text-sand">Concierge</p>
           <ul className="mt-5 space-y-3 text-sm text-sand">
             <li>{CONTACT.address}</li>
             <li>
@@ -121,7 +121,7 @@ export default function Footer() {
                 {CONTACT.email}
               </a>
             </li>
-            <li className="text-mute">{CONTACT.hours}</li>
+            <li className="text-sand">{CONTACT.hours}</li>
           </ul>
           <button
             onClick={() => openReserve()}
@@ -133,10 +133,10 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-3 px-5 py-6 text-[11px] tracking-[0.18em] text-mute md:flex-row md:px-10">
+        <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-3 px-5 py-6 text-[11px] tracking-[0.18em] text-sand md:flex-row md:px-10">
           <p>© {new Date().getFullYear()} B LEADER S.r.l. — P.IVA 04812390756</p>
           <p className="text-center">Taviano, Salento · Puglia · Italia</p>
-          <p className="italic text-gold-deep">Designed for the few.</p>
+          <p className="italic text-gold">Designed for the few.</p>
         </div>
       </div>
     </footer>
