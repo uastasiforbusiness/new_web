@@ -9,10 +9,10 @@ import { LoadingScreen } from '@/components/velox/ui/loading-screen';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 
 import Marquee from '@/components/Marquee';
+import CarouselSection from '@/components/CarouselSection';
 import SignatureJourneys from '@/components/SignatureJourneys';
 import FleetStrip from '@/components/FleetStrip';
 import YachtSection from '@/components/YachtSection';
-import PrivateOccasions from '@/components/PrivateOccasions';
 import CTASection from '@/components/CTASection';
 import SectionReveal from '@/components/SectionReveal';
 
@@ -58,13 +58,17 @@ export function HomeClient() {
     : { duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] as const };
 
   /*
-    One continuous, sequentially numbered narrative for the US luxury traveler:
-      01 — The arrival        (hero)
+    Teaser-first homepage for the US luxury traveler.
+    Each section is one mood, one image, one door deeper into the site —
+    the specialized pages (/fleet, /experiences, /services, /contact)
+    carry the real information.
+
+      01 — The arrival        (hero — untouched)
       — The fleet in motion   (marquee divider)
-      02 — Signature journeys (land & sea index)
-      03 — The fleet          (compact strip → /fleet)
-      04 — The yacht          (charter packages)
-      05 — Private occasions  (single quiet band → /services)
+      02 — The world we move in (3D carousel — intrigue, one door per card)
+      03 — The journeys       (3 teaser tiles → /experiences)
+      04 — The fleet          (one cinematic band → /fleet)
+      05 — The sea            (yacht teaser → /experiences)
       06 — The concierge      (reserve / WhatsApp)
   */
   return (
@@ -97,24 +101,24 @@ export function HomeClient() {
             <Marquee />
           </SectionReveal>
 
-          {/* 02 — Signature journeys: one continuous land-and-sea index */}
+          {/* 02 — The world we move in */}
+          <SectionReveal>
+            <CarouselSection />
+          </SectionReveal>
+
+          {/* 03 — The journeys (teaser) */}
           <SectionReveal>
             <SignatureJourneys />
           </SectionReveal>
 
-          {/* 03 — The fleet */}
-          <SectionReveal>
+          {/* 04 — The fleet (teaser) */}
+          <SectionReveal accentLine>
             <FleetStrip />
           </SectionReveal>
 
-          {/* 04 — The yacht */}
-          <SectionReveal accentLine>
-            <YachtSection />
-          </SectionReveal>
-
-          {/* 05 — Private occasions */}
+          {/* 05 — The sea */}
           <SectionReveal>
-            <PrivateOccasions />
+            <YachtSection />
           </SectionReveal>
 
           {/* 06 — The concierge */}
