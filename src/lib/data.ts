@@ -122,7 +122,7 @@ export const YACHT = {
   image: "https://images.pexels.com/photos/10514509/pexels-photo-10514509.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
   imageCruise: "https://images.pexels.com/photos/38009036/pexels-photo-38009036.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
   imageDinner: "https://images.pexels.com/photos/7766408/pexels-photo-7766408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-  imageSailing: "https://images.pexels.com/photos/7873392/pexels-photo-7873392.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+  imageSailing: "/images/new_items/gallipoli_desde-mar.jpg",
   specs: [
     { label: "Length", value: "15.60 m — teak deck" },
     { label: "Engines", value: "2 × Volvo Penta D9-575" },
@@ -178,6 +178,8 @@ export type Experience = {
   type: "land" | "sea";
   description: string;
   image: string;
+  /** Optional CSS object-position for portrait images rendered in the 4:3 slot */
+  imagePosition?: string;
   price: string;
   duration: string;
   highlights: string[];
@@ -193,7 +195,7 @@ export const EXPERIENCES: Experience[] = [
     category: "Adriatic tour · La Rotta Adriatica & Le Grotte",
     type: "land",
     description: "Ferrari drive to the Adriatic coast, private boat to Grotta della Zinzulusa, scenic SP358, lunch-aperitif at Canyon del Ciolo, Santa Maria di Leuca sanctuary & lighthouse. From Porto Gaio.",
-    image: "https://images.pexels.com/photos/7995539/pexels-photo-7995539.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    image: "/images/new_items/torre_uluzzo2.jpg",
     price: "from €1,900",
     duration: "Full day · custom schedule",
     highlights: ["Grotta della Zinzulusa by private boat", "SP358 clifftop drive", "Canyon del Ciolo lunch-aperitif", "Finis Terrae sanctuary & lighthouse"],
@@ -205,7 +207,8 @@ export const EXPERIENCES: Experience[] = [
     category: "Signature tour · The Art of Driving & Pasta Making",
     type: "land",
     description: "Ferrari drive on the SP108 coastal road, Porto Selvaggio & Torre Uluzzo photo stop, historic estate with olive groves and vineyards, Negroamaro Rosato welcome, \"Mani in Farina\" cooking class, lunch with handmade pasta and Primitivo/Negroamaro tasting. From Porto Gaio.",
-    image: "https://images.pexels.com/photos/38009036/pexels-photo-38009036.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    image: "/images/new_items/pasta.jpg",
+    imagePosition: "object-[center_40%]",
     price: "from €1,900",
     duration: "4 hours · 10:00 – 14:00",
     highlights: ["Porto Selvaggio & Torre Uluzzo", "Historic estate & Negroamaro Rosato", "\"Mani in Farina\" cooking class", "Handmade orecchiette & minchiareddi", "Primitivo & Negroamaro tasting"],
@@ -242,7 +245,7 @@ export const EXPERIENCES: Experience[] = [
     category: "Yacht experience",
     type: "sea",
     description: "Sant'Andrea and the Gallipoli bay. Skipper & stewardess, fuel, Salentino traditional aperitif, 2 bottles prosecco/wine, unlimited water, snorkel, SUP, canoe. Optional tender & jet ski.",
-    image: "https://images.pexels.com/photos/7873392/pexels-photo-7873392.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    image: "/images/cranchi_atlantique_50.jpg",
     price: "from €1,200",
     duration: "4 hours · 10:00–14:00 or 15:00–19:00",
     highlights: ["Sant'Andrea & Gallipoli bay", "Salentino traditional aperitif", "Prosecco, snorkel, SUP & canoe", "Optional tender & jet ski"],
@@ -254,7 +257,8 @@ export const EXPERIENCES: Experience[] = [
     category: "Sunset ritual",
     type: "sea",
     description: "Gallipoli coast and Punta della Suina at golden hour. Skipper, fuel, Salentino aperitif with local specialties, prosecco/wine, water/soft drinks.",
-    image: "https://images.pexels.com/photos/36610228/pexels-photo-36610228.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    image: "/images/new_items/torre_uluzzo.jpg",
+    imagePosition: "object-[center_25%]",
     price: "€600",
     duration: "2 hours",
     highlights: ["Gallipoli coast & Punta della Suina", "Salentino aperitif with local specialties", "Prosecco or wine"],

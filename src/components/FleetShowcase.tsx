@@ -279,7 +279,6 @@ function YachtChapter() {
               src={YACHT.image}
               alt={YACHT.name}
               loading="lazy"
-              unoptimized
               className="h-full w-full object-cover fleet-image"
             />
         </div>
@@ -370,7 +369,6 @@ function YachtChapter() {
                       src={shot.src}
                       alt={shot.alt}
                       loading="lazy"
-                      unoptimized
                       className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                     />
                     <span className="absolute left-3 top-3 font-display text-[10px] tracking-[0.3em] text-ivory/80">

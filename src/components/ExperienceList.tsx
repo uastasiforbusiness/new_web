@@ -52,7 +52,12 @@ export default function ExperienceList() {
             </Reveal>
             <Reveal y={56} className={i % 2 === 1 ? "md:col-span-5 md:order-3" : "md:col-span-5"}>
               <div className="group aspect-[4/3] overflow-hidden">
-                <img src={exp.image} alt={exp.name} loading="lazy" className="img-cine img-hover-zoom h-full w-full object-cover" />
+                <img
+                  src={exp.image}
+                  alt={exp.name}
+                  loading="lazy"
+                  className={`img-cine img-hover-zoom h-full w-full object-cover ${exp.imagePosition ?? ""}`}
+                />
               </div>
             </Reveal>
             <Reveal delay={0.1} className={`md:col-span-5 ${i % 2 === 1 ? "md:order-1" : ""}`}>
