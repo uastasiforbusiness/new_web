@@ -125,13 +125,10 @@ export default function YachtSection() {
                       {p.duration} · {p.note}
                     </p>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-display text-lg text-gold">{p.price}</span>
-                    <ArrowUpRight
-                      size={16}
-                      className="text-gold opacity-0 transition-all duration-500 group-hover:translate-x-1 group-hover:opacity-100"
-                    />
-                  </div>
+                  <ArrowUpRight
+                    size={16}
+                    className="text-gold opacity-0 transition-all duration-500 group-hover:translate-x-1 group-hover:opacity-100"
+                  />
                 </button>
               ))}
             </div>
