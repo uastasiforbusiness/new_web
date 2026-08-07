@@ -29,7 +29,7 @@ export default function FleetPage() {
         <FleetGrid />
       </SectionReveal>
       <SectionReveal>
-        <CTASection />
+        <CTASection mode="experiences" />
       </SectionReveal>
     </>
   );

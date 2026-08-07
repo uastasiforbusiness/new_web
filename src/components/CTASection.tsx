@@ -1,11 +1,12 @@
 "use client";
 
 import { ArrowRight, MessageCircle } from "lucide-react";
+import Link from "next/link";
 import { whatsappUrl } from "@/lib/config";
 import Reveal from "./Reveal";
 import { useReserve } from "./ReserveModal";
 
-export default function CTASection() {
+export default function CTASection({ mode = "reserve" }: { mode?: "reserve" | "experiences" }) {
   const { openReserve } = useReserve();
 
   return (
@@ -37,13 +38,23 @@ export default function CTASection() {
         </Reveal>
         <Reveal delay={0.24}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
-            <button
-              onClick={() => openReserve()}
-              className="btn-sweep group flex items-center gap-3 border border-gold px-9 py-4.5 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
-            >
-              Reserve
-              <ArrowRight size={14} className="transition-transform duration-500 group-hover:translate-x-1.5" />
-            </button>
+            {mode === "experiences" ? (
+              <Link
+                href="/experiences"
+                className="btn-sweep group flex items-center gap-3 border border-gold px-9 py-4.5 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
+              >
+                Explore experiences
+                <ArrowRight size={14} className="transition-transform duration-500 group-hover:translate-x-1.5" />
+              </Link>
+            ) : (
+              <button
+                onClick={() => openReserve()}
+                className="btn-sweep group flex items-center gap-3 border border-gold px-9 py-4.5 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
+              >
+                Reserve
+                <ArrowRight size={14} className="transition-transform duration-500 group-hover:translate-x-1.5" />
+              </button>
+            )}
             <a
               href={whatsappUrl("Hello B LEADER — I would like to plan an experience in Salento.")}
               target="_blank"

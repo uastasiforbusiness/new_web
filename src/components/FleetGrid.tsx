@@ -1,15 +1,12 @@
 "use client";
 
-import { ArrowUpRight, Cog, Gauge, Settings2, Timer, Wind, Zap } from "lucide-react";
+import { ArrowRight, Cog, Gauge, Settings2, Timer, Wind, Zap } from "lucide-react";
 import { CARS } from "@/lib/data";
 import Reveal from "./Reveal";
-import { useReserve } from "./ReserveModal";
 
 const SPEC_ICONS = [Cog, Gauge, Zap, Settings2, Timer, Wind] as const;
 
 export default function FleetGrid() {
-  const { openReserve } = useReserve();
-
   return (
     <div className="grid gap-px border border-line bg-line lg:grid-cols-2">
       {CARS.map((car, i) => (
@@ -40,23 +37,15 @@ export default function FleetGrid() {
             </div>
 
             <div className="flex flex-1 flex-col p-7 md:p-9">
-              <div className="flex items-start justify-between gap-6">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.32em] text-gold-deep">
-                    {car.kind}
-                  </p>
-                  <h2 className="mt-2 font-serif text-4xl font-light text-ivory md:text-5xl">
-                    {car.name}
-                  </h2>
-                  <p className="mt-1.5 text-[10px] uppercase tracking-[0.22em] text-mute">
-                    {car.seats} seats
-                  </p>
-                </div>
-                <p className="text-right font-display text-2xl text-gold">
-                  {car.price}
-                  <span className="block text-[10px] uppercase tracking-[0.2em] text-mute">
-                    {car.priceNote}
-                  </span>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.32em] text-gold-deep">
+                  {car.kind}
+                </p>
+                <h2 className="mt-2 font-serif text-4xl font-light text-ivory md:text-5xl">
+                  {car.name}
+                </h2>
+                <p className="mt-1.5 text-[10px] uppercase tracking-[0.22em] text-mute">
+                  {car.seats} seats
                 </p>
               </div>
 
@@ -88,16 +77,18 @@ export default function FleetGrid() {
                 })}
               </div>
 
-              <button
-                onClick={() => openReserve(car.name)}
-                className="btn-sweep group/btn mt-8 flex w-full items-center justify-between border border-gold/45 px-7 py-4 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
-              >
-                Reserve the {car.name.split(" ")[0]}
-                <ArrowUpRight
-                  size={15}
-                  className="transition-transform duration-500 group-hover/btn:rotate-45"
-                />
-              </button>
+              <div className="mt-8 flex items-center justify-between gap-4 border-t border-line pt-5">
+                <span className="text-[10px] uppercase tracking-[0.24em] text-mute">
+                  Featured in selected experiences
+                </span>
+                <a
+                  href="/experiences"
+                  className="group/btn flex flex-none items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-gold transition-colors hover:text-gold-light"
+                >
+                  View experiences
+                  <ArrowRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </a>
+              </div>
             </div>
           </article>
         </Reveal>
