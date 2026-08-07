@@ -46,7 +46,7 @@ export const CARS: Car[] = [
     name: "Ferrari California",
     kind: "Convertible GT",
     tagline: "The naturally-aspirated icon that started it all.",
-    image: "/images/ferrari_california_white.jpg",
+    image: "/images/ferrari_california_white_background.png",
     price: "€1,950",
     priceNote: "per day",
     seats: "2",
