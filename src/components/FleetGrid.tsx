@@ -20,7 +20,7 @@ export default function FleetGrid() {
                 src={car.image}
                 alt={car.name}
                 loading={i < 2 ? "eager" : "lazy"}
-                className="img-cine img-hover-zoom h-full w-full object-cover"
+                className="fleet-image h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent" />
               <span className="absolute left-6 top-6 font-display text-xs tracking-[0.35em] text-gold">
@@ -104,7 +104,7 @@ export default function FleetGrid() {
               src="/images/yacht_360/frame_001.webp"
               alt={YACHT.name}
               loading="lazy"
-              className="img-cine img-hover-zoom h-full w-full object-cover"
+              className="fleet-image h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent" />
             <span className="absolute left-6 top-6 font-display text-xs tracking-[0.35em] text-gold">
