@@ -101,7 +101,7 @@ export default function FleetGrid() {
         >
           <div className="relative aspect-[16/10] overflow-hidden">
             <img
-              src="/images/yacht_360/frame_001.webp"
+              src="/images/cranchi_atlantique_50.jpg"
               alt={YACHT.name}
               loading="lazy"
               className="fleet-image h-full w-full object-cover"
