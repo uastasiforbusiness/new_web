@@ -19,7 +19,7 @@ export default function CTASection() {
       <div className="relative z-10 mx-auto max-w-4xl px-5 py-28 text-center md:py-40">
         <Reveal>
           <p className="text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
-            The concierge
+            06 — The concierge
           </p>
         </Reveal>
         <Reveal delay={0.08}>

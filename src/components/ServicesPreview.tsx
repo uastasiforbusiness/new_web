@@ -18,7 +18,7 @@ export default function ServicesPreview() {
           <div>
             <Reveal>
               <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
-                <span className="h-px w-12 bg-gold/70" /> 04 — Chauffeured services
+                <span className="h-px w-12 bg-gold/70" /> 05 — Private occasions
               </p>
             </Reveal>
             <Reveal delay={0.08}>

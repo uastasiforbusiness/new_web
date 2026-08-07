@@ -93,7 +93,7 @@ export default function YachtSection() {
         <div className="flex flex-col justify-center px-5 py-20 md:px-12 md:py-28 lg:pr-16">
           <Reveal>
             <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
-              <span className="h-px w-12 bg-gold/70" /> 02 — The flybridge
+              <span className="h-px w-12 bg-gold/70" /> 04 — The yacht
             </p>
           </Reveal>
           <Reveal delay={0.08}>

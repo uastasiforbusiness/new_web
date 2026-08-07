@@ -75,7 +75,6 @@ export function TextReel({
     }, containerRef);
 
     return () => ctx.revert();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headline, subtitle, description, reducedMotion]);
 
   const splitChars = (text: string) =>
@@ -140,7 +139,7 @@ export function TextReel({
         <div className="flex items-center gap-3 sm:gap-4 text-[9px] sm:text-[10px] tracking-widest text-gray-300 font-medium">
           <span>01</span>
           <div className="w-8 sm:w-10 h-px bg-white/30" />
-          <span>INTRO</span>
+          <span>THE ARRIVAL</span>
         </div>
       </div>
     </div>

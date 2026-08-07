@@ -10,11 +10,11 @@ export interface HeroImageSlide {
 export const HERO_SLIDES: HeroImageSlide[] = [
   {
     src: '/hero-video.mp4',
-    alt: 'B LEADER — Luxury driving & yacht experiences in Salento',
-    headline: 'ELEVATE',
-    subtitle: 'YOUR JOURNEY.',
+    alt: 'B LEADER — Private luxury driving and yacht experiences in Salento, Puglia',
+    headline: 'SALENTO,',
+    subtitle: 'FROM THE DRIVER\u2019S SEAT.',
     description:
-      'B LEADER redefines Mediterranean luxury. Precision-engineered rentals for those who demand the extraordinary.',
+      'One private itinerary across land and sea — a Ferrari along the Adriatic cliffs, a sunset charter off Gallipoli, and a concierge who answers in English.',
     duration: 0,
   },
 ];

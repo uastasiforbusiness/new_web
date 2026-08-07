@@ -9,9 +9,10 @@ import { LoadingScreen } from '@/components/velox/ui/loading-screen';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 
 import Marquee from '@/components/Marquee';
-import TravelCarousel from '@/components/TravelCarousel';
+import SignatureJourneys from '@/components/SignatureJourneys';
+import FleetStrip from '@/components/FleetStrip';
 import YachtSection from '@/components/YachtSection';
-import ServicesPreview from '@/components/ServicesPreview';
+import PrivateOccasions from '@/components/PrivateOccasions';
 import CTASection from '@/components/CTASection';
 import SectionReveal from '@/components/SectionReveal';
 
@@ -56,6 +57,16 @@ export function HomeClient() {
     ? { duration: 0 }
     : { duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] as const };
 
+  /*
+    One continuous, sequentially numbered narrative for the US luxury traveler:
+      01 — The arrival        (hero)
+      — The fleet in motion   (marquee divider)
+      02 — Signature journeys (land & sea index)
+      03 — The fleet          (compact strip → /fleet)
+      04 — The yacht          (charter packages)
+      05 — Private occasions  (single quiet band → /services)
+      06 — The concierge      (reserve / WhatsApp)
+  */
   return (
     <>
       <AnimatePresence>
@@ -76,21 +87,37 @@ export function HomeClient() {
           animate={{ opacity: 1, y: 0 }}
           transition={heroTransition}
         >
+          {/* 01 — The arrival */}
           <SectionReveal accentLine>
             <HeroScaleDown />
           </SectionReveal>
+
+          {/* Divider — the fleet in motion */}
           <SectionReveal>
             <Marquee />
           </SectionReveal>
-          <SectionReveal accentLine>
-            <TravelCarousel />
-          </SectionReveal>
+
+          {/* 02 — Signature journeys: one continuous land-and-sea index */}
           <SectionReveal>
+            <SignatureJourneys />
+          </SectionReveal>
+
+          {/* 03 — The fleet */}
+          <SectionReveal>
+            <FleetStrip />
+          </SectionReveal>
+
+          {/* 04 — The yacht */}
+          <SectionReveal accentLine>
             <YachtSection />
           </SectionReveal>
-          <SectionReveal accentLine>
-            <ServicesPreview />
+
+          {/* 05 — Private occasions */}
+          <SectionReveal>
+            <PrivateOccasions />
           </SectionReveal>
+
+          {/* 06 — The concierge */}
           <SectionReveal>
             <CTASection />
           </SectionReveal>
