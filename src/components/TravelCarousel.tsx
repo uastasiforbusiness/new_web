@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 
 // Estructura para tus futuros datos — el interior de la tarjeta está diseñado
@@ -83,7 +82,7 @@ export default function TravelCarousel() {
       {/* 1. Fondo difuminado (Misty background effect) */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(30,41,59,0.3)_0%,rgba(15,23,42,0.8)_100%)] opacity-80 blur-3xl" />
 
-      {/* 0. Header band — "What we do" (fused context, inside the wheel screen) */}
+      {/* 0. Header band — aligned with the five wheel cards */}
       <div className="relative z-20 mx-auto w-full max-w-5xl pt-14 md:pt-20">
         <div className="flex flex-col items-center text-center">
           <span className="h-px w-12 bg-gold/70" aria-hidden />
@@ -91,8 +90,8 @@ export default function TravelCarousel() {
             What we do
           </p>
           <h2 className="mt-4 font-serif text-4xl font-light leading-[1.05] text-ivory md:text-6xl">
-            One standard,
-            <br className="md:hidden" /> <em className="gold-text">three ways to live it.</em>
+            Five steps,
+            <br className="md:hidden" /> <em className="gold-text">one standard.</em>
           </h2>
         </div>
       </div>
@@ -197,26 +196,6 @@ export default function TravelCarousel() {
       >
         →
       </button>
-
-      {/* 4. Footer strip — the three pillar links (fused "What we do") */}
-      <nav className="relative z-20 mb-8 mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 md:gap-x-12">
-        {[
-          { label: "The Fleet", href: "/fleet", id: "fleet" },
-          { label: "The Yacht", href: "/experiences", id: "yacht" },
-          { label: "The Concierge", href: "/services", id: "concierge" },
-        ].map((link) => (
-          <Link
-            key={link.id}
-            href={link.href}
-            className="group flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-sand transition-colors duration-300 hover:text-ivory"
-          >
-            {link.label}
-            <span aria-hidden className="text-gold transition-transform duration-500 group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
-        ))}
-      </nav>
     </div>
   );
 }
