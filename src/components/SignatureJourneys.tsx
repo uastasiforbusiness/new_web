@@ -28,7 +28,7 @@ const FEATURED = [
   },
   {
     slug: EXPERIENCES.find((e) => e.slug === "ferrari-sea-combination")?.slug ?? "ferrari-sea-combination",
-    image: "/images/new_items/labarca.jpg",
+    image: "/images/new_items/gallipoli_desde-mar.jpg",
     name: "The Ultimate Day",
     verb: "Land by Ferrari, sea by flybridge — one unbroken day.",
   },
