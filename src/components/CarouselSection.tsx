@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 /**
  * MotionLink: marries framer-motion's motion.* components with Next.js Link,
@@ -14,11 +14,10 @@ const MotionLink = motion.create(Link);
 /**
  * 02 — The world we move in.
  *
- * A restructured 3D card wheel that works as an intrigue device, not an
- * information dump: each card is one mood, one line, and one door into the
- * site (Fleet, Experiences, Services, Concierge). Nothing is duplicated from
- * the specialized pages — the goal is to make the visitor want to keep
- * navigating.
+ * A refined 3D coverflow wheel — intrigue device, never an information dump.
+ * The active card dominates, side cards sit quietly behind it with a gentle
+ * rotation and darkness (no blur smear). Autoplay, swipe, arrows, dots and
+ * keyboard all supported; each card opens one door deeper into the site.
  */
 
 interface CardData {
@@ -27,6 +26,8 @@ interface CardData {
   title: string;
   mood: string;
   image: string;
+  /** CSS object-position so each collage's focal point centers in the frame */
+  focus: string;
   href: string;
   cta: string;
 }
@@ -38,6 +39,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     title: "Machines with an accent",
     mood: "Ferrari, Maserati, and the open road of Salento.",
     image: "/images/card1_collage.webp",
+    focus: "center 70%",
     href: "/fleet",
     cta: "Meet the fleet",
   },
@@ -47,6 +49,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     title: "Sunset off Gallipoli",
     mood: "The Cranchi flybridge, the Ionian, and slow evenings at anchor.",
     image: "/images/card2_collage.webp",
+    focus: "center 55%",
     href: "/experiences",
     cta: "Explore the sea",
   },
@@ -56,6 +59,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     title: "Let someone else drive",
     mood: "Chauffeured days along Puglia's cliffs and olive groves.",
     image: "/images/card3_collage.webp",
+    focus: "center 48%",
     href: "/services",
     cta: "Chauffeured days",
   },
@@ -65,6 +69,7 @@ const CAROUSEL_ITEMS: CardData[] = [
     title: "A proposal on the bow",
     mood: "Weddings, proposals, and celebrations, arranged end to end.",
     image: "/images/card4_collage.webp",
+    focus: "center 55%",
     href: "/services",
     cta: "Plan an occasion",
   },
@@ -74,36 +79,76 @@ const CAROUSEL_ITEMS: CardData[] = [
     title: "One message away",
     mood: "A person answers — in English — within two hours.",
     image: "/images/card5_collage.webp",
+    focus: "center 40%",
     href: "/contact",
     cta: "Say hello",
   },
 ];
 
+const AUTOPLAY_MS = 5200;
+
 export default function CarouselSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [hovering, setHovering] = useState(false);
+  const [swipeX, setSwipeX] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
   const count = CAROUSEL_ITEMS.length;
 
-  const handleNext = () => setCurrentIndex((prev) => (prev + 1) % count);
-  const handlePrev = () =>
-    setCurrentIndex((prev) => (prev - 1 + count) % count);
+  const goTo = useCallback(
+    (next: number) => setCurrentIndex(((next % count) + count) % count),
+    [count],
+  );
+
+  const next = useCallback(() => goTo(currentIndex + 1), [currentIndex, goTo]);
+  const prev = useCallback(() => goTo(currentIndex - 1), [currentIndex, goTo]);
+
+  /* Autoplay — pauses while the visitor hovers the wheel or the page hides */
+  useEffect(() => {
+    if (hovering) return;
+    const timer = setInterval(next, AUTOPLAY_MS);
+    return () => clearInterval(timer);
+  }, [currentIndex, hovering, next]);
+
+  /* Keyboard navigation when the section is focused/visible */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") next();
+      else if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [next, prev]);
+
+  const wrap = (i: number) => ((i % count) + count) % count;
 
   return (
     <section
       id="carousel"
+      ref={sectionRef}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
       className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-4 py-24"
     >
-      {/* Moody background — the wheel's backdrop, kept intentionally dark and soft */}
+      {/* Calm, near-black backdrop so the cards float */}
       <img
         src="/back_cards_whells.jpeg"
         alt=""
         draggable={false}
-        className="absolute inset-0 z-0 h-full w-full object-cover"
+        aria-hidden
+        className="absolute inset-0 z-0 h-full w-full object-cover opacity-60"
       />
-      <div className="absolute inset-0 z-0 bg-[#0d0c0a]/55" />
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(30,41,59,0.3)_0%,rgba(15,23,42,0.8)_100%)] opacity-80 blur-3xl" />
+      <div className="absolute inset-0 z-0 bg-[#0a0908]/82" />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 45%, rgba(201,169,110,0.06) 0%, transparent 55%)",
+        }}
+      />
 
       {/* Header */}
-      <div className="relative z-20 mx-auto w-full max-w-5xl pb-8 pt-6 md:pb-12">
+      <div className="relative z-20 mx-auto w-full max-w-5xl pb-10 pt-6 md:pb-14">
         <div className="flex flex-col items-center text-center">
           <RevealLine>
             <span className="h-px w-12 bg-gold/70" aria-hidden />
@@ -122,23 +167,29 @@ export default function CarouselSection() {
         </div>
       </div>
 
-      {/* 3D wheel */}
+      {/* 3D coverflow wheel */}
       <div
-        className="relative z-10 flex h-[520px] w-full max-w-5xl items-center justify-center"
-        style={{ perspective: "1200px" }}
+        className="relative z-10 flex w-full max-w-[1400px] items-center justify-center"
+        style={{ perspective: "2400px", minHeight: "640px" }}
+        onPointerDown={(e) => {
+          (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+        }}
       >
-        {[...Array(5)].map((_, slot) => {
-          const offset = slot - 2;
-          const wrap = (i: number) => ((i % count) + count) % count;
-          const card = CAROUSEL_ITEMS[wrap(currentIndex + offset)];
-          const isActive = offset === 0;
+        {CAROUSEL_ITEMS.map((card, i) => {
+          /* relative position of this card's index around the current one */
+          let rel = wrap(i - currentIndex);
+          if (rel > count / 2) rel -= count;
 
-          const rotateY = -offset * 30;
-          const translateX = offset * 150;
-          const translateZ = -Math.abs(offset) * 130;
-          const scale = 1 - Math.abs(offset) * 0.12;
-          const zIndex = 10 - Math.abs(offset);
-          const opacity = isActive ? 1 : 0.35;
+          const isActive = rel === 0;
+          const absRel = Math.abs(rel);
+
+          /* geometry: active centered & large; others rotated + pushed back */
+          const rotateY = rel * 14;
+          const translateX = rel * (typeof window !== "undefined" && window.innerWidth < 768 ? 0 : 260);
+          const translateZ = absRel * 180;
+          const scale = isActive ? 1 : 1 - absRel * 0.09;
+          const brightness = isActive ? 1 : 0.42 - (absRel - 1) * 0.16;
+          const zIndex = 100 - absRel;
 
           return (
             <MotionLink
@@ -146,98 +197,120 @@ export default function CarouselSection() {
               href={card.href}
               tabIndex={isActive ? 0 : -1}
               aria-hidden={!isActive}
-              className={`absolute h-[440px] w-[300px] cursor-pointer overflow-hidden rounded-[20px] backdrop-blur-md transition-all duration-500 ease-out will-change-transform ${
-                isActive
-                  ? "border border-gold/30 shadow-[0_24px_80px_rgba(201,169,110,0.18)]"
-                  : "pointer-events-none border border-white/10 blur-[1px]"
-              }`}
-              initial={{ opacity: 0, scale: 0.8, rotateY: offset * 45 }}
+              className="absolute left-1/2 top-1/2 h-[545px] w-[416px] overflow-hidden rounded-[18px] shadow-[0_40px_100px_rgba(0,0,0,0.55)] md:h-[620px] md:w-[464px]"
+              initial={{ opacity: 0, scale: 0.85 }}
               animate={{
-                x: translateX,
+                x: `calc(${translateX}px - 50% + ${swipeX}px)`,
+                y: "-50%",
                 z: translateZ,
                 rotateY,
                 scale,
+                filter: `brightness(${brightness})`,
                 zIndex,
-                opacity,
+                opacity: isActive ? 1 : 0.55,
               }}
               transition={{
-                duration: 0.65,
-                ease: [0.22, 1, 0.36, 1] as const,
-                delay: Math.abs(offset) * 0.08,
+                type: "spring",
+                stiffness: 90,
+                damping: 22,
+                mass: 1,
+                filter: { duration: 0.55 },
               }}
-              style={{
-                transformStyle: "preserve-3d",
-                background:
-                  "linear-gradient(180deg, rgba(26,26,26,0.92) 0%, rgba(10,10,10,0.96) 100%)",
+              drag={isActive ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.35}
+              onDrag={(e, info) => setSwipeX(info.offset.x)}
+              onDragEnd={(e, info) => {
+                setSwipeX(0);
+                const dir = info.offset.x;
+                const vel = info.velocity.x;
+                if (dir < -60 || vel < -200) prev();
+                else if (dir > 60 || vel > 200) next();
               }}
+              style={{ transformStyle: "preserve-3d" }}
+              whileHover={isActive ? { y: "-52%" } : undefined}
             >
-              {card.image && (
-                <>
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    draggable={false}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/50 to-[#0a0a0a]/25" />
-                </>
-              )}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,169,110,0.08),transparent_60%)]" />
+              {/* Card art */}
+              <img
+                src={card.image}
+                alt={card.title}
+                draggable={false}
+                className="absolute inset-[-4%] h-[108%] w-[108%] object-cover"
+                style={{ objectPosition: card.focus }}
+              />
+              {/* Reading gradient — guaranteed contrast for the copy */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908]/97 via-[#0a0908]/35 to-[#0a0908]/10" />
+              <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
 
-              <div className="relative flex h-full w-full flex-col justify-end p-8 pb-9">
-                <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.4em] text-gold">
-                  {card.label}
-                </span>
-                <h3 className="mt-3 font-serif text-[26px] font-light leading-[1.15] text-ivory">
+              {/* Gold hairline on top edge */}
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+
+              {/* Copy — consistent layout on every card */}
+              <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-8 pb-9 md:p-10">
+                <div className="flex w-full items-center justify-between">
+                  <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.4em] text-gold">
+                    {String(i + 1).padStart(2, "0")} · {card.label}
+                  </span>
+                  {isActive && (
+                    <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-gold/90">
+                      {card.cta}
+                      <ChevronRight size={12} />
+                    </span>
+                  )}
+                </div>
+                <h3 className="mt-4 font-serif text-[28px] font-light leading-[1.12] text-ivory md:text-[32px]">
                   {card.title}
                 </h3>
                 <div className="mt-4 h-px w-10 bg-gold/60" />
-                <p className="mt-3 font-sans text-[13.5px] leading-relaxed text-ivory/70">
+                <p className="mt-3 max-w-[340px] font-sans text-[13.5px] leading-relaxed text-ivory/75">
                   {card.mood}
                 </p>
-                <span className="mt-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-gold">
-                  {card.cta}
-                  <ArrowRight size={13} className="transition-transform duration-500 group-hover:translate-x-2" />
-                </span>
               </div>
             </MotionLink>
           );
         })}
       </div>
 
-      {/* Controls */}
-      <div className="relative z-20 mt-10 flex items-center gap-8">
+      {/* Luxury controls */}
+      <div className="relative z-20 mt-10 flex items-center gap-8 md:gap-10">
         <button
-          onClick={handlePrev}
+          onClick={prev}
           aria-label="Previous mood"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-95"
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold backdrop-blur-sm transition-all duration-500 hover:border-gold hover:bg-gold/10 active:scale-95"
         >
-          ←
+          <ChevronLeft size={18} />
         </button>
-        <div className="flex gap-3">
+
+        <div className="flex items-center gap-2.5">
           {CAROUSEL_ITEMS.map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentIndex(i)}
+              onClick={() => goTo(i)}
               aria-label={`Go to mood ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
-                i === currentIndex ? "w-8 bg-gold" : "w-1.5 bg-white/25 hover:bg-white/50"
-              }`}
+              className="rounded-full transition-all duration-500"
+              style={{
+                width: i === currentIndex ? 26 : 6,
+                height: 6,
+                background:
+                  i === currentIndex
+                    ? "linear-gradient(90deg, #c9a96e, #e4cba3)"
+                    : "rgba(255,255,255,0.22)",
+              }}
             />
           ))}
         </div>
+
         <button
-          onClick={handleNext}
+          onClick={next}
           aria-label="Next mood"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-95"
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold backdrop-blur-sm transition-all duration-500 hover:border-gold hover:bg-gold/10 active:scale-95"
         >
-          →
+          <ChevronRight size={18} />
         </button>
       </div>
 
       {/* Quiet nudge to keep exploring */}
-      <p className="relative z-20 mt-10 text-[11px] uppercase tracking-[0.4em] text-mute">
+      <p className="relative z-20 mt-8 text-[11px] uppercase tracking-[0.4em] text-mute">
         Every mood has a deeper story — keep scrolling
       </p>
     </section>
