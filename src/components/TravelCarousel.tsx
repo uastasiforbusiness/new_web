@@ -54,7 +54,7 @@ const CAROUSEL_ITEMS: CardData[] = [
 
 export default function TravelCarousel() {
   const [cards] = useState<CardData[]>(CAROUSEL_ITEMS);
-  const [currentIndex, setCurrentIndex] = useState(2); // La tarjeta central empieza activa
+  const [currentIndex, setCurrentIndex] = useState(0); // La rueda empieza en la Step 01
 
   const ROTATE_STEP = 30; // ° de giro hacia dentro por paso
   const X_STEP = 150; // px de apertura horizontal por paso
