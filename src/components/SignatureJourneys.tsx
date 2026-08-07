@@ -16,19 +16,19 @@ import Reveal from "./Reveal";
 const FEATURED = [
   {
     slug: EXPERIENCES.find((e) => e.slug === "ferrari-grand-tour")?.slug ?? "ferrari-grand-tour",
-    image: "https://images.pexels.com/photos/7995539/pexels-photo-7995539.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1200",
+    image: "/images/ferrari_rossa_card.webp",
     name: "Ferrari Grand Tour",
     verb: "Chase the Adriatic sunrise in an open-top Ferrari.",
   },
   {
     slug: EXPERIENCES.find((e) => e.slug === "salento-supercar-tour")?.slug ?? "salento-supercar-tour",
-    image: "https://images.pexels.com/photos/38009036/pexels-photo-38009036.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1200",
+    image: "/images/new_items/pasta_3.jpg",
     name: "Supercar & Pasta Day",
     verb: "A coastal drive, an ancient estate, hands in the flour.",
   },
   {
     slug: EXPERIENCES.find((e) => e.slug === "ferrari-sea-combination")?.slug ?? "ferrari-sea-combination",
-    image: "https://images.pexels.com/photos/36610228/pexels-photo-36610228.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1200",
+    image: "/images/new_items/labarca.jpg",
     name: "The Ultimate Day",
     verb: "Land by Ferrari, sea by flybridge — one unbroken day.",
   },
