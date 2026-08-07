@@ -127,7 +127,7 @@ export default function CarouselSection() {
       ref={sectionRef}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
-      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-4 py-24"
+      className="relative flex min-h-[auto] w-full flex-col items-center justify-center overflow-hidden px-4 py-16 md:min-h-screen md:py-24"
     >
       {/* Calm, near-black backdrop so the cards float */}
       <img
@@ -170,7 +170,7 @@ export default function CarouselSection() {
       {/* 3D coverflow wheel */}
       <div
         className="relative z-10 flex w-full max-w-[1400px] items-center justify-center"
-        style={{ perspective: "2400px", minHeight: "640px" }}
+        style={{ perspective: "2400px", minHeight: "clamp(430px, 125vw, 640px)" }}
         onPointerDown={(e) => {
           (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
         }}
@@ -185,9 +185,10 @@ export default function CarouselSection() {
 
           /* geometry: active centered & large; others rotated + pushed back */
           const rotateY = rel * 14;
-          const translateX = rel * (typeof window !== "undefined" && window.innerWidth < 768 ? 0 : 260);
+          // On phones, keep the active card readable while letting adjacent cards peek in.
+          const translateX = rel * (typeof window !== "undefined" && window.innerWidth < 768 ? 112 : 260);
           const translateZ = absRel * 180;
-          const scale = isActive ? 1 : 1 - absRel * 0.09;
+          const scale = isActive ? 1 : 1 - absRel * (typeof window !== "undefined" && window.innerWidth < 768 ? 0.06 : 0.09);
           const brightness = isActive ? 1 : 0.42 - (absRel - 1) * 0.16;
           const zIndex = 100 - absRel;
 
@@ -197,7 +198,7 @@ export default function CarouselSection() {
               href={card.href}
               tabIndex={isActive ? 0 : -1}
               aria-hidden={!isActive}
-              className="absolute left-1/2 top-1/2 h-[545px] w-[416px] overflow-hidden rounded-[18px] shadow-[0_40px_100px_rgba(0,0,0,0.55)] md:h-[620px] md:w-[464px]"
+              className="absolute left-1/2 top-1/2 h-[min(118vw,480px)] min-h-[400px] w-[calc(100vw-48px)] max-w-[360px] overflow-hidden rounded-[18px] shadow-[0_40px_100px_rgba(0,0,0,0.55)] md:h-[620px] md:w-[464px]"
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{
                 x: `calc(${translateX}px - 50% + ${swipeX}px)`,
@@ -246,7 +247,7 @@ export default function CarouselSection() {
               <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
 
               {/* Copy — consistent layout on every card */}
-              <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-8 pb-9 md:p-10">
+              <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-6 pb-7 md:p-10">
                 <div className="flex w-full items-center justify-between">
                   <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.4em] text-gold">
                     {String(i + 1).padStart(2, "0")} · {card.label}
@@ -258,11 +259,11 @@ export default function CarouselSection() {
                     </span>
                   )}
                 </div>
-                <h3 className="mt-4 font-serif text-[28px] font-light leading-[1.12] text-ivory md:text-[32px]">
+                <h3 className="mt-3 font-serif text-[25px] font-light leading-[1.08] text-ivory md:mt-4 md:text-[32px]">
                   {card.title}
                 </h3>
                 <div className="mt-4 h-px w-10 bg-gold/60" />
-                <p className="mt-3 max-w-[340px] font-sans text-[13.5px] leading-relaxed text-ivory/75">
+                <p className="mt-3 max-w-[340px] font-sans text-[12.5px] leading-relaxed text-ivory/75 md:text-[13.5px]">
                   {card.mood}
                 </p>
               </div>
