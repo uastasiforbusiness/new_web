@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Shield, Heart, MapPin, Award, ArrowUpRight, type LucideIcon } from "lucide-react";
+import { Shield, Heart, MapPin, Award, type LucideIcon } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "@/components/Reveal";
@@ -172,24 +172,26 @@ export default function AboutClient() {
           <WordmarkBand word="ABOUT" />
 
           {/* ── Cinematic hero band ───────────────────────────────────── */}
-          <ParallaxImage
-            src="/images/about/hero_frame.webp"
-            alt="B LEADER — couple in a Ferrari California"
-            className="min-h-[70vh] lg:min-h-[85svh]"
-          />
-          <div className="absolute inset-x-0 bottom-0 left-0 z-10 mx-auto max-w-[1600px] px-5 pb-14 md:px-10 md:pb-20">
-            <div className="flex items-end justify-between gap-6">
-              <div className="flex items-start gap-5">
-                <span className="text-outline-gold select-none pt-3 font-display text-[17vw] font-bold leading-none md:text-[8rem]">
-                  I
-                </span>
-                <div className="pb-4">
-                  <p className="flex items-center gap-3 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
-                    <span className="h-px w-10 bg-gold/70" /> Salento · Italy
-                  </p>
-                  <p className="mt-2 text-[10px] uppercase tracking-[0.24em] text-ivory/60">
-                    Curated luxury, land and sea
-                  </p>
+          <div className="relative min-h-[70vh] lg:min-h-[85svh]">
+            <ParallaxImage
+              src="/images/about/hero_frame.webp"
+              alt="B LEADER — couple in a Ferrari California"
+            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 left-0 z-10 mx-auto max-w-[1600px] px-5 pb-14 md:px-10 md:pb-20">
+              <div className="flex items-end justify-between gap-6">
+                <div className="flex items-start gap-5">
+                  <span className="text-outline-gold select-none pt-3 font-display text-[17vw] font-bold leading-none md:text-[8rem]">
+                    I
+                  </span>
+                  <div className="pb-4">
+                    <p className="flex items-center gap-3 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
+                      <span className="h-px w-10 bg-gold/70" /> Salento · Italy
+                    </p>
+                    <p className="mt-2 text-[10px] uppercase tracking-[0.24em] text-ivory/60">
+                      Curated luxury, land and sea
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -229,7 +231,7 @@ export default function AboutClient() {
                     </blockquote>
                   </Reveal>
                   <Reveal delay={0.32}>
-                    <p className="border-t border-line pt-6 text-sm leading-8 text-mute">
+                    <p className="border-t border-line pt-6 text-sm leading-8 text-sand">
                       Our founder, a lifelong Salentino, spent years navigating
                       Alpine passes and Adriatic coves before settling on the
                       question: What if luxury travel were not about excess,
@@ -243,7 +245,6 @@ export default function AboutClient() {
                   <ParallaxImage
                     src="/images/about/polignano_panoramic.webp"
                     alt="Polignano a Mare cliffs, Salento, Puglia"
-                    className="inset-0 h-full w-full"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
                   <span className="absolute bottom-8 left-6 hidden font-display text-[10px] tracking-[0.35em] text-ivory/60 md:block">
@@ -257,7 +258,7 @@ export default function AboutClient() {
           {/* ── Visual interlude: Gallipoli old town ─────────────────── */}
           <div aria-hidden className="relative overflow-hidden border-t border-line py-10">
             <div className="mx-auto max-w-[1600px] px-5 md:px-10">
-              <div className="group aspect-[21/9] overflow-hidden">
+              <div className="group aspect-[3/4] overflow-hidden md:aspect-[16/9]">
                 <img
                   src="/images/new_items/gallipoli.jpg"
                   alt="Gallipoli old town at golden hour"
@@ -322,7 +323,7 @@ export default function AboutClient() {
                       {/* Copy column */}
                       <div className={`md:col-span-7 ${isEven ? "" : "md:order-1"}`}>
                         <div className="flex items-start gap-6">
-                          <span className="text-outline-gold select-none pt-3 font-display text-[10vw] font-bold leading-none md:text-[5rem]">
+                          <span className="text-outline-gold select-none pt-3 font-display text-5xl font-bold leading-none md:text-[5rem]">
                             {String(i + 1).padStart(2, "0")}
                           </span>
                           <div className="flex flex-col justify-end pb-4">
@@ -379,7 +380,7 @@ export default function AboutClient() {
                           <h3 className="mt-6 font-serif text-3xl font-light leading-tight text-ivory md:text-5xl">
                             {m.title}
                           </h3>
-                          <p className="mt-5 max-w-lg text-[15px] leading-8 text-mute">
+                          <p className="mt-5 max-w-lg text-[15px] leading-8 text-sand">
                             {m.description}
                           </p>
                         </div>
@@ -390,12 +391,12 @@ export default function AboutClient() {
                             <img
                               src={
                                 i === 0
-                                  ? "/images/ferrari_rossa_card.webp"
+                                  ? "/images/about/ferrari_coastal_road.webp"
                                   : i === 1
                                     ? "/images/new_items/torre_uluzzo2.jpg"
                                     : i === 2
                                       ? "/images/cranchi_atlantique_50.jpg"
-                                      : "/images/new_items/pasta.jpg"
+                                      : "/images/new_items/pasta_3.jpg"
                               }
                               alt={`${m.year} — ${m.title}`}
                               loading="lazy"
