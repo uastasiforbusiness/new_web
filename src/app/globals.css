@@ -631,7 +631,7 @@ textarea {
 
 /* Fleet catalogue imagery: one consistent cinematic treatment for cars and yacht */
 .fleet-image {
-  transform: scale(1.01);
+  transform: scale(1);
   filter: saturate(0.76) contrast(1.06) brightness(0.93);
   transform-origin: center;
   transition:
@@ -639,7 +639,7 @@ textarea {
     filter 1.4s cubic-bezier(0.65, 0, 0.15, 1);
 }
 .group:hover .fleet-image {
-  transform: scale(1.055);
+  transform: scale(1.01);
   filter: saturate(0.84) contrast(1.06) brightness(0.97);
 }
 

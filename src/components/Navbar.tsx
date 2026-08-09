@@ -148,8 +148,7 @@ export default function Navbar() {
               transition={{ delay: 0.55 }}
               className="border-t border-line px-8 py-6 text-xs tracking-[0.18em] text-mute md:px-16"
             >
-              <p>{CONTACT.address}</p>
-              <p className="mt-1 text-sand">{CONTACT.email}</p>
+              <p className="text-sand">{CONTACT.email}</p>
             </motion.div>
           </motion.div>
         )}

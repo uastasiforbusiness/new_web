@@ -115,13 +115,11 @@ export default function Footer() {
         <div className="md:col-span-3">
           <p className="text-[10px] uppercase tracking-[0.32em] text-sand">Concierge</p>
           <ul className="mt-5 space-y-3 text-sm text-sand">
-            <li>{CONTACT.address}</li>
             <li>
               <a href={`mailto:${CONTACT.email}`} className="transition-colors hover:text-ivory">
                 {CONTACT.email}
               </a>
             </li>
-            <li className="text-sand">{CONTACT.hours}</li>
           </ul>
           <button
             onClick={() => openReserve()}

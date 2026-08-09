@@ -3,15 +3,15 @@ import { JsonLd } from "@/components/JsonLd";
 import AboutClient from "./about-client";
 
 export const metadata = buildPageMeta({
-  title: "About B LEADER — Luxury Experience Curator in Salento, Puglia",
+  title: "About B LEADER — The Story of Luxury in Salento, Puglia",
   description:
-    "B LEADER is a luxury experience curator based in Salento, Puglia. Founded in 2023, we specialize in Ferrari driving tours, yacht charters, and premium concierge services for discerning travelers from around the world.",
+    "Born in the heart of Salento, Puglia. B LEADER curates automotive and nautical experiences of absolute excellence for the world's most discerning travelers.",
   path: "/about",
   keywords: [
     "about B LEADER",
     "luxury experience curator Salento",
     "Puglia luxury travel",
-    "B LEADER team",
+    "B LEADER story",
     "Italian luxury experiences",
     "Salento Ferrari tours",
   ],

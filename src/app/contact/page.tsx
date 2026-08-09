@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, MessageCircle, type LucideIcon } from "lucide-react";
+import { Mail, MessageCircle, type LucideIcon } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
@@ -15,8 +15,6 @@ type ContactRow = { Icon: LucideIcon; label: string; value: string; href?: strin
 
 const ROWS: ContactRow[] = [
   { Icon: Mail, label: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}` },
-  { Icon: MapPin, label: "Studio", value: CONTACT.address },
-  { Icon: Clock, label: "Hours", value: CONTACT.hours },
 ];
 
 export default function ContactPage() {

@@ -27,8 +27,6 @@ type Chapter = {
   name: string;
   tagline: string;
   image: string;
-  price: string;
-  priceNote: string;
   seats: string;
   heroNote: string;
   exterior: string;
@@ -44,8 +42,6 @@ const CAR_CHAPTERS: Chapter[] = CARS.map((car, i) => ({
   name: car.name,
   tagline: car.tagline,
   image: car.image,
-  price: car.price,
-  priceNote: car.priceNote,
   seats: car.seats,
   heroNote: car.heroNote,
   exterior: car.exterior,
@@ -91,9 +87,9 @@ function CarChapter({
     const ctx = gsap.context(() => {
       gsap.fromTo(
         img,
-        { yPercent: 8, scale: 1.08 },
+        { yPercent: 2, scale: 1.02 },
         {
-          yPercent: -8,
+          yPercent: -2,
           scale: 1,
           ease: "none",
           scrollTrigger: {
@@ -183,15 +179,7 @@ function CarChapter({
           <SpecStrip specs={chapter.specs} />
 
           <Reveal delay={0.24}>
-            <div className="mt-12 flex flex-wrap items-center justify-between gap-6 border-t border-line pt-8">
-              <div>
-                <p className="font-serif text-4xl font-light text-gold md:text-5xl">
-                  {chapter.price}
-                </p>
-                <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-mute">
-                  {chapter.priceNote}
-                </p>
-              </div>
+            <div className="mt-12 flex flex-wrap items-center gap-6 border-t border-line pt-8">
               <a
                 href="/experiences"
                 className="group/btn flex items-center gap-2.5 border border-gold/50 px-7 py-3.5 text-[10px] uppercase tracking-[0.28em] text-gold transition-colors duration-500 hover:bg-gold hover:text-ink"
@@ -210,7 +198,7 @@ function CarChapter({
         <div
           className={`relative min-h-[55vh] overflow-hidden lg:col-span-7 lg:min-h-[100svh] ${imgOrder}`}
         >
-          <div ref={imgRef} className="absolute inset-0 h-[120%] w-full">
+          <div ref={imgRef} className="absolute inset-0 h-[108%] w-full">
             <img
               src={chapter.image}
               alt={chapter.name}
@@ -248,9 +236,9 @@ function YachtChapter() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         img,
-        { yPercent: 8, scale: 1.08 },
+        { yPercent: 2, scale: 1.02 },
         {
-          yPercent: -8,
+          yPercent: -2,
           scale: 1,
           ease: "none",
           scrollTrigger: {
@@ -274,7 +262,7 @@ function YachtChapter() {
     >
       {/* Hero band */}
       <div className="relative min-h-[60vh] overflow-hidden lg:min-h-[85svh]">
-          <div ref={heroImgRef} className="absolute inset-0 h-[115%] w-full">
+          <div ref={heroImgRef} className="absolute inset-0 h-[106%] w-full">
             <img
               src={YACHT.image}
               alt={YACHT.name}
@@ -353,33 +341,8 @@ function YachtChapter() {
 
           <div className="lg:col-span-5">
             <SpecStrip specs={YACHT.specs} />
-
-            <Reveal delay={0.2}>
-              <div className="mt-12 grid grid-cols-2 gap-px border border-line bg-line">
-                {(
-                  [
-                    { src: YACHT.imageCruise, alt: "Cruise between both seas" },
-                    { src: YACHT.imageDinner, alt: "Dinner at anchor" },
-                    { src: YACHT.imageSailing, alt: "Sailing the Salento coast" },
-                    { src: YACHT.image, alt: "Cranchi Atlantique 50" },
-                  ] as const
-                ).map((shot, i) => (
-                  <div key={shot.alt} className="group relative aspect-[4/3] overflow-hidden bg-coal">
-                    <img
-                      src={shot.src}
-                      alt={shot.alt}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                    />
-                    <span className="absolute left-3 top-3 font-display text-[10px] tracking-[0.3em] text-ivory/80">
-                      0{i + 1}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          </div>
         </div>
+      </div>
       </div>
     </article>
   );

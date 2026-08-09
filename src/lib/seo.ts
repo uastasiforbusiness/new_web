@@ -122,7 +122,7 @@ export function localBusinessSchema() {
     "@type": ["Organization", "LocalBusiness"],
     name: SITE.name,
     url: SITE.url,
-    logo: `${SITE.url}/images/logo-white.webp`,
+    logo: `${SITE.url}/images/logo_oro.png`,
     description: SITE.defaultDescription,
     image: `${SITE.url}/images/hero-bg-new.webp`,
     priceRange: "$$$$",
