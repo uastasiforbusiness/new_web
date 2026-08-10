@@ -105,6 +105,11 @@ export default function Footer() {
                 {CONTACT.email}
               </a>
             </li>
+            <li>
+              <Link href="/trust" className="transition-colors hover:text-ivory">
+                How it works &amp; FAQ
+              </Link>
+            </li>
           </ul>
           <button
             onClick={() => openReserve()}

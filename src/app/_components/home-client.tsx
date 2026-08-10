@@ -13,6 +13,7 @@ import CarouselSection from '@/components/CarouselSection';
 import SignatureJourneys from '@/components/SignatureJourneys';
 import FleetStrip from '@/components/FleetStrip';
 import YachtSection from '@/components/YachtSection';
+import Testimonials from '@/components/Testimonials';
 import CTASection from '@/components/CTASection';
 import SectionReveal from '@/components/SectionReveal';
 
@@ -119,6 +120,11 @@ export function HomeClient() {
           {/* 05 — The sea */}
           <SectionReveal>
             <YachtSection />
+          </SectionReveal>
+
+          {/* Guest voices — renders when testimonials exist */}
+          <SectionReveal>
+            <Testimonials />
           </SectionReveal>
 
           {/* 06 — The concierge */}

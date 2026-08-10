@@ -78,28 +78,24 @@ description: 'One private itinerary across land and sea — a Ferrari along the 
 
 ## FASE 2 — Infraestructura de confianza (decisiva para conversión US) — *Semana 1-2*
 
-### T2.1 Footer — enlaces sociales reales (`src/components/Footer.tsx:52-65`)
-**Acción**: Reemplazar `href="#"` por URLs reales de Instagram, Facebook, YouTube. Si no existen cuentas activas → crear placeholder privado o quitar iconos (mejor sin iconos rotos que falsos).
-**Verificación**: Click en cada icono abre perfil real en new tab.
+> **Estado 2026-08-10**: T2.1 ✅ (iconos eliminados — decisión del cliente: sin cuentas reales, mejor sin iconos); T2.2 ✅ (componente + data listos, esperando citas reales); T2.4 ✅ (página /trust en vivo, contenido verificado del repo); T2.3 ⏳ bloqueada hasta tener cobertura de prensa real.
 
-### T2.2 Módulo Testimonios (nuevo componente `src/components/Testimonials.tsx`)
-**Spec**:
-- 3–5 tarjetas: nombre/initials, experiencia (ej. "Ferrari Grand Tour, July 2025"), cita 1–2 frases, avatar genérico.
-- Fuente inicial: exportar conversaciones WhatsApp reales (anónimas), pedir permiso.
-- Ubicación: Homepage (entre 05 y 06), Experiences page (antes de CTA), Fleet page (antes de CTA).
-- Schema: `Review` JSON-LD automático.
+### T2.1 Footer — iconos sociales ✅ HECHO
+**Acción ejecutada**: eliminados los iconos IG/FB/YT que apuntaban a `href="#"` (`src/components/Footer.tsx`). Re-añadir cuando existan cuentas reales activas.
+**Verificación**: `grep "mark: IG"` → 0 resultados; build OK.
 
-### T2.3 Prensa / Media mentions (nueva sección `src/components/PressLogos.tsx`)
-**Objetivo**: Tier-1 trust signals. Incluso 1–2 logos (Robb Report, Condé Nast Traveler, Departures, Virtuoso, Forbes Travel Guide) cambian la percepción.
-**Acción**: Si no hay cobertura → outreach proactivo a 3 periodistas de travel luxury con press kit (one-pager + imágenes + data: 7 experiencias, 4 coches, 1 yacht, Est. 2023, Porto Gaio base). Incluir en Homepage (banda sutil) y About.
+### T2.2 Módulo Testimonios ✅ COMPONENTE LISTO — *necesita tu contenido*
+**Hecho**: `src/components/Testimonials.tsx` (editorial, sin estrellas, numeración serif, docenas negras) + `src/lib/testimonials.ts` (contrato de datos, array vacío). Renderiza `null` hasta que haya 3+ citas.
+**Pendiente tuyo**: exportar 3–5 conversaciones WhatsApp reales (anonimizadas: nombre + experiencia + cita de 1–3 frases + fecha). Con permiso del cliente. Pega las citas en `src/lib/testimonials.ts`.
+**Wired**: homepage entre sección 05 (yate) y 06 (concierge).
 
-### T2.4 Página "How it works / Trust" (`src/app/trust/page.tsx` + link en footer)
-**Contenido**:
-- Licencias capitanes (Italian Master 200/500 GT), seguros, inspecciones yacht.
-- Política de cancelación clara (flexible vs estricta por temporada).
-- FAQ: depósitos, weather policy, niños, mascotas, accesibilidad.
-- "Our concierge" — foto/nombre real del concierge (humaniza "person answers in 2h").
-- JSON-LD `FAQPage`.
+### T2.3 Prensa / Media mentions ⏳ BLOQUEADA — *necesita cobertura real*
+**No construido a propósito**: sin menciones reales no hay banda de logos. Outreach necesario: press kit (one-pager + imágenes + data) a 3 periodistas de travel luxury (Robb Report, Condé Nast Traveler, Forbes Travel Guide) + prensa italiana de lujo. Cuando existan 1+ menciones verificables → construir `PressLogos.tsx` y añadir a Home/About.
+
+### T2.4 Página "How it works / Trust" ✅ HECHO
+**Hecho**: `src/app/trust/page.tsx` — 3 pasos, 4 trust points, "What every charter includes" (desde `YACHT.included`), FAQ con 6 preguntas **verificables del repo** (sin nada inventado), JSON-LD `FAQPage` + breadcrumb. Enlazada desde Footer (columna Concierge: "How it works & FAQ").
+**Verificación**: lint 0 errores; build OK (`/trust` estático generado).
+**Pendiente tuyo** (datos operativos que no invento): detalles de seguro, política de cancelación (flexible/estricta), condiciones de depósito si las hubiera. Cuando me los des, los añado a la sección "How we earn it" y al FAQ.
 
 ---
 
