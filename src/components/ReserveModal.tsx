@@ -286,13 +286,6 @@ function ReserveModal({
                             <option value="" disabled>
                               Select from the collection…
                             </option>
-                            <optgroup label="The supercar fleet">
-                              {ALL_EXPERIENCE_OPTIONS.filter((o) => o.type === "car").map((o) => (
-                                <option key={o.value} value={o.value}>
-                                  {o.value}
-                                </option>
-                              ))}
-                            </optgroup>
                             <optgroup label="Yacht — Cranchi Atlantique 50">
                               {ALL_EXPERIENCE_OPTIONS.filter((o) => o.type === "yacht").map((o) => (
                                 <option key={o.value} value={o.value}>

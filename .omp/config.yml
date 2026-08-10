@@ -1,9 +1,7 @@
-# B LEADER project settings — see plans/pi-agent-setup-plan.md (Phase 1+2)
-# Project-local; merged over global ~/.omp/agent/config.yml
-
 modelRoleStorage: project
-
-memory:
+memory: 
   backend: local
-  autolearn:
+  autolearn: 
     enabled: true
+modelRoles: 
+  default: opencode-zen/deepseek-v4-flash-free

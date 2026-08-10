@@ -543,6 +543,7 @@ html.lenis body {
 }
 select.field {
   appearance: none;
+  color-scheme: dark;
 }
 input[type="date"].field {
   color-scheme: dark;
