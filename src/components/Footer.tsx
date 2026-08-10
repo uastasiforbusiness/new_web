@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { CARS } from "@/lib/data";
 import { CONTACT, NAV_LINKS } from "@/lib/config";
@@ -135,6 +136,24 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} B LEADER S.r.l. — P.IVA 04812390756</p>
           <p className="text-center">Carmiano, Salento · Puglia · Italia</p>
           <p className="italic text-gold">Designed for the few.</p>
+          <a
+            href="https://github.com/uastasiforbusiness"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 transition-opacity duration-500 hover:opacity-80"
+            aria-label="UastasiProject — website design & development"
+          >
+            <Image
+              src="/uastasi-logo-gold.png"
+              alt=""
+              className="h-4 w-auto"
+              width={140}
+              height={96}
+            />
+            <span className="text-[10px] uppercase tracking-[0.25em] text-sand">
+              UastasiProject
+            </span>
+          </a>
         </div>
       </div>
     </footer>

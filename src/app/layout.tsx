@@ -104,6 +104,7 @@ export const metadata: Metadata = {
     },
   },
   category: "Automotive",
+  authors: [{ name: "UastasiProject", url: "https://github.com/uastasiforbusiness" }],
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
   },
@@ -131,6 +132,13 @@ export default function RootLayout({
       className={`${cormorant.variable} ${outfit.variable} ${inter.variable}`}
     >
       <body className="grain bg-ink font-sans text-ivory antialiased">
+        <div
+          aria-hidden
+          className="hidden"
+          dangerouslySetInnerHTML={{
+            __html: "<!-- Designed & built by UastasiProject -->",
+          }}
+        />
         <JsonLd data={localBusinessSchema()} />
         <ReserveProvider>
           <SmoothScroll>
