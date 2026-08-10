@@ -104,7 +104,7 @@ export default function CarouselSection() {
           </RevealLine>
           <RevealLine delay={0.14}>
             <h2 className="mt-4 max-w-2xl font-serif text-4xl font-light leading-[1.05] text-ivory md:text-6xl">
-              Five moods,
+              Every occasion,
               <br className="md:hidden" /> <em className="gold-text">one standard.</em>
             </h2>
           </RevealLine>
