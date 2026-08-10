@@ -1,0 +1,9 @@
+# B LEADER project settings — see plans/pi-agent-setup-plan.md (Phase 1+2)
+# Project-local; merged over global ~/.omp/agent/config.yml
+
+modelRoleStorage: project
+
+memory:
+  backend: local
+  autolearn:
+    enabled: true

@@ -42,6 +42,52 @@ Never commit `.env*` values, Cloudflare API tokens, Meta credentials, Resend key
 
 There is no automated test suite yet. Before a pull request, run `npm run lint` and `npm run build`; use `npm run cf:preview` when changing Worker bindings, API routes, or deployment behavior. Use focused conventional commits such as `fix(reserve): validate pickup date`, and include a concise summary, verification performed, and screenshots for visual changes.
 
+# Pi Agent — Tools, Skills & Workflow
+
+This section is for the **pi** coding agent. Follow it in every session.
+
+## Core tools
+
+| Tool | When to use |
+|---|---|
+| `read` | Inspect files before editing; always read before you change |
+| `edit` | Precise, targeted file changes (never rewrite a whole file for a small fix) |
+| `write` | New files or complete rewrites only |
+| `bash` | Commands: npm scripts, git, wrangler, grep/find. Verify with real output, don't assume |
+| `ctx_*` (context-mode) | Process large outputs (logs, build output, git diffs) in a sandbox and print only the summary; search the knowledge base instead of re-reading raw files |
+| `web_search` / `fetch_content` | Research docs, APIs, or references when unsure |
+| `subagent` | Delegate independent work (reviews, research) to child agents; keep one writer per workspace |
+| `intercom` | Coordinate with other pi sessions on this machine |
+
+## Available skills
+
+| Domain | Skill | Use for |
+|---|---|---|
+| Workflow | `brainstorming` | Any creative work: clarify intent, present a design, get approval BEFORE writing code |
+| Workflow | `writing-plans` | Multi-step tasks: turn an approved design into an implementation plan |
+| Workflow | `systematic-debugging` | Any bug: reproduce → isolate → root cause → verify fix. No blind fixes |
+| Workflow | `verification-before-completion` | Before claiming done: run the real verification commands and confirm output |
+| Workflow | `test-driven-development` | Features/bugfixes: write the failing check first when logic is non-trivial |
+| Workflow | `executing-plans`, `subagent-driven-development`, `dispatching-parallel-agents` | Execute approved plans; parallelize independent tasks |
+| Workflow | `requesting-code-review`, `receiving-code-review` | Independent review of completed work |
+| Code intelligence | GitNexus (`gitnexus_impact`, `gitnexus_query`, `gitnexus_context`, `gitnexus_detect_changes`, `gitnexus_rename`) | See the GitNexus section below; it is mandatory before editing symbols and before commits |
+| Cloudflare | `wrangler`, `cloudflare`, `workers-best-practices`, `durable-objects`, `cloudflare-email-service` | Worker/D1/email work — bindings, config, deployment behavior |
+| Frontend / design | `impeccable`, `design-taste-frontend`, `apple-design`, `improve-animations`, `find-animation-opportunities`, `animation-vocabulary` | UI work, redesigns, animation and polish |
+| Performance | `web-perf` | Core Web Vitals and page-load audits |
+| Research | `web-search`, `web-research`, `parallel-deep-research` | Web research and source checking |
+| Project mgmt | bigpowers skills (planning, epics, release) | Heavy project management only if the user explicitly asks |
+
+## Workflow rules
+
+1. **Bugs:** start with `systematic-debugging`. Find the root cause; fix it where all callers route through, not just the reported path.
+2. **New features:** `brainstorming` first — explore intent, present a short design, get user approval, then implement. For multi-step work, follow with `writing-plans`.
+3. **Before editing any symbol:** run `gitnexus_impact` and report blast radius. Warn the user on HIGH/CRITICAL risk.
+4. **Before committing:** run `gitnexus_detect_changes()` to confirm the diff only touches expected symbols.
+5. **Before claiming done:** run `npm run lint` and `npm run build`. Use `npm run cf:preview` when Worker bindings, API routes, or deployment behavior changed. Show the real output.
+6. **Keep changes minimal:** prefer targeted `edit`s, reuse existing helpers, no speculative abstractions, no new dependencies for what a few lines can do.
+7. **Commits:** focused conventional commits (`fix(reserve): validate pickup date`) with a concise summary of what changed and verification performed; screenshots for visual changes.
+8. **Language:** respond in the user's language; code, commits, and customer-facing copy in US English.
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 

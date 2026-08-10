@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/src/config/mcp-schema.json",
+  "mcpServers": {
+    "gitnexus": {
+      "type": "stdio",
+      "command": "gitnexus",
+      "args": ["mcp"]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}

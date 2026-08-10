@@ -196,7 +196,7 @@ function CarChapter({
 
         {/* ── Full-bleed imagery column ──────────────────── */}
         <div
-          className={`relative min-h-[55vh] overflow-hidden lg:col-span-7 lg:min-h-[100svh] ${imgOrder}`}
+          className={`relative min-h-[50vh] overflow-hidden lg:col-span-7 lg:min-h-[80svh] ${imgOrder}`}
         >
           <div ref={imgRef} className="absolute inset-0 h-[108%] w-full">
             <img
@@ -261,7 +261,7 @@ function YachtChapter() {
       className="scroll-mt-20 border-t border-line"
     >
       {/* Hero band */}
-      <div className="relative min-h-[60vh] overflow-hidden lg:min-h-[85svh]">
+      <div className="relative min-h-[50vh] overflow-hidden lg:min-h-[72svh]">
           <div ref={heroImgRef} className="absolute inset-0 h-[106%] w-full">
             <img
               src={YACHT.image}
