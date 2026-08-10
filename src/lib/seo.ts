@@ -53,7 +53,7 @@ export const CONTACT = {
 
 export type PageMeta = {
   title: string;
-  description: string;
+  description?: string;
   path: string;
   keywords?: string[];
   ogImage?: string;
