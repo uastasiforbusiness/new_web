@@ -8,19 +8,19 @@ const values: { numeral: string; title: string; description: string }[] = [
     numeral: "01",
     title: "Passion",
     description:
-      "Born from a passion for the Italian automotive heritage and the breathtaking landscapes of Puglia, we share with our guests the emotion of roads and seas that leave their mark.",
+      "We grew up on these roads and seas — and we share them because they moved us first.",
   },
   {
     numeral: "02",
     title: "Exclusive Knowledge",
     description:
-      "Our deep roots in Salento allow us to reveal hidden coves, scenic clifftop roads and historic vineyards — places that no tourist guide ever tells you about.",
+      "Years of running Salento's coast mean we know which coves are swimmable at 11 AM in August — and which clifftop roads deserve the roof down.",
   },
   {
     numeral: "03",
     title: "Discretion",
     description:
-      "Impeccable service, from booking to the moment you return. Your privacy and your comfort are, and will always remain, our absolute priority.",
+      "Your privacy and comfort are not negotiable. No shared charters, no data sold, no surprises.",
   },
 ];
 
@@ -43,18 +43,18 @@ export default function AboutClient() {
         </Reveal>
         <Reveal delay={0.16}>
           <p className="mt-10 max-w-3xl text-xl font-light leading-10 text-sand md:text-2xl md:leading-[1.7]">
-            Born in the heart of Salento, in Puglia, B LEADER brings the most
-            discerning travelers in the world to discover what few have the
-            privilege to experience: the Ionian and Adriatic coasts of Salento,
-            among the most spectacular and iconic in the Mediterranean, through
-            automotive and nautical experiences of absolute excellence.
+            Born in the heart of Salento, in Puglia, B LEADER opens the
+            Ionian and Adriatic coasts of Salento — shoreline few travelers
+            ever see without the crowds — through automotive and nautical
+            experiences built on craft, place, and privacy.
           </p>
         </Reveal>
         <Reveal delay={0.24}>
           <p className="mt-6 max-w-3xl text-[15px] leading-8 text-mute">
-            Every vehicle is maintained with meticulous care and every itinerary
-            is designed down to the smallest detail. We accept nothing less than
-            perfection — because our clients deserve nothing less than the best.
+Born in Salento and based in Porto Gaio, we run the coast with
+              Italian Master–licensed skippers and chauffeurs who have driven these
+              roads for years. Every itinerary is tested by us before you arrive —
+              the same coves, the same light we would choose for our own family.
           </p>
         </Reveal>
       </div>

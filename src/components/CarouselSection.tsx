@@ -25,25 +25,25 @@ const CAROUSEL_ITEMS: CardData[] = [
     id: 1,
     title: "Nautical experiences",
     icon: <Anchor size={22} strokeWidth={1.5} />,
-    body: "Sail the crystal-clear waters of the Salento coast aboard our luxury yachts. Exclusive departures from Porto Gaio, Gallipoli — with routes to the wonders of Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and the evocative shores of Greece.\n\nChoose your experience: half-day cruise, full day, sunset, or overnight on board — always with a professional skipper at your service.",
+    body: "Sail the Salento coast from Porto Gaio — anchor at Punta della Suina, swim at Porto Cesareo, finish at Santa Maria di Leuca where the seas meet. Skipper, hostess, aperitivo aboard.",
   },
   {
     id: 2,
     title: "Weddings & Ceremonies",
     icon: <Gem size={22} strokeWidth={1.5} />,
-    body: "Make the most beautiful day of your life unforgettable. Luxury cars with a professional chauffeur, personalized wedding decorations, and direct coordination with your wedding planner.\n\nEvery detail taken care of for you — so nothing is left to chance.",
+    body: "Your wedding: a white Ferrari spider, an olive-grove ceremony, a photographer briefed on golden hour. We coordinate cars, florals, and timing so you don't.",
   },
   {
     id: 3,
     title: "Events & occasions",
     icon: <Sparkles size={22} strokeWidth={1.5} />,
-    body: "Every special occasion deserves a car that rises to it. We provide luxury vehicles for birthdays, baptisms, communions, confirmations, and private parties — with a dedicated chauffeur and tailor-made packages.\n\nBecause every important moment in life deserves style.",
+    body: "Milestone birthdays, anniversaries, proposals — matched with the car that fits the moment. Chauffeur, route, and details handled.",
   },
   {
     id: 4,
     title: "Corporate & business",
     icon: <Briefcase size={22} strokeWidth={1.5} />,
-    body: "Representation and style for companies, executives, and conferences. High-end vehicles with professional bilingual chauffeurs — an impeccable corporate image at every appointment.\n\nThe luxury that makes the difference, even in business.",
+    body: "Executive transfers and multi-car delegations across Puglia. Bilingual chauffeurs, NDA-grade discretion, real-time coordination.",
   },
 ];
 

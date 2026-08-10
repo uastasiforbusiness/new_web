@@ -5,7 +5,7 @@ import AboutClient from "./about-client";
 export const metadata = buildPageMeta({
   title: "About B LEADER — The Story of Luxury in Salento, Puglia",
   description:
-    "Born in the heart of Salento, Puglia. B LEADER curates automotive and nautical experiences of absolute excellence for the world's most discerning travelers.",
+    "Born in the heart of Salento, Puglia. B LEADER curates private automotive and nautical experiences along the Ionian and Adriatic coasts — craft, place, and privacy, one itinerary at a time.",
   path: "/about",
   keywords: [
     "about B LEADER",
