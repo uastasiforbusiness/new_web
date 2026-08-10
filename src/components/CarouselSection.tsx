@@ -1,15 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
-/**
- * MotionLink: marries framer-motion's motion.* components with Next.js Link,
- * so cards can carry `initial`/`animate` props while staying proper <a> links.
- */
-const MotionLink = motion.create(Link);
+import { Anchor, Briefcase, ChevronLeft, ChevronRight, Gem, Sparkles } from "lucide-react";
 
 /**
  * 02 — The world we move in.
@@ -17,71 +10,40 @@ const MotionLink = motion.create(Link);
  * A refined 3D coverflow wheel — intrigue device, never an information dump.
  * The active card dominates, side cards sit quietly behind it with a gentle
  * rotation and darkness (no blur smear). Autoplay, swipe, arrows, dots and
- * keyboard all supported; each card opens one door deeper into the site.
+ * keyboard all supported; each card carries an emblem, title and story.
  */
 
 interface CardData {
   id: number;
-  label: string;
   title: string;
-  mood: string;
-  image: string;
-  /** CSS object-position so each collage's focal point centers in the frame */
-  focus: string;
-  href: string;
-  cta: string;
+  body?: string;
+  icon?: React.ReactNode;
 }
 
 const CAROUSEL_ITEMS: CardData[] = [
   {
     id: 1,
-    label: "The fleet",
-    title: "Machines with an accent",
-    mood: "Your pulse rises before the key even turns.",
-    image: "/images/card1_collage.webp",
-    focus: "center 70%",
-    href: "/fleet",
-    cta: "Meet the fleet",
+    title: "Nautical experiences",
+    icon: <Anchor size={22} strokeWidth={1.5} />,
+    body: "Sail the crystal-clear waters of the Salento coast aboard our luxury yachts. Exclusive departures from Porto Gaio, Gallipoli — with routes to the wonders of Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and the evocative shores of Greece.\n\nChoose your experience: half-day cruise, full day, sunset, or overnight on board — always with a professional skipper at your service.",
   },
   {
     id: 2,
-    label: "By sea",
-    title: "Sunset off Gallipoli",
-    mood: "The moment the sun touches the water, everything else goes quiet.",
-    image: "/images/card2_collage.webp",
-    focus: "center 55%",
-    href: "/experiences",
-    cta: "Explore the sea",
+    title: "Weddings & Ceremonies",
+    icon: <Gem size={22} strokeWidth={1.5} />,
+    body: "Make the most beautiful day of your life unforgettable. Luxury cars with a professional chauffeur, personalized wedding decorations, and direct coordination with your wedding planner.\n\nEvery detail taken care of for you — so nothing is left to chance.",
   },
   {
     id: 3,
-    label: "On land",
-    title: "Let someone else drive",
-    mood: "The whole coast unfolds in front of you — no map, no decisions, just the view.",
-    image: "/images/card3_collage.webp",
-    focus: "center 48%",
-    href: "/services",
-    cta: "Chauffeured days",
+    title: "Events & occasions",
+    icon: <Sparkles size={22} strokeWidth={1.5} />,
+    body: "Every special occasion deserves a car that rises to it. We provide luxury vehicles for birthdays, baptisms, communions, confirmations, and private parties — with a dedicated chauffeur and tailor-made packages.\n\nBecause every important moment in life deserves style.",
   },
   {
     id: 4,
-    label: "Private occasions",
-    title: "A proposal on the bow",
-    mood: "The moment they say yes — and the one after, when you remember why you planned it.",
-    image: "/images/card4_collage.webp",
-    focus: "center 55%",
-    href: "/services",
-    cta: "Plan an occasion",
-  },
-  {
-    id: 5,
-    label: "Your concierge",
-    title: "One message away",
-    mood: "You never have to figure it out alone. Someone already has.",
-    image: "/images/card5_collage.webp",
-    focus: "center 40%",
-    href: "/contact",
-    cta: "Say hello",
+    title: "Corporate & business",
+    icon: <Briefcase size={22} strokeWidth={1.5} />,
+    body: "Representation and style for companies, executives, and conferences. High-end vehicles with professional bilingual chauffeurs — an impeccable corporate image at every appointment.\n\nThe luxury that makes the difference, even in business.",
   },
 ];
 
@@ -129,24 +91,6 @@ export default function CarouselSection() {
       onMouseLeave={() => setHovering(false)}
       className="relative flex min-h-[auto] w-full flex-col items-center justify-center overflow-hidden px-4 py-16 md:min-h-screen md:py-24"
     >
-      {/* Calm, near-black backdrop so the cards float */}
-      <img
-        src="/back_cards_whells.jpeg"
-        alt=""
-        draggable={false}
-        aria-hidden
-        className="absolute inset-0 z-0 h-full w-full object-cover opacity-60"
-      />
-      <div className="absolute inset-0 z-0 bg-[#0a0908]/82" />
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        aria-hidden
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 45%, rgba(201,169,110,0.06) 0%, transparent 55%)",
-        }}
-      />
-
       {/* Header */}
       <div className="relative z-20 mx-auto w-full max-w-5xl pb-10 pt-6 md:pb-14">
         <div className="flex flex-col items-center text-center">
@@ -193,11 +137,8 @@ export default function CarouselSection() {
           const zIndex = 100 - absRel;
 
           return (
-            <MotionLink
+            <motion.div
               key={card.id}
-              href={card.href}
-              tabIndex={isActive ? 0 : -1}
-              aria-hidden={!isActive}
               className="absolute left-1/2 top-1/2 h-[min(118vw,480px)] min-h-[400px] w-[calc(100vw-48px)] max-w-[360px] overflow-hidden rounded-[18px] shadow-[0_40px_100px_rgba(0,0,0,0.55)] md:h-[620px] md:w-[464px]"
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{
@@ -231,43 +172,32 @@ export default function CarouselSection() {
               style={{ transformStyle: "preserve-3d" }}
               whileHover={isActive ? { y: "-52%" } : undefined}
             >
-              {/* Card art */}
-              <img
-                src={card.image}
-                alt={card.title}
-                draggable={false}
-                className="absolute inset-[-4%] h-[108%] w-[108%] object-cover"
-                style={{ objectPosition: card.focus }}
-              />
-              {/* Reading gradient — guaranteed contrast for the copy */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908]/97 via-[#0a0908]/35 to-[#0a0908]/10" />
+              {/* Card art — black panel, gold hairline */}
+              <div className="absolute inset-0 bg-[#0a0a0a]" />
               <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
 
               {/* Gold hairline on top edge */}
               <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
 
-              {/* Copy — consistent layout on every card */}
-              <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-6 pb-7 md:p-10">
-                <div className="flex w-full items-center justify-between">
-                  <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.4em] text-gold">
-                    {String(i + 1).padStart(2, "0")} · {card.label}
+              {/* Copy — centered emblem, title and story */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center overflow-y-auto p-6 text-center md:p-10">
+                {card.icon && (
+                  <span className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-gold/40 bg-gold/5 text-gold shadow-[0_0_32px_rgba(201,169,110,0.18)]">
+                    {card.icon}
                   </span>
-                  {isActive && (
-                    <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-gold/90">
-                      {card.cta}
-                      <ChevronRight size={12} />
-                    </span>
-                  )}
-                </div>
-                <h3 className="mt-3 font-serif text-[25px] font-light leading-[1.08] text-ivory md:mt-4 md:text-[32px]">
+                )}
+                <h3 className="font-serif text-[26px] font-light leading-[1.08] text-ivory md:text-[36px]">
                   {card.title}
                 </h3>
-                <div className="mt-4 h-px w-10 bg-gold/60" />
-                <p className="mt-3 max-w-[340px] font-sans text-[12.5px] leading-relaxed text-ivory/75 md:text-[13.5px]">
-                  {card.mood}
-                </p>
+                {card.body && (
+                  <div className="mt-5 max-w-[340px] space-y-3 font-sans text-[12.5px] leading-relaxed text-ivory/75 md:text-[13.5px]">
+                    {card.body.split("\n\n").map((paragraph, pi) => (
+                      <p key={pi}>{paragraph}</p>
+                    ))}
+                  </div>
+                )}
               </div>
-            </MotionLink>
+            </motion.div>
           );
         })}
       </div>
