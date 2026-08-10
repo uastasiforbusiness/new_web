@@ -1,14 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { WhatsAppPopup } from './whatsapp-popup';
+import { useChat } from './chat-context';
 
 export function WhatsAppButton() {
   const btnRef = useRef<HTMLAnchorElement>(null);
   const pulseRef = useRef<HTMLSpanElement>(null);
-  const [open, setOpen] = useState(false);
+  const { open: openChatState, openChat, closeChat } = useChat();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -41,12 +42,12 @@ export function WhatsAppButton() {
         role="button"
         onClick={(e) => {
           e.preventDefault();
-          setOpen(!open);
+          openChat();
         }}
         href="#"
         aria-label="Open concierge chat"
         className={`fixed bottom-6 right-6 z-50 group flex items-center overflow-hidden w-14 hover:w-52 h-14 rounded-full bg-[#0a0a0a] border shadow-[0_4px_20px_rgba(201,169,110,0.15)] hover:shadow-[0_4px_30px_rgba(201,169,110,0.3)] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] cursor-pointer gap-0 hover:gap-3 px-4 ${
-          open
+          openChatState
             ? 'border-[#c9a96e]/80 shadow-[0_4px_30px_rgba(201,169,110,0.3)]'
             : 'border-[#c9a96e]/40'
         }`}
@@ -83,7 +84,7 @@ export function WhatsAppButton() {
 
       {/* Chat popup */}
       <AnimatePresence>
-        {open && <WhatsAppPopup open={open} onClose={() => setOpen(false)} />}
+        {openChatState && <WhatsAppPopup open={openChatState} onClose={closeChat} />}
       </AnimatePresence>
     </>
   );

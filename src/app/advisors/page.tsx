@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, CalendarCheck, MessageCircle, Percent, Timer } from "lucide-react";
-import { whatsappUrl } from "@/lib/config";
 import { buildPageMeta, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import Reveal from "@/components/Reveal";
+import { WhatsAppChatCta } from "@/components/velox/chat/whatsapp-chat-cta";
 
 export const metadata = buildPageMeta({
   title: "Travel Advisors — Partner with B LEADER in Salento",
@@ -78,15 +78,11 @@ export default function AdvisorsPage() {
         </Reveal>
         <Reveal delay={0.24}>
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <a
-              href={whatsappUrl("Hello B LEADER — travel advisor inquiry. I would like net rates for my clients.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-sweep group flex items-center gap-3 border border-gold px-9 py-4 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
-            >
-              <MessageCircle size={15} className="text-gold" />
-              Talk to the advisor desk
-            </a>
+            <WhatsAppChatCta
+              message="Hello B LEADER — travel advisor inquiry. I would like net rates for my clients."
+              label="Talk to the advisor desk"
+              className="btn-sweep group inline-flex cursor-pointer items-center gap-3 border border-gold px-9 py-4 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
+            />
             <Link
               href="/trust"
               className="group flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-sand transition-colors hover:text-ivory"
@@ -163,15 +159,11 @@ export default function AdvisorsPage() {
             </p>
           </Reveal>
           <Reveal delay={0.2}>
-            <a
-              href={whatsappUrl("Hello B LEADER — travel advisor. Requesting a rate sheet and advisor terms.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-sweep group mt-10 inline-flex items-center gap-3 border border-gold px-9 py-4 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
-            >
-              Request the rate sheet
-              <ArrowRight size={14} className="text-gold transition-transform duration-500 group-hover:translate-x-1.5" />
-            </a>
+            <WhatsAppChatCta
+              message="Hello B LEADER — travel advisor. Requesting a rate sheet and advisor terms."
+              label="Request the rate sheet"
+              className="btn-sweep group mt-10 inline-flex cursor-pointer items-center gap-3 border border-gold px-9 py-4 text-[11px] uppercase tracking-[0.3em] text-gold transition-colors duration-500 hover:text-ink"
+            />
           </Reveal>
         </div>
       </section>

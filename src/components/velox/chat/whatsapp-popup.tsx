@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { X, Send, MessageSquare, Phone } from 'lucide-react';
+import { useChat } from './chat-context';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'bleader_chat_session';
@@ -59,6 +60,8 @@ interface StoredSession {
 }
 
 export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { presetMessage, clearPreset } = useChat();
+  const didInjectPreset = useRef(false);
   const [phase, setPhase] = useState<'closed' | 'greeting' | 'awaiting-phone' | 'chat' | 'phone-error'>('closed');
   const [displayedGreeting, setDisplayedGreeting] = useState('');
   const [messages, setMessages] = useState<ChatMsg[]>([]);
@@ -99,8 +102,18 @@ export function WhatsAppPopup({ open, onClose }: { open: boolean; onClose: () =>
     // No session → greeting sequence
     setPhase('greeting');
     setDisplayedGreeting('');
+    didInjectPreset.current = false;
   }, [open]);
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  // ─── Pre-fill the input with a preset message (e.g. from a CTA) ──
+  useEffect(() => {
+    if (phase === 'chat' && presetMessage && !didInjectPreset.current) {
+      didInjectPreset.current = true;
+      setInput(presetMessage);
+      clearPreset();
+    }
+  }, [phase, presetMessage, clearPreset]);
 
   // ─── Greeting typing effect ─────────────────────────────────────────────
   useEffect(() => {

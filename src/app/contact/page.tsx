@@ -1,9 +1,10 @@
-import { Mail, MessageCircle, type LucideIcon } from "lucide-react";
+import { Mail, type LucideIcon } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
 import { buildPageMeta, breadcrumbSchema } from "@/lib/seo";
-import { CONTACT, whatsappUrl } from "@/lib/config";
+import { CONTACT } from "@/lib/config";
+import { WhatsAppChatCta } from "@/components/velox/chat/whatsapp-chat-cta";
 
 export const metadata = buildPageMeta({
   title: "Contact — Talk to the Concierge",
@@ -63,17 +64,11 @@ export default function ContactPage() {
               </Reveal>
             ))}
             <Reveal delay={0.1}>
-              <a
-                href={whatsappUrl("Hello B LEADER — I would like to speak with the concierge.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-9 flex w-fit items-center gap-4 border border-ivory/15 px-7 py-4 transition-all duration-500 hover:border-gold/60"
-              >
-                <MessageCircle size={17} className="text-gold" />
-                <span className="text-[11px] uppercase tracking-[0.3em] text-ivory transition-colors hover:text-gold-light">
-                  WhatsApp the concierge
-                </span>
-              </a>
+              <WhatsAppChatCta
+                message="Hello B LEADER — I would like to speak with the concierge."
+                label="WhatsApp the concierge"
+                className="group mt-9 flex w-fit cursor-pointer items-center gap-4 border border-ivory/15 px-7 py-4 transition-all duration-500 hover:border-gold/60"
+              />
             </Reveal>
           </div>
 

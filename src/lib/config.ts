@@ -10,13 +10,6 @@ export const CONTACT = {
   email: "info@bleaderitaly.com",
 } as const;
 
-export const WHATSAPP_NUMBER =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "393516667788";
-
-export function whatsappUrl(message: string): string {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
-
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bleaderitaly.com";
 
 export const NAV_LINKS = [

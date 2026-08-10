@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
 import { WhatsAppButton } from "@/components/velox/chat/whatsapp-button";
+import { ChatProvider } from "@/components/velox/chat/chat-context";
 import { ReserveProvider } from "@/components/ReserveModal";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema } from "@/lib/seo";
@@ -140,15 +141,17 @@ export default function RootLayout({
           }}
         />
         <JsonLd data={localBusinessSchema()} />
-        <ReserveProvider>
-          <SmoothScroll>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <ScrollToTop />
-          </SmoothScroll>
-        </ReserveProvider>
-        <WhatsAppButton />
+        <ChatProvider>
+          <ReserveProvider>
+            <SmoothScroll>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+              <ScrollToTop />
+            </SmoothScroll>
+          </ReserveProvider>
+          <WhatsAppButton />
+        </ChatProvider>
       </body>
     </html>
   );

@@ -2,12 +2,13 @@
 
 import { ArrowRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { whatsappUrl } from "@/lib/config";
 import Reveal from "./Reveal";
 import { useReserve } from "./ReserveModal";
+import { useChat } from "@/components/velox/chat/chat-context";
 
 export default function CTASection({ mode = "reserve" }: { mode?: "reserve" | "experiences" }) {
   const { openReserve } = useReserve();
+  const { openChat } = useChat();
 
   return (
     <section className="relative overflow-hidden border-t border-line">
@@ -55,15 +56,13 @@ export default function CTASection({ mode = "reserve" }: { mode?: "reserve" | "e
                 <ArrowRight size={14} className="transition-transform duration-500 group-hover:translate-x-1.5" />
               </button>
             )}
-            <a
-              href={whatsappUrl("Hello B LEADER — I would like to plan an experience in Salento.")}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => openChat("Hello B LEADER — I would like to plan an experience in Salento.")}
               className="group flex items-center gap-3 border border-ivory/20 px-9 py-4.5 text-[11px] uppercase tracking-[0.3em] text-ivory transition-all duration-500 hover:border-gold/60 hover:text-gold-light"
             >
               <MessageCircle size={15} className="text-gold" />
               WhatsApp us
-            </a>
+            </button>
           </div>
         </Reveal>
       </div>
