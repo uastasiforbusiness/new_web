@@ -5,12 +5,17 @@ import { SERVICES } from "@/lib/data";
 import Reveal from "./Reveal";
 import { useReserve } from "./ReserveModal";
 
-export default function ServiceBands() {
+export default function ServiceBands({
+  audience,
+}: {
+  audience?: "leisure" | "corporate";
+}) {
   const { openReserve } = useReserve();
+  const services = audience ? SERVICES.filter((s) => s.audience === audience) : SERVICES;
 
   return (
     <div className="border-t border-line">
-      {SERVICES.map((service, i) => (
+      {services.map((service, i) => (
         <section id={service.slug} key={service.slug} className="scroll-mt-24 border-b border-line">
           <div className="mx-auto grid max-w-[1600px] items-stretch md:grid-cols-2">
             {/* image */}

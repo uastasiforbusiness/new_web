@@ -110,6 +110,11 @@ export default function Footer() {
                 How it works &amp; FAQ
               </Link>
             </li>
+            <li>
+              <Link href="/corporate" className="transition-colors hover:text-ivory">
+                Corporate &amp; business
+              </Link>
+            </li>
           </ul>
           <button
             onClick={() => openReserve()}

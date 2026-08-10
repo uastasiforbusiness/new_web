@@ -101,14 +101,7 @@ description: 'One private itinerary across land and sea — a Ferrari along the 
 
 ## FASE 3 — Ajustes de posicionamiento (eliminar ruido B2B en canal leisure) — *Semana 2*
 
-### T3.1 Services page — separar B2B (`src/app/services/page.tsx` + `src/components/ServiceBands.tsx`)
-**Problema**: *"VAT invoicing"*, *"Board-grade logistics"*, *"baptisms, communions, confirmations"* conviven con bodas/propuestas de lujo US.
-**Solución**: Crear sub-página `/services/corporate` (o `/corporate`) y mover ahí:
-- Corporate & Business service completo
-- VAT invoicing, fleet coordination 40 guests, NDA-grade
-**En `/services` (leisure)**: solo Weddings + Social Events, copy refinada para US (baptisms/communions → "milestone celebrations: birthdays, anniversaries, religious ceremonies").
-
-### T3.2 Carrusel item 4 (Corporate) — ya corregido en T1.1 (quitado "VAT invoicing" del body leisure).
+> **Estado 2026-08-10**: ✅ HECHO. `/services` es leisure (Weddings + Social Events con cross-link); `/corporate` nuevo (Corporate & Business con VAT invoicing, NDA, 40 guests); `Service` en `data.ts` etiquetado con `audience`; sitemap corregido (se eliminó `/yacht` inexistente, se añadieron rutas reales + /corporate).
 
 ---
 

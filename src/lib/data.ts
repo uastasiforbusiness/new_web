@@ -280,6 +280,8 @@ export type Service = {
   description: string;
   image: string;
   features: string[];
+  /** Which audience this service is sold to — separates leisure (US luxury) from B2B. */
+  audience: "leisure" | "corporate";
 };
 
 export const SERVICES: Service[] = [
@@ -288,6 +290,7 @@ export const SERVICES: Service[] = [
     name: "Weddings",
     description: "Uniformed chauffeurs, ribbon-styled cars, and timing rehearsed to the minute.",
     image: "https://images.pexels.com/photos/32632277/pexels-photo-32632277.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    audience: "leisure",
     features: ["Dedicated wedding coordinator", "Floral & ribbon styling", "Guest shuttles", "Photo-time built into the route"],
   },
   {
@@ -295,6 +298,7 @@ export const SERVICES: Service[] = [
     name: "Corporate & Business",
     description: "Board-grade logistics for retreats, launches and visiting delegations.",
     image: "https://images.pexels.com/photos/13741320/pexels-photo-13741320.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    audience: "corporate",
     features: ["Airport & station meet-and-greet", "Fleet coordination up to 40 guests", "NDA-grade discretion", "VAT invoicing"],
   },
   {
@@ -302,6 +306,7 @@ export const SERVICES: Service[] = [
     name: "Social Events",
     description: "Anniversaries, proposals, birthdays on deck — styled to the last sparkler.",
     image: "https://images.pexels.com/photos/17041994/pexels-photo-17041994.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    audience: "leisure",
     features: ["Proposal & celebration set-ups", "Yacht dinner partnerships", "Photographer on request", "Late-return flexibility"],
   },
 ];

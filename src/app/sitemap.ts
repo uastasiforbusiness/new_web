@@ -3,7 +3,7 @@ import { SITE } from "@/lib/seo";
 
 /**
  * Dynamic sitemap.xml — Next.js lo sirve automáticamente en /sitemap.xml
- * URLs reales que existen como rutas Next.js.
+ * Solo rutas reales que existen como rutas Next.js.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/yacht`,
+      url: `${baseUrl}/experiences`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
@@ -32,6 +32,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/corporate`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/trust`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
     },
     {
       url: `${baseUrl}/about`,
