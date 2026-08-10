@@ -7,7 +7,7 @@ export const BRAND = "B LEADER";
 export const TAGLINE = "Luxury in motion — Salento, Italy";
 
 export const CONTACT = {
-  email: "bookings@bleaderitaly.com",
+  email: "info@bleaderitaly.com",
 } as const;
 
 export const WHATSAPP_NUMBER =
