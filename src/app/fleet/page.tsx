@@ -6,7 +6,7 @@ import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
   title: "The Fleet — Ferrari, Maserati & Mercedes",
-  description: "Ferrari California T, Ferrari California, Maserati Ghibli and Mercedes E 220d Cabrio — supercar hire in Salento.",
+  description: "Ferrari California T, Ferrari California, Maserati Ghibli and Mercedes E 220d Cabrio — supercar experiences in Salento.",
   path: "/fleet",
 });
 

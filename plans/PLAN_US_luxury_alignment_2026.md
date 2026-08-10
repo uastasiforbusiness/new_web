@@ -5,6 +5,8 @@
 
 ## Principios rectores (del research)
 
+0. **Modelo de negocio confirmado por el cliente (2026-08-10)**: *pura experiencia* — NO se alquilan coches sueltos; los vehículos se venden dentro de experiencias completas (tours con conductor/itinerario). El optgroup "The supercar fleet" se eliminó del dropdown de reserva deliberadamente. Claims de About confirmadas: capitanes con licencia MASTER italiana y base en Porto Gaio.
+
 1. **Quiet luxury register**: "say less, mean more" — especificidad > superlativos; invitaciones, no anuncios.
 2. **Trust hierarchy**: Tier-1 (prensa prestigiosa, certificaciones) → Tier-2 (reseñas verificadas) → Tier-3 (señales de seguridad, concierge visible).
 3. **Experiencia sobre posesión**: verb-led, sensorial, concreto; zero clichés traducidos.
@@ -106,6 +108,8 @@ description: 'One private itinerary across land and sea — a Ferrari along the 
 ---
 
 ## FASE 4 — Enriquecimiento narrativo (alineación Virtuoso 5 tendencias) — *Semana 2-3*
+
+> **Estado 2026-08-10**: ✅ HECHO. Framing slow/wellness/crowd-avoidance añadido a `data.ts` sobre servicios existentes (sin inventar): "Paced for slow mornings", "Quiet anchorages, no beach clubs", "Shoulder-season advantage: April–June & September–October" en las 3 experiencias land y 2 sea. T4.3 (culture catalyst: ópera privada, acceso after-hours) **descartado** — requiere servicios que aún no se ofrecen; no se fabrican.
 
 ### T4.1 Wellness / Slow travel — micro-copy en experiencias marinas
 **Archivos**: `src/lib/data.ts` (EXPERIENCES sea items), `src/components/YachtPackages.tsx`, `src/components/YachtIncluded.tsx`.
