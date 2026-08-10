@@ -156,6 +156,8 @@ Añadir: `"luxury travel advisor Salento"`, `"Virtuoso preferred partner Puglia"
 
 ## FASE 6 — QA visual + verificación copia — *Semana 3-4*
 
+> **Estado 2026-08-10**: ✅ Casi hecha. **Hallazgo crítico corregido**: la homepage (HomeClient) solo renderizaba su contenido en cliente tras el LoadingScreen — Google no indexaba nada de la home (secciones ni testimonios). Refactor a **SSR completo**: el contenido se pinta en servidor/estático; el loading quedó como overlay cliente no-bloqueante (`mounted && !loaded`, con `requestAnimationFrame` para evitar setState síncrono). Verificado: el prerender de la home ahora incluye fleet/yacht/concierge/testimonios. Limpieza extra: eliminado componente muerto `premium-experiences-section` (corría copy de baja calidad sin importadores); corregido 'favourite'→'favorite' en data.ts. `cf:preview` bloqueado en Windows por EPERM en `.open-next` (dev server en :3001 con OCR/Antivirus sosteniendo el dir) — se valida por build estático + dev server en su lugar.
+
 ### T6.1 Auditar US English consistency
 **Buscar**: `grep -r "optimise\|colour\|favourite\|programme\|behaviour\|analyse\|realise\|localise\|personalised" src/` → pasar a US (`optimize, color, favorite, program, behavior, analyze, realize, localize, personalized`).
 **Excepción**: "chauffeur" (standard), "aperitivo" (seasoning deliberado).

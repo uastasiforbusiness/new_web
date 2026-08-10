@@ -28,8 +28,17 @@ const prefersReducedMotion =
     : false;
 
 export function HomeClient() {
+  // Content is rendered on the server (crawlable). The loading screen is a
+  // client-only cosmetic overlay that never blocks the content from indexing.
   const [loaded, setLoaded] = useState(false);
-  const [heroReady, setHeroReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Runs post-hydration only; marks the client as mounted so the loading
+    // overlay can appear without blocking server-rendered content.
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     if (!loaded) return;
@@ -47,16 +56,11 @@ export function HomeClient() {
 
   const handleComplete = () => {
     setLoaded(true);
-    setHeroReady(true);
   };
 
   const exitTransition: Transition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const };
-
-  const heroTransition: Transition = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] as const };
 
   /*
     Teaser-first homepage for the US luxury traveler.
@@ -74,65 +78,60 @@ export function HomeClient() {
   */
   return (
     <>
-      <AnimatePresence>
-        {!loaded && (
+      {/* Client-only loading overlay — never blocks content from SSR/indexing */}
+      {mounted && !loaded && (
+        <AnimatePresence>
           <motion.div
             key="loading"
+            className="fixed inset-0 z-[100]"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={exitTransition}
           >
             <LoadingScreen onComplete={handleComplete} />
           </motion.div>
-        )}
-      </AnimatePresence>
-      {heroReady && (
-        <motion.div
-          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={heroTransition}
-        >
-          {/* 01 — The arrival */}
-          <SectionReveal accentLine>
-            <HeroScaleDown />
-          </SectionReveal>
-
-          {/* Divider — the fleet in motion */}
-          <SectionReveal>
-            <Marquee />
-          </SectionReveal>
-
-          {/* 02 — The world we move in */}
-          <SectionReveal>
-            <CarouselSection />
-          </SectionReveal>
-
-          {/* 03 — The journeys (teaser) */}
-          <SectionReveal>
-            <SignatureJourneys />
-          </SectionReveal>
-
-          {/* 04 — The fleet (teaser) */}
-          <SectionReveal accentLine>
-            <FleetStrip />
-          </SectionReveal>
-
-          {/* 05 — The sea */}
-          <SectionReveal>
-            <YachtSection />
-          </SectionReveal>
-
-          {/* Guest voices — renders when testimonials exist */}
-          <SectionReveal>
-            <Testimonials />
-          </SectionReveal>
-
-          {/* 06 — The concierge */}
-          <SectionReveal>
-            <CTASection />
-          </SectionReveal>
-        </motion.div>
+        </AnimatePresence>
       )}
+
+      {/* 01 — The arrival */}
+      <SectionReveal accentLine>
+        <HeroScaleDown />
+      </SectionReveal>
+
+      {/* Divider — the fleet in motion */}
+      <SectionReveal>
+        <Marquee />
+      </SectionReveal>
+
+      {/* 02 — The world we move in */}
+      <SectionReveal>
+        <CarouselSection />
+      </SectionReveal>
+
+      {/* 03 — The journeys (teaser) */}
+      <SectionReveal>
+        <SignatureJourneys />
+      </SectionReveal>
+
+      {/* 04 — The fleet (teaser) */}
+      <SectionReveal accentLine>
+        <FleetStrip />
+      </SectionReveal>
+
+      {/* 05 — The sea */}
+      <SectionReveal>
+        <YachtSection />
+      </SectionReveal>
+
+      {/* Guest voices — renders when testimonials exist */}
+      <SectionReveal>
+        <Testimonials />
+      </SectionReveal>
+
+      {/* 06 — The concierge */}
+      <SectionReveal>
+        <CTASection />
+      </SectionReveal>
     </>
   );
 }

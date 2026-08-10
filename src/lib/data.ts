@@ -81,7 +81,7 @@ export const CARS: Car[] = [
       { label: "0–100 km/h", value: "6.3 s" },
       { label: "Top speed", value: "250 km/h" },
     ],
-    heroNote: "The chauffeur favourite. Discreet outside, symphonic inside.",
+    heroNote: "The chauffeur favorite. Discreet outside, symphonic inside.",
   },
   {
     slug: "mercedes-e-cabrio",
