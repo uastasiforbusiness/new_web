@@ -4,4 +4,4 @@ memory:
   autolearn: 
     enabled: true
 modelRoles: 
-  default: opencode-zen/deepseek-v4-flash-free
+  default: deepseek/deepseek-v4-flash
