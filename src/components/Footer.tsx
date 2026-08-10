@@ -59,22 +59,6 @@ export default function Footer() {
             Supercars, a flybridge yacht and chauffeured services across Salento.
             One concierge, one standard: impeccable.
           </p>
-          <div className="mt-8 flex items-center gap-3">
-            {[
-              { mark: "IG", label: "Instagram" },
-              { mark: "FB", label: "Facebook" },
-              { mark: "YT", label: "YouTube" },
-            ].map(({ mark, label }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-line font-display text-[10px] font-medium tracking-[0.18em] text-sand transition-all duration-300 hover:border-gold/60 hover:text-gold"
-              >
-                {mark}
-              </a>
-            ))}
-          </div>
         </div>
 
         <div className="md:col-span-2">
@@ -146,11 +130,11 @@ export default function Footer() {
             <Image
               src="/uastasi-logo-gold.png"
               alt=""
-              className="h-4 w-auto"
+              className="h-7 w-auto"
               width={140}
               height={96}
             />
-            <span className="text-[10px] uppercase tracking-[0.25em] text-sand">
+            <span className="text-xs uppercase tracking-[0.25em] text-sand">
               UastasiProject
             </span>
           </a>
