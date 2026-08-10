@@ -133,7 +133,7 @@ export default function Footer() {
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-3 px-5 py-6 text-[11px] tracking-[0.18em] text-sand md:flex-row md:px-10">
           <p>© {new Date().getFullYear()} B LEADER S.r.l. — P.IVA 04812390756</p>
-          <p className="text-center">Taviano, Salento · Puglia · Italia</p>
+          <p className="text-center">Carmiano, Salento · Puglia · Italia</p>
           <p className="italic text-gold">Designed for the few.</p>
         </div>
       </div>

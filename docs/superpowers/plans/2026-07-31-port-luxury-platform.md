@@ -47,7 +47,7 @@ export const NAV_LINKS = [
 ] as const;
 ```
 
-Keep all other exports identical to the reference (`BRAND`, `TAGLINE`, `CONTACT`, `WHATSAPP_NUMBER`, `whatsappUrl`, `SITE_URL`). Verify the `CONTACT` values match `src/lib/seo.ts` `CONTACT` (phone `+39 351 666 7788`, email `info@bleaderitaly.com`, address `Piazza Castello 1, 73057 Taviano (LE), Salento · Italy`).
+Keep all other exports identical to the reference (`BRAND`, `TAGLINE`, `CONTACT`, `WHATSAPP_NUMBER`, `whatsappUrl`, `SITE_URL`). Verify the `CONTACT` values match `src/lib/seo.ts` `CONTACT` (phone `+39 351 666 7788`, email `info@bleaderitaly.com`, address `Piazza Castello 1, 73057 Carmiano (LE), Salento · Italy`).
 
 - [ ] **Step 2: Verify typecheck**
 
