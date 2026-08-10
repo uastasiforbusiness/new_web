@@ -32,8 +32,8 @@ export default function Testimonials() {
           </div>
           <Reveal delay={0.16}>
             <p className="max-w-xs text-right text-sm leading-7 text-mute">
-              Real voices from Salento — shared with permission, lightly edited for
-              length alone.
+              Real voices from Salento — shared with each guest&apos;s permission,
+              lightly edited for length and tone.
             </p>
           </Reveal>
         </div>

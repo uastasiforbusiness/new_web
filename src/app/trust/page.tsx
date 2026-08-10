@@ -50,6 +50,21 @@ const TRUST_POINTS = [
   },
 ];
 
+const BOOKING_TERMS = [
+  {
+    title: "The reservation amount",
+    body: "No payments are taken online. During your conversation, the concierge agrees a small reservation amount to hold the date — nothing is charged through the website.",
+  },
+  {
+    title: "Cancellation",
+    body: "That reservation amount is the only thing at risk: it is retained only if you cancel. Changing the hour or the day is always free.",
+  },
+  {
+    title: "Where we meet",
+    body: "The yacht is kept in Porto Gaio, Gallipoli. For boat and car experiences we agree a pickup point that is convenient for everyone — airports, stations and hotels included.",
+  },
+];
+
 const FAQS: { q: string; a: string }[] = [
   {
     q: "How do I reserve?",
@@ -61,7 +76,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Where do departures start?",
-    a: "Yacht departures are from Porto Gaio, Gallipoli. Car experiences start from Porto Gaio too, with pickup points agreed at booking; airport and station transfers can be arranged.",
+    a: "The yacht is kept in Porto Gaio, Gallipoli. For boat and car experiences we agree a pickup point that is convenient for everyone — airports, stations and hotels can be arranged at booking.",
+  },
+  {
+    q: "Can I cancel or reschedule?",
+    a: "A small reservation amount is agreed during your conversation. That amount is retained only if you cancel; changing the hour or the day is always free.",
   },
   {
     q: "Can I combine land and sea in one day?",
@@ -163,6 +182,35 @@ export default function TrustPage() {
                     <h3 className="font-serif text-2xl font-light text-ivory">{p.title}</h3>
                     <p className="mt-3 max-w-md text-sm leading-7 text-sand">{p.body}</p>
                   </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Booking terms ────────────────────────────────────────────── */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-[1600px] px-5 py-20 md:px-10 md:py-28">
+          <Reveal>
+            <p className="flex items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-gold md:text-[11px]">
+              <span className="h-px w-12 bg-gold/70" /> The fine print, in plain words
+            </p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h2 className="mt-5 font-serif text-4xl font-light text-ivory md:text-5xl">
+              Simple terms, <em className="text-gold-light">no surprises</em>
+            </h2>
+          </Reveal>
+          <div className="mt-14 grid gap-x-12 gap-y-10 md:grid-cols-3">
+            {BOOKING_TERMS.map((t, i) => (
+              <Reveal key={t.title} y={30} delay={i * 0.08}>
+                <div>
+                  <span className="font-display text-4xl font-bold text-outline-gold">
+                    0{i + 1}
+                  </span>
+                  <h3 className="mt-5 font-serif text-2xl font-light text-ivory">{t.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-sand">{t.body}</p>
                 </div>
               </Reveal>
             ))}

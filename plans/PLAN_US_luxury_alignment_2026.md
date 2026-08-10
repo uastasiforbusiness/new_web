@@ -78,7 +78,7 @@ description: 'One private itinerary across land and sea — a Ferrari along the 
 
 ## FASE 2 — Infraestructura de confianza (decisiva para conversión US) — *Semana 1-2*
 
-> **Estado 2026-08-10**: T2.1 ✅ (iconos eliminados — decisión del cliente: sin cuentas reales, mejor sin iconos); T2.2 ✅ (componente + data listos, esperando citas reales); T2.4 ✅ (página /trust en vivo, contenido verificado del repo); T2.3 ⏳ bloqueada hasta tener cobertura de prensa real.
+> **Estado 2026-08-10**: T2.1 ✅ (iconos eliminados); T2.2 ✅ (3 testimonios reales de Google, con permiso, en `src/lib/testimonials.ts`); T2.4 ✅ (página /trust en vivo, incl. política de reserva/cancelación y punto de encuentro); T2.3 ⏳ bloqueada hasta tener cobertura de prensa real.
 
 ### T2.1 Footer — iconos sociales ✅ HECHO
 **Acción ejecutada**: eliminados los iconos IG/FB/YT que apuntaban a `href="#"` (`src/components/Footer.tsx`). Re-añadir cuando existan cuentas reales activas.
