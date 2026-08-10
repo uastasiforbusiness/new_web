@@ -132,6 +132,17 @@ description: 'One private itinerary across land and sea — a Ferrari along the 
 
 ## FASE 5 — SEO / Metadata / Advisor-friendly — *Semana 3*
 
+> **Estado 2026-08-10**: ✅ HECHO. Keywords advisor-facing en `seo.ts`; landing `/advisors` en vivo (net rates on request, 24h quotes, advisor-only channel); metadata de `/experiences` enriquecido (nombres + precios). OG por experiencia individual descartado (no hay rutas `[slug]`; las experiencias viven en `/experiences` con anclas) — se compensa con metadata de colección + OpenGraph global dinámico.
+
+### T5.1 `src/lib/seo.ts` — ampliar keywords advisor-facing ✅
+Añadidas: "luxury travel advisor Salento", "travel advisor commission Puglia experiences", "chauffeur service for travel advisors Italy", "private yacht charter for travel advisors".
+
+### T5.2 Página `/advisors` (landing para travel advisors) ✅ HECHO
+`src/app/advisors/page.tsx` — net rates on request (confidencial), 24h quote turnaround, one point of contact, advisor-only WhatsApp channel, catálogo vendible, CTA rate sheet. Enlazada desde Footer.
+
+### T5.3 OpenGraph / Twitter cards por experiencia ⚠️ ADAPTADO
+No hay páginas `[slug]` por experiencia (se renderizan en `/experiences` con anclas `#slug`). En su lugar: metadata de `/experiences` ahora lista nombres concretos + rango de precios; el OG global dinámico (`opengraph-image.tsx`) ya aplica a toda la colección. Si más adelante se crean páginas individuales, cada una llevará su propio `buildPageMeta` + `og:image`.
+
 ### T5.1 `src/lib/seo.ts` — ampliar keywords advisor-facing
 Añadir: `"luxury travel advisor Salento"`, `"Virtuoso preferred partner Puglia"`, `"travel agent commission Italy experiences"`, `"concierge service Puglia for travel advisors"`.
 

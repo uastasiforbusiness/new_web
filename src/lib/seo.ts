@@ -33,6 +33,10 @@ export const SITE = {
     "yacht dinner experience Adriatic",
     "Salento luxury travel curator",
     "Ferrari California tour Italy",
+    "luxury travel advisor Salento",
+    "travel advisor commission Puglia experiences",
+    "chauffeur service for travel advisors Italy",
+    "private yacht charter for travel advisors",
   ],
   /** Default OG image — generado dinámicamente por app/opengraph-image.tsx */
   ogImage: "/opengraph-image",

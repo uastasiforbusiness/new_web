@@ -6,7 +6,8 @@ import { buildPageMeta } from "@/lib/seo";
 
 export const metadata = buildPageMeta({
   title: "Experiences — Editorial Days in Salento",
-  description: "Curated experiences by B LEADER: supercar tours, flybridge yacht charters and sunset rituals across land and sea.",
+  description:
+    "Seven curated experiences by B LEADER: Ferrari Grand Tour, Supercar & Pasta Day, The Ultimate Day, and Cranchi Atlantique 50 charters — private, licensed, and paced for the slow season. From €600.",
   path: "/experiences",
 });
 

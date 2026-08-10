@@ -115,6 +115,11 @@ export default function Footer() {
                 Corporate &amp; business
               </Link>
             </li>
+            <li>
+              <Link href="/advisors" className="transition-colors hover:text-ivory">
+                For travel advisors
+              </Link>
+            </li>
           </ul>
           <button
             onClick={() => openReserve()}
