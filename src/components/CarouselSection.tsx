@@ -22,14 +22,12 @@ const MotionLink = motion.create(Link);
 
 interface CardData {
   id: number;
-  badge?: string;
   label: string;
   title: string;
-  subtitle?: string;
-  body?: string;
-  image?: string;
+  mood: string;
+  image: string;
   /** CSS object-position so each collage's focal point centers in the frame */
-  focus?: string;
+  focus: string;
   href: string;
   cta: string;
 }
@@ -37,34 +35,51 @@ interface CardData {
 const CAROUSEL_ITEMS: CardData[] = [
   {
     id: 1,
-    badge: "PREMIUM",
-    label: "⚓ Yacht charter",
-    title: "Nautical experiences",
-    body: "Sail the crystal-clear waters of the Salento coast aboard our luxury yachts. Exclusive departures from Porto Gaio, Gallipoli — with routes to the wonders of Punta della Suina, Porto Cesareo, Santa Maria di Leuca, and the evocative shores of Greece.\n\nChoose your experience: half-day cruise, full day, sunset, or overnight on board — always with a professional skipper at your service.",
+    label: "The fleet",
+    title: "Machines with an accent",
+    mood: "Your pulse rises before the key even turns.",
+    image: "/images/card1_collage.webp",
+    focus: "center 70%",
+    href: "/fleet",
+    cta: "Meet the fleet",
+  },
+  {
+    id: 2,
+    label: "By sea",
+    title: "Sunset off Gallipoli",
+    mood: "The moment the sun touches the water, everything else goes quiet.",
+    image: "/images/card2_collage.webp",
+    focus: "center 55%",
     href: "/experiences",
     cta: "Explore the sea",
   },
   {
-    id: 2,
-    label: "Card 2",
-    title: "Pending content",
-    body: "Waiting for your copy.",
-    href: "/services",
-    cta: "Discover",
-  },
-  {
     id: 3,
-    label: "Card 3",
-    title: "Pending content",
-    body: "Waiting for your copy.",
+    label: "On land",
+    title: "Let someone else drive",
+    mood: "The whole coast unfolds in front of you — no map, no decisions, just the view.",
+    image: "/images/card3_collage.webp",
+    focus: "center 48%",
     href: "/services",
-    cta: "Discover",
+    cta: "Chauffeured days",
   },
   {
     id: 4,
-    label: "Card 4",
-    title: "Pending content",
-    body: "Waiting for your copy.",
+    label: "Private occasions",
+    title: "A proposal on the bow",
+    mood: "The moment they say yes — and the one after, when you remember why you planned it.",
+    image: "/images/card4_collage.webp",
+    focus: "center 55%",
+    href: "/services",
+    cta: "Plan an occasion",
+  },
+  {
+    id: 5,
+    label: "Your concierge",
+    title: "One message away",
+    mood: "You never have to figure it out alone. Someone already has.",
+    image: "/images/card5_collage.webp",
+    focus: "center 40%",
     href: "/contact",
     cta: "Say hello",
   },
@@ -114,6 +129,24 @@ export default function CarouselSection() {
       onMouseLeave={() => setHovering(false)}
       className="relative flex min-h-[auto] w-full flex-col items-center justify-center overflow-hidden px-4 py-16 md:min-h-screen md:py-24"
     >
+      {/* Calm, near-black backdrop so the cards float */}
+      <img
+        src="/back_cards_whells.jpeg"
+        alt=""
+        draggable={false}
+        aria-hidden
+        className="absolute inset-0 z-0 h-full w-full object-cover opacity-60"
+      />
+      <div className="absolute inset-0 z-0 bg-[#0a0908]/82" />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 45%, rgba(201,169,110,0.06) 0%, transparent 55%)",
+        }}
+      />
+
       {/* Header */}
       <div className="relative z-20 mx-auto w-full max-w-5xl pb-10 pt-6 md:pb-14">
         <div className="flex flex-col items-center text-center">
@@ -198,52 +231,41 @@ export default function CarouselSection() {
               style={{ transformStyle: "preserve-3d" }}
               whileHover={isActive ? { y: "-52%" } : undefined}
             >
-              {/* Card art — black panel, gold hairline */}
-              <div className="absolute inset-0 bg-[#0a0a0a]" />
+              {/* Card art */}
+              <img
+                src={card.image}
+                alt={card.title}
+                draggable={false}
+                className="absolute inset-[-4%] h-[108%] w-[108%] object-cover"
+                style={{ objectPosition: card.focus }}
+              />
+              {/* Reading gradient — guaranteed contrast for the copy */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908]/97 via-[#0a0908]/35 to-[#0a0908]/10" />
               <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
 
               {/* Gold hairline on top edge */}
               <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
 
               {/* Copy — consistent layout on every card */}
-              <div className="absolute inset-0 flex flex-col items-start justify-between overflow-y-auto p-6 pb-7 md:p-10">
+              <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-6 pb-7 md:p-10">
                 <div className="flex w-full items-center justify-between">
-                  <div className="flex flex-col gap-1.5">
-                    {card.badge && (
-                      <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.45em] text-gold">
-                        {card.badge}
-                      </span>
-                    )}
-                    <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.4em] text-ivory/80">
-                      {card.label}
-                    </span>
-                  </div>
+                  <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.4em] text-gold">
+                    {String(i + 1).padStart(2, "0")} · {card.label}
+                  </span>
                   {isActive && (
-                    <span className="flex shrink-0 items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-gold/90">
+                    <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-gold/90">
                       {card.cta}
                       <ChevronRight size={12} />
                     </span>
                   )}
                 </div>
-
-                <div className="flex w-full flex-col">
-                  <h3 className="font-serif text-[25px] font-light leading-[1.08] text-ivory md:text-[34px]">
-                    {card.title}
-                  </h3>
-                  {card.subtitle && (
-                    <p className="mt-1 font-sans text-[12px] uppercase tracking-[0.28em] text-gold/90 md:text-[13px]">
-                      {card.subtitle}
-                    </p>
-                  )}
-                  <div className="mt-4 h-px w-10 bg-gold/60" />
-                  {card.body && (
-                    <div className="mt-3 max-w-[340px] space-y-3 font-sans text-[12.5px] leading-relaxed text-ivory/75 md:text-[13.5px]">
-                      {card.body.split("\n\n").map((paragraph, pi) => (
-                        <p key={pi}>{paragraph}</p>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <h3 className="mt-3 font-serif text-[25px] font-light leading-[1.08] text-ivory md:mt-4 md:text-[32px]">
+                  {card.title}
+                </h3>
+                <div className="mt-4 h-px w-10 bg-gold/60" />
+                <p className="mt-3 max-w-[340px] font-sans text-[12.5px] leading-relaxed text-ivory/75 md:text-[13.5px]">
+                  {card.mood}
+                </p>
               </div>
             </MotionLink>
           );
