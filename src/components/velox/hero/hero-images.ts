@@ -9,7 +9,7 @@ export interface HeroImageSlide {
 
 export const HERO_SLIDES: HeroImageSlide[] = [
   {
-    src: '/hero-video.mp4',
+    src: '/images/hero-frames/frame_0001.webp',
     alt: 'B LEADER — Private luxury driving and yacht experiences in Salento, Puglia',
     headline: 'PUGLIA\u2019S SALENTO,',
     subtitle: 'FROM THE DRIVER\u2019S SEAT.',
