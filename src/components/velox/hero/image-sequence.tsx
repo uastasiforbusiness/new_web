@@ -1,44 +1,77 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import Image from 'next/image';
+import { useRef, useEffect, useState } from 'react';
 import { HERO_SLIDES, type HeroImageSlide } from './hero-images';
 import { TextReel } from './text-reel';
 
 export function ImageSequence() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const current: HeroImageSlide = HERO_SLIDES[0];
 
   useEffect(() => {
+    const connection = (
+      navigator as Navigator & {
+        connection?: { effectiveType?: string; saveData?: boolean };
+      }
+    ).connection;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const slowConnection = ['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
+
+    if (prefersReducedMotion || connection?.saveData || slowConnection) return;
+
+    // Render the poster first. Deferring motion by a moment protects the LCP
+    // while preserving the cinematic hero for capable connections.
+    const timer = window.setTimeout(() => setShouldLoadVideo(true), 250);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadVideo) return;
     const video = videoRef.current;
     if (!video) return;
 
-    // Ensure the video plays (autoplay may be blocked without user gesture on some browsers)
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        // Autoplay prevented — the video will wait for interaction or muted autoplay policy
+        // Muted autoplay can still be blocked by a browser policy.
       });
     }
 
     return () => {
       video.pause();
     };
-  }, []);
+  }, [shouldLoadVideo]);
 
   return (
     <>
-      {/* Video background */}
-      <video
-        ref={videoRef}
-        src="/hero-video.mp4"
-        className="absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        disablePictureInPicture
-        controls={false}
+      {/* The optimized poster is the LCP image; motion upgrades after first paint. */}
+      <Image
+        src="/images/hero-video-poster.webp"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
       />
+
+      {shouldLoadVideo && (
+        <video
+          ref={videoRef}
+          src="/hero-video.mp4"
+          poster="/images/hero-video-poster.webp"
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          disablePictureInPicture
+          controls={false}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Fixed overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/15 pointer-events-none" />

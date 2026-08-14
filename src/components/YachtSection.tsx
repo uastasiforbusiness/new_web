@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -83,11 +84,13 @@ export default function YachtSection() {
         {/* Sticky imagery */}
         <div className="relative min-h-[55vh] overflow-hidden lg:min-h-screen">
           <div ref={imgWrapRef} className="absolute inset-[-10%_0]">
-            <img
+            <Image
               ref={imgRef}
               src={YACHT.image}
               alt="Cranchi Atlantique 50 underway on the Ionian sea"
-              className="img-cine h-full w-full scale-[1.22] object-cover"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="img-cine scale-[1.22] object-cover"
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-r from-ink/20 via-transparent to-ink/60" />

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { ArrowRight, ArrowUpRight, Clock } from "lucide-react";
 import { EXPERIENCES, type Experience } from "@/lib/data";
@@ -51,12 +52,13 @@ export default function ExperienceList() {
               </span>
             </Reveal>
             <Reveal y={56} className={i % 2 === 1 ? "md:col-span-5 md:order-3" : "md:col-span-5"}>
-              <div className="group aspect-[4/3] overflow-hidden">
-                <img
+              <div className="group relative aspect-[4/3] overflow-hidden">
+                <Image
                   src={exp.image}
                   alt={exp.name}
-                  loading="lazy"
-                  className={`img-cine img-hover-zoom h-full w-full object-cover ${exp.imagePosition ?? ""}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                  className={`img-cine img-hover-zoom object-cover ${exp.imagePosition ?? ""}`}
                 />
               </div>
             </Reveal>

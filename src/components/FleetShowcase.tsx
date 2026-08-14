@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -199,11 +200,12 @@ function CarChapter({
           className={`relative min-h-[50vh] overflow-hidden lg:col-span-7 lg:min-h-[80svh] ${imgOrder}`}
         >
           <div ref={imgRef} className="absolute inset-0 h-[108%] w-full">
-            <img
+            <Image
               src={chapter.image}
               alt={chapter.name}
-              loading="lazy"
-              className="h-full w-full object-cover fleet-image"
+              fill
+              sizes="(max-width: 1024px) 100vw, 58vw"
+              className="object-cover fleet-image"
             />
           </div>
           <div
@@ -263,11 +265,12 @@ function YachtChapter() {
       {/* Hero band */}
       <div className="relative min-h-[50vh] overflow-hidden lg:min-h-[72svh]">
           <div ref={heroImgRef} className="absolute inset-0 h-[106%] w-full">
-            <img
+            <Image
               src={YACHT.image}
               alt={YACHT.name}
-              loading="lazy"
-              className="h-full w-full object-cover fleet-image"
+              fill
+              sizes="100vw"
+              className="object-cover fleet-image"
             />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent" />
