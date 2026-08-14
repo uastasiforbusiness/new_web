@@ -9,7 +9,7 @@ afterAll(() => {
   vi.unstubAllEnvs();
 });
 
-const { limit, limitChat } = await import("../rate-limit");
+const { limit, limitChat, isRateLimitConfigured } = await import("../rate-limit");
 
 describe("in-memory rate limiter fallback", () => {
   it("reserve limiter allows 5 requests per 60s per IP", async () => {
@@ -40,6 +40,17 @@ describe("in-memory rate limiter fallback", () => {
       await expect(limit("203.0.113.14")).resolves.toEqual({ success: true });
     } finally {
       vi.useRealTimers();
+    }
+  });
+
+  it("fails closed in production when distributed Redis is not configured", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    try {
+      expect(isRateLimitConfigured()).toBe(false);
+      await expect(limit("203.0.113.15")).resolves.toEqual({ success: false });
+      await expect(limitChat("203.0.113.16")).resolves.toEqual({ success: false });
+    } finally {
+      vi.stubEnv("NODE_ENV", "test");
     }
   });
 });
