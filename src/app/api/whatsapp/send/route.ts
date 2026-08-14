@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { db } from '@/lib/db';
 import { normalizePhone, sendFirstContact, sendTextMessage } from '@/lib/whatsapp';
 import { checkOrigin } from '@/lib/csrf';
-import { limitChat } from '@/lib/rate-limit';
+import { isRateLimitConfigured, limitChat } from '@/lib/rate-limit';
 import { getClientIp } from '@/lib/client-ip';
 
 // Node runtime required for crypto HMAC + stable WhatsApp Graph fetch
@@ -32,6 +32,14 @@ export async function POST(request: Request) {
   }
 
   // ─── Rate limiting (bounded chat traffic per IP) ───────────────────────
+  if (process.env.NODE_ENV === 'production' && !isRateLimitConfigured()) {
+    console.error('[rate-limit] WhatsApp endpoint unavailable: distributed Redis is not configured');
+    return NextResponse.json(
+      { error: 'Service temporarily unavailable. Please try again shortly.' },
+      { status: 503 }
+    );
+  }
+
   const ip = getClientIp(request);
   const { success } = await limitChat(ip);
   if (!success) {

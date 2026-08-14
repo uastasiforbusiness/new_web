@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { limit } from "@/lib/rate-limit";
+import { isRateLimitConfigured, limit } from "@/lib/rate-limit";
 import { sendReservationEmails } from "@/lib/email";
 import { checkOrigin } from "@/lib/csrf";
 import { getClientIp } from "@/lib/client-ip";
@@ -59,6 +59,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: originCheck.error },
         { status: 403 }
+      );
+    }
+
+    if (process.env.NODE_ENV === "production" && !isRateLimitConfigured()) {
+      console.error("[rate-limit] Reservation endpoint unavailable: distributed Redis is not configured");
+      return NextResponse.json(
+        { error: "Service temporarily unavailable. Please try again shortly." },
+        { status: 503 }
       );
     }
 

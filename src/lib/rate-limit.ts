@@ -2,13 +2,12 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 /**
- * Distributed rate limiters backed by Upstash Redis (memory fallback when Redis
- * is unavailable).
+ * Distributed rate limiters backed by Upstash Redis.
  *
- * Requires KV_REST_API_URL and KV_REST_API_TOKEN (or the Upstash-named
- * equivalents) to be set. When the env vars are absent (e.g. local dev without
- * KV), callers fall back to a permissive in-memory limiter — NOT suitable for
- * serverless production, but keeps local development functional.
+ * KV_REST_API_URL and KV_REST_API_TOKEN are mandatory in production. When they
+ * are absent in local development or tests, callers use an in-memory fallback.
+ * Requests fail closed in production because an in-memory counter is not
+ * reliable across serverless instances.
  */
 
 type LimiterKey = "reserve" | "chat";
@@ -38,6 +37,14 @@ const redis: Redis | null =
 
 const upstashLimiters = new Map<LimiterKey, Ratelimit>();
 
+export function isRateLimitConfigured(): boolean {
+  return redis !== null;
+}
+
+function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
+}
+
 function getUpstashLimiter(key: LimiterKey): Ratelimit | null {
   if (!redis) return null;
   let limiter = upstashLimiters.get(key);
@@ -55,9 +62,9 @@ function getUpstashLimiter(key: LimiterKey): Ratelimit | null {
 }
 
 /**
- * Lightweight in-memory fallback used in local dev when Redis is not
- * configured. Resets per server instance — NOT suitable for serverless
- * production (each Worker isolate gets its own counter).
+ * Lightweight in-memory fallback used only in local development and tests.
+ * It resets per process and must never protect public production endpoints
+ * running on multiple serverless instances.
  */
 const memoryMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -82,9 +89,19 @@ let warnedNoRedis = false;
 async function limitWith(key: LimiterKey, ip: string): Promise<{ success: boolean }> {
   const limiter = getUpstashLimiter(key);
   if (!limiter) {
+    if (isProduction()) {
+      if (!warnedNoRedis) {
+        warnedNoRedis = true;
+        console.error(
+          "[rate-limit] Redis is required in production. Rejecting public requests until KV_REST_API_URL and KV_REST_API_TOKEN are configured."
+        );
+      }
+      return { success: false };
+    }
+
     if (!warnedNoRedis) {
       warnedNoRedis = true;
-      console.warn("[rate-limit] Redis not configured — falling back to in-memory limiter");
+      console.warn("[rate-limit] Redis not configured — using in-memory limiter outside production");
     }
     return checkMemoryLimit(key, ip);
   }

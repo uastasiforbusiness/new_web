@@ -48,6 +48,20 @@ describe("POST /api/reserve", () => {
     expect(createMock).not.toHaveBeenCalled();
   });
 
+  it("returns 503 in production when distributed rate limiting is not configured", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    try {
+      const res = await post(VALID_BODY);
+      expect(res.status).toBe(503);
+      expect(await res.json()).toEqual({
+        error: "Service temporarily unavailable. Please try again shortly.",
+      });
+      expect(createMock).not.toHaveBeenCalled();
+    } finally {
+      vi.stubEnv("NODE_ENV", "test");
+    }
+  });
+
   it("rejects unparseable JSON with 400", async () => {
     const res = await post("{not json");
     expect(res.status).toBe(400);
