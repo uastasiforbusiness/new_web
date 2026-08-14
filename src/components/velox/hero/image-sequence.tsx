@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { HERO_SLIDES, type HeroImageSlide } from './hero-images';
 import { TextReel } from './text-reel';
 
-const FRAME_COUNT = 60;
+const FRAME_COUNT = 128;
 const FRAME_DURATION = 5_246;
 
 type ConnectionInfo = {
@@ -38,6 +38,9 @@ export function ImageSequence() {
     let startTime = 0;
     let viewWidth = 0;
     let viewHeight = 0;
+
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
 
     const frames: HTMLImageElement[] = [];
     const ready = new Array<boolean>(FRAME_COUNT).fill(false);
@@ -81,12 +84,10 @@ export function ImageSequence() {
       const elapsed = (now - startTime) % FRAME_DURATION;
       const position = (elapsed / FRAME_DURATION) * FRAME_COUNT;
       const currentIndex = Math.floor(position) % FRAME_COUNT;
-      const nextIndex = (currentIndex + 1) % FRAME_COUNT;
-      const mix = position - Math.floor(position);
-
       context.clearRect(0, 0, viewWidth, viewHeight);
+      // One source frame per original video frame preserves the film's motion
+      // and avoids the softened, ghosted look of crossfading at a low frame rate.
       if (ready[currentIndex]) drawCover(frames[currentIndex], 1);
-      if (ready[nextIndex]) drawCover(frames[nextIndex], mix * 0.5);
       context.globalAlpha = 1;
 
       animationFrame = window.requestAnimationFrame(render);
