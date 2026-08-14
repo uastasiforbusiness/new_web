@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion, type Transition } from 'framer-motion';
 import gsap from 'gsap';
@@ -9,13 +10,16 @@ import { LoadingScreen } from '@/components/velox/ui/loading-screen';
 import { HeroScaleDown } from '@/components/velox/sections/hero-scale-down';
 
 import Marquee from '@/components/Marquee';
-import CarouselSection from '@/components/CarouselSection';
-import SignatureJourneys from '@/components/SignatureJourneys';
-import FleetStrip from '@/components/FleetStrip';
-import YachtSection from '@/components/YachtSection';
-import Testimonials from '@/components/Testimonials';
-import CTASection from '@/components/CTASection';
 import SectionReveal from '@/components/SectionReveal';
+
+// Keep the hero path lean. The following sections are still server-rendered,
+// but their interactive code is delivered in separate chunks below the fold.
+const CarouselSection = dynamic(() => import('@/components/CarouselSection'));
+const SignatureJourneys = dynamic(() => import('@/components/SignatureJourneys'));
+const FleetStrip = dynamic(() => import('@/components/FleetStrip'));
+const YachtSection = dynamic(() => import('@/components/YachtSection'));
+const Testimonials = dynamic(() => import('@/components/Testimonials'));
+const CTASection = dynamic(() => import('@/components/CTASection'));
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);

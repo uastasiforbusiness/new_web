@@ -1,10 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
-import { WhatsAppPopup } from './whatsapp-popup';
 import { useChat } from './chat-context';
+
+const WhatsAppPopup = dynamic(
+  () => import('./whatsapp-popup').then((module) => module.WhatsAppPopup),
+  { ssr: false }
+);
 
 export function WhatsAppButton() {
   const btnRef = useRef<HTMLAnchorElement>(null);
