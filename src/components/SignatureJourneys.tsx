@@ -22,13 +22,13 @@ const FEATURED = [
   },
   {
     slug: EXPERIENCES.find((e) => e.slug === "salento-supercar-tour")?.slug ?? "salento-supercar-tour",
-    image: "/images/new_items/pasta_3.jpg",
+    image: "/images/visual-pass/home_pasta_editorial.avif",
     name: "Supercar & Pasta Day",
     verb: "A coastal drive, an ancient estate, hands in the flour.",
   },
   {
     slug: EXPERIENCES.find((e) => e.slug === "ferrari-sea-combination")?.slug ?? "ferrari-sea-combination",
-    image: "/images/new_items/gallipoli_desde-mar.jpg",
+    image: "/images/visual-pass/home_private_charter.avif",
     name: "The Ultimate Day",
     verb: "Land by Ferrari, sea by flybridge — one unbroken day.",
   },
