@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit, Cormorant_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,24 +12,43 @@ import { localBusinessSchema } from "@/lib/seo";
 import { faqSchema } from "@/lib/faq-schema";
 import ScrollToTop from "@/components/ScrollToTop";
 
-const outfit = Outfit({
+// Wave 1 fix: fuentes self-hosted en public/fonts (woff2, subset latin).
+// Eliminan la descarga de fonts.gstatic.com durante el build de Turbopack,
+// que fallaba con "Can't resolve @vercel/turbopack-next/internal/font/google/font"
+// cuando Google devolvía 404 para algunas slices de Inter/Outfit.
+const outfit = localFont({
+  src: [
+    { path: "../../public/fonts/outfit-300-normal.woff2", weight: "300" },
+    { path: "../../public/fonts/outfit-400-normal.woff2", weight: "400" },
+    { path: "../../public/fonts/outfit-500-normal.woff2", weight: "500" },
+    { path: "../../public/fonts/outfit-600-normal.woff2", weight: "600" },
+    { path: "../../public/fonts/outfit-700-normal.woff2", weight: "700" },
+    { path: "../../public/fonts/outfit-800-normal.woff2", weight: "800" },
+  ],
   variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: [
+    { path: "../../public/fonts/inter-300-normal.woff2", weight: "300" },
+    { path: "../../public/fonts/inter-400-normal.woff2", weight: "400" },
+    { path: "../../public/fonts/inter-500-normal.woff2", weight: "500" },
+    { path: "../../public/fonts/inter-600-normal.woff2", weight: "600" },
+  ],
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
+const cormorant = localFont({
+  src: [
+    { path: "../../public/fonts/cormorant-garamond-300-normal.woff2", weight: "300" },
+    { path: "../../public/fonts/cormorant-garamond-400-normal.woff2", weight: "400" },
+    { path: "../../public/fonts/cormorant-garamond-500-normal.woff2", weight: "500" },
+    { path: "../../public/fonts/cormorant-garamond-600-normal.woff2", weight: "600" },
+    { path: "../../public/fonts/cormorant-garamond-700-normal.woff2", weight: "700" },
+  ],
   variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 

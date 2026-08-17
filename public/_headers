@@ -13,3 +13,7 @@
 
 /uastasi-logo-gold.png
   Cache-Control: public,max-age=31536000,immutable
+
+# Wave 1 fix: fuentes self-hosted (eliminan la dependencia de fonts.gstatic.com en build)
+/fonts/*
+  Cache-Control: public,max-age=31536000,immutable
