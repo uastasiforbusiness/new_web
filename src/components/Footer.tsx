@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { CARS } from "@/lib/data";
 import { CONTACT, NAV_LINKS } from "@/lib/config";
@@ -142,7 +141,7 @@ export default function Footer() {
             className="flex items-center gap-2 transition-opacity duration-500 hover:opacity-80"
             aria-label="UastasiProject — website design & development"
           >
-            <Image
+            <img
               src="/uastasi-logo-gold.png"
               alt=""
               className="h-7 w-auto"

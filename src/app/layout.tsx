@@ -9,6 +9,7 @@ import { ChatProvider } from "@/components/velox/chat/chat-context";
 import { ReserveProvider } from "@/components/ReserveModal";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema } from "@/lib/seo";
+import { faqSchema } from "@/lib/faq-schema";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const outfit = Outfit({
@@ -62,7 +63,11 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   appleWebApp: {
     capable: true,
@@ -141,6 +146,7 @@ export default function RootLayout({
           }}
         />
         <JsonLd data={localBusinessSchema()} />
+        <JsonLd data={faqSchema()} />
         <ChatProvider>
           <ReserveProvider>
             <SmoothScroll>

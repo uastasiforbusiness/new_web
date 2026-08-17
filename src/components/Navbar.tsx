@@ -44,7 +44,7 @@ export default function Navbar() {
         <div className={`mx-auto flex max-w-[1600px] items-center justify-between px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] transition-all duration-500 md:px-10 ${scrolled ? "h-16" : "h-20"}`}>
           <Link href="/" className="group flex items-center" aria-label="B LEADER home">
             <motion.img
-              src="/images/logo_oro.png"
+              src="/images/logo_oro.svg"
               alt="B LEADER"
               animate={{ scale: scrolled ? 0.9 : 1, opacity: scrolled ? 0.9 : 1 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}

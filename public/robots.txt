@@ -12,3 +12,38 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Wave 1: crawlers de IA (AI search) — los viajeros de lujo de EE. UU. planifican
+# cada vez más con ChatGPT, Perplexity y Gemini. Permitimos y optimizamos para ellos.
+User-agent: GPTBot
+Allow: /
+
+User-agent: GPTBot-Image
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: PerplexityUser
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
